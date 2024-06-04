@@ -34,8 +34,9 @@
 				:adjust-position="adjustPosition" @focus="_Focus" @blur="_Blur" @input="onInput" @confirm="onConfirm"
 				@keyboardheightchange="onkeyboardheightchange" />
 			<!-- #endif -->
-
+			
 			<template v-if="type === 'password' && passwordIcon">
+				
 				<!-- 开启密码时显示小眼睛 -->
 				<uni-icons v-if="isVal" class="content-clear-icon" :class="{ 'is-textarea-icon': type === 'textarea' }"
 					:type="showPassword ? 'eye-slash-filled' : 'eye-filled'" :size="22"

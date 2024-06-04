@@ -27,3 +27,7 @@
 .flex-column {
 	flex-direction: column;
 }
+
+button::after {
+	border: none;
+}

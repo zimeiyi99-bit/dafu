@@ -35,17 +35,17 @@
 		<!-- 内容 -->
 		<view class="tui-card">
 			<view class="tui-content animate__animated animate__fadeInTopRight">
-				<view class="item" v-for="(item,index) in 7" :key="index">
+				<view class="item" v-for="(item,index) in list" :key="index" @click="onClickOpen(item,index)">
 					<template v-if="index != 6">
 						<image src="../../static/hand.png" mode=""></image>
 						<view class="title">
-							快捷入金
+							{{item.title}}
 						</view>
 					</template>
 					<template v-if="index == 6">
 						<view class="tui-itemLeft">
 							<view class="kefu">
-								在线客服
+								{{item.title}}
 							</view>
 							<view class="fuwu">
 								优质竭诚为您服务
@@ -58,7 +58,7 @@
 				</view>
 			</view>
 			<!-- 公告 -->
-			<view class="tui-notice">
+			<view class="tui-notice" @click="onClickNotice">
 				<image src="/static/laba.png" mode=""></image>
 				<view class="tui-desc">
 					<view class="title">
@@ -74,9 +74,9 @@
 				<view class="title">
 					产品推荐
 				</view>
-				<scroll-view class="prefer-scroll" scroll-x="true" @scroll="scroll">
+				<scroll-view class="prefer-scroll" scroll-x="true">
 					<block v-for="item in 5" :key="item">
-						<view class="image-box">
+						<view class="image-box" @click="onClickDetail">
 							<view class="name">欧元/美元</view>
 							<view class="desc">
 								EURUSD
@@ -114,7 +114,7 @@
 					</view>
 				</view>
 				<view class="tui-varietyContent">
-					<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index">
+					<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index" @click="onClickDetail">
 						<view class="name">
 							<text class="piceName">欧元/美元</text>
 							<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
@@ -134,6 +134,12 @@
 				</view>
 			</view>
 		</view>
+		<!-- 公告 -->
+		<uni-popup ref="popup" type="center">
+			<view class="tui-popup">
+				<rich-text :nodes="'富文本'"></rich-text>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -150,16 +156,63 @@
 				dotsStyles: {
 					selectedBackgroundColor: '#fff',
 					selectedBorder: '#fff'
-				}
+				},
+				list: [{
+					title: '快捷入金',
+				}, {
+					title: '产品交易',
+				}, {
+					title: '我的订单',
+				}, {
+					title: '出款方式',
+				}, {
+					title: '关于我们',
+				}, {
+					title: '系统消息',
+				}, {
+					title: '在线客服',
+				}]
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
+			onClickDetail() {
+				uni.navigateTo({
+					url: '/pages/Detail/Detail'
+				})
+			},
+			onClickNotice() {
+				this.$refs.popup.open()
+			},
 			change(e) {
 				this.current = e.detail.current
 			},
+			onClickOpen(item, index) {
+				switch (item.title) {
+					case '系统消息':
+						uni.navigateTo({
+							url: '/pages/message/message'
+						})
+						break;
+					case '出款方式':
+						uni.navigateTo({
+							url: '/pages/account/account'
+						})
+						break;
+					case '我的订单':
+						uni.navigateTo({
+							url: '/pages/order/order'
+						})
+						break;
+					case '产品交易':
+						uni.switchTab({
+							url: '/pages/product/product'
+						})
+						break;
+				}
+			}
 		}
 	}
 </script>
@@ -168,6 +221,18 @@
 	page {
 		height: 100%;
 		background-color: #f6f7fb;
+	}
+
+	/deep/.uni-popup {
+		z-index: 999 !important;
+	}
+
+	.tui-popup {
+		width: 600rpx;
+		background-color: #fff;
+		border-radius: 20rpx;
+		padding: 30rpx;
+		box-sizing: border-box;
 	}
 
 	.tui-variety {
@@ -259,7 +324,7 @@
 			-webkit-overflow-scrolling: touch;
 			/* 针对移动端使滚动更流畅 */
 			width: 100%;
-			
+
 
 		}
 

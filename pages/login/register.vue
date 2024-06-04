@@ -135,10 +135,6 @@
 		}
 	}
 
-	.tui-register {
-		margin-top: 64rpx;
-	}
-
 	/deep/.uni-easyinput__content {
 		border-radius: 30rpx;
 	}
