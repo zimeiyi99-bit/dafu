@@ -4,11 +4,14 @@ import App from './App'
 import Vue from 'vue'
 import './uni.promisify.adaptor'
 Vue.config.productionTip = false
+import * as echarts from 'echarts';
+Vue.prototype.$echarts=echarts;
 App.mpType = 'app'
 const app = new Vue({
   ...App
 })
 app.$mount()
+
 // #endif
 
 // #ifdef VUE3

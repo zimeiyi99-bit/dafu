@@ -8,12 +8,13 @@
 	import {
 		quoteData
 	} from './data'
-	import * as echarts from 'echarts'
 	export default {
 		data() {
 			return {}
 		},
 		mounted() {
+			this.$echarts.env.touchEventsSupported = false;
+			this.$echarts.env.wxa = false;
 			this.init()
 		},
 		methods: {
@@ -104,7 +105,7 @@
 					},
 					grid: [{
 							left: '0%',
-							right: '14%',
+							right: '12.5%',
 							height: '50%',
 							top: '8%'
 						},
@@ -120,6 +121,9 @@
 							data: data.categoryData,
 							scale: true,
 							boundaryGap: false,
+							axisTick: {
+								show: true
+							},
 							axisLine: {
 								onZero: false
 							},
@@ -172,7 +176,10 @@
 					yAxis: [{
 							scale: true,
 							position: 'right',
-							splitArea: {
+							// splitArea: {
+							// 	show: true
+							// }
+							axisTick: {
 								show: true
 							}
 						},
@@ -312,7 +319,7 @@
 						}
 					]
 				};
-				const kline = echarts.init(document.getElementById("Kline"));
+				const kline = this.$echarts.init(document.getElementById("Kline"));
 				kline.setOption(option);
 			},
 		},
