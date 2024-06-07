@@ -21,113 +21,148 @@
 				</swiper>
 			</uni-swiper-dot>
 		</view>
-		<view class="tui-decorate">
-			<view class="tui-line"></view>
-			<view class="tui-lucky">
-				<view class="tui-luckImge"></view>
+		<view :class="['platformIntroduction',{show:isFold}]">
+			<view class="con-title">
+				<image src="/static/title.png"></image>
+				<text>
+					平台亮点
+				</text>
+				<image src="/static/title.png"></image>
 			</view>
-			<view class="tui-luckyHand"></view>
-			<view class="tui-dialog"></view>
-			<view class="tui-popupDia">
-				点击我~
+			<view class="lightspot">
+				帮助投资者轻松选出好股好基，排除风险大的，进行价值投资，长期指数持有，利用复利的力量掌握财富。
+			</view>
+			<lightspotImg></lightspotImg>
+			<view class="con-title">
+				<image src="/static/title.png"></image>
+				<text>
+					隐私政策
+				</text>
+				<image src="/static/title.png"></image>
+			</view>
+			<view class="policy">
+				{{policyText}}
+			</view>
+			<view class="packUpBtn">
+				<image src="/static/lucky_fold.png" ></image>
+			<view class="btnBox">
+				<view class="" @click="isFold=false">
+					点击收起
+				</view>
+			</view>
+			
 			</view>
 		</view>
-		<!-- 内容 -->
-		<view class="tui-card">
-			<view class="tui-content animate__animated animate__fadeInTopRight">
-				<view class="item" v-for="(item,index) in list" :key="index" @click="onClickOpen(item,index)">
-					<template v-if="index != 6">
-						<image src="../../static/hand.png" mode=""></image>
-						<view class="title">
-							{{item.title}}
-						</view>
-					</template>
-					<template v-if="index == 6">
-						<view class="tui-itemLeft">
-							<view class="kefu">
+		<view :class="['conBox',{hide:isFold}]">
+			<view class="tui-decorate">
+				<view class="tui-line"></view>
+				<view class="tui-lucky">
+					<view class="tui-luckImge"></view>
+				</view>
+				<view class="tui-luckyHand"></view>
+				<view class="tui-dialog"></view>
+				<view class="tui-popupDia" @click="isFold=true">
+					点击我~
+				</view>
+			</view>
+			<!-- 内容 -->
+			<view class="tui-card">
+				<view class="tui-content animate__animated animate__fadeInTopRight">
+					<view class="item" v-for="(item,index) in list" :key="index" @click="onClickOpen(item,index)">
+						<template v-if="index != 6">
+							<image src="../../static/hand.png" mode=""></image>
+							<view class="title">
 								{{item.title}}
 							</view>
-							<view class="fuwu">
-								优质竭诚为您服务
+						</template>
+						<template v-if="index == 6">
+							<view class="tui-itemLeft">
+								<view class="kefu">
+									{{item.title}}
+								</view>
+								<view class="fuwu">
+									优质竭诚为您服务
+								</view>
 							</view>
-						</view>
-						<view class="tui-itemRight">
-							<image src="/static/kefu.png" mode=""></image>
-						</view>
-					</template>
+							<view class="tui-itemRight">
+								<image src="/static/kefu.png" mode=""></image>
+							</view>
+						</template>
+					</view>
 				</view>
-			</view>
-			<!-- 公告 -->
-			<view class="tui-notice" @click="onClickNotice">
-				<image src="/static/laba.png" mode=""></image>
-				<view class="tui-desc">
+				<!-- 公告 -->
+				<view class="tui-notice" @click="onClickNotice">
+					<image src="/static/laba.png" mode=""></image>
+					<view class="tui-desc">
+						<view class="title">
+							Financial Conduct Authority | FCA
+						</view>
+						<view class="time">
+							2023-11-03 02:55:24
+						</view>
+					</view>
+				</view>
+				<!-- 产品推荐 -->
+				<view class="tui-recommend">
 					<view class="title">
-						Financial Conduct Authority | FCA
+						产品推荐
 					</view>
-					<view class="time">
-						2023-11-03 02:55:24
-					</view>
-				</view>
-			</view>
-			<!-- 产品推荐 -->
-			<view class="tui-recommend">
-				<view class="title">
-					产品推荐
-				</view>
-				<scroll-view class="prefer-scroll" scroll-x="true">
-					<block v-for="item in 5" :key="item">
-						<view class="image-box" @click="onClickDetail">
-							<view class="name">欧元/美元</view>
-							<view class="desc">
-								EURUSD
-							</view>
-							<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
-							<view class="proportion">
-								1.08483
-							</view>
-							<view class="parities">
-								<text>0.00212</text>
-								<view class="tui-rightParities">
-									<image class="down" src="../../static/red_up.png" mode=""></image>
-									<view class="rise">
-										+0.19%
+					<scroll-view class="prefer-scroll" scroll-x="true">
+						<block v-for="item in 5" :key="item">
+							<view class="image-box" @click="onClickDetail">
+								<view class="name">欧元/美元</view>
+								<view class="desc">
+									EURUSD
+								</view>
+								<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
+								<view class="proportion">
+									1.08483
+								</view>
+								<view class="parities">
+									<text>0.00212</text>
+									<view class="tui-rightParities">
+										<image class="down" src="../../static/red_up.png" mode=""></image>
+										<view class="rise">
+											+0.19%
+										</view>
 									</view>
 								</view>
 							</view>
-						</view>
-					</block>
+						</block>
 
-				</scroll-view>
-			</view>
-			<!-- 货币种类 -->
-			<view class="tui-variety animate__animated animate__slideInRight">
-				<view class="title">
-					货币种类
+					</scroll-view>
 				</view>
-				<view class="tui-classify">
-					<view class="" style="flex: 1;">
-						名称
+				<!-- 货币种类 -->
+				<view class="tui-variety animate__animated animate__slideInRight">
+					<view class="title">
+						货币种类
 					</view>
-					<view class="tui-rightVariety" style="flex: 1;">
-						<text>最新价格</text>
-						<text>24h涨幅</text>
+					<view class="tui-classify">
+						<view class="" style="flex: 1;">
+							名称
+						</view>
+						<view class="tui-rightVariety" style="flex: 1;">
+							<text>最新价格</text>
+							<text>24h涨幅</text>
+						</view>
 					</view>
-				</view>
-				<view class="tui-varietyContent">
-					<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index" @click="onClickDetail">
-						<view class="name">
-							<text class="piceName">欧元/美元</text>
-							<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
-								<text>24H量</text>
-								<text>961k</text>
+					<view class="tui-varietyContent">
+						<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index"
+							@click="onClickDetail">
+							<view class="name">
+								<text class="piceName">欧元/美元</text>
+								<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
+									<text>24H量</text>
+									<text>961k</text>
+								</view>
 							</view>
-						</view>
-						<view class="code">
-							1.08484
-						</view>
-						<view style="justify-content: flex-end;" class="flex">
-							<view class="tui-end">
-								+0.165%
+							<view class="code">
+								1.08484
+							</view>
+							<view style="justify-content: flex-end;" class="flex">
+								<view class="tui-end">
+									+0.165%
+								</view>
 							</view>
 						</view>
 					</view>
@@ -140,18 +175,28 @@
 				<rich-text :nodes="'富文本'"></rich-text>
 			</view>
 		</uni-popup>
+
 	</view>
 </template>
 
 <script>
+	import {
+		policyText
+	} from "./data.js";
 	export default {
+		components: {
+			lightspotImg: () => import("@/components/lightspotImg.vue"),
+		},
+
 		data() {
 			return {
+				policyText,
+				isFold: false,
 				current: 0,
 				mode: 'dot',
-				info: ['https://www.i7pauan.xyz//storage/banner/image/e2f2ec614550eb77a8fdc3b372bb0353.png',
-					'https://www.i7pauan.xyz//storage/banner/image/e13da9f07ba8ef6558ba628210ed8280.png',
-					'https://www.i7pauan.xyz//storage/banner/image/51a57145d748f696d280b352b8df7420.png'
+				info: ['https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e2f2ec614550eb77a8fdc3b372bb0353.png',
+					'https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e13da9f07ba8ef6558ba628210ed8280.png',
+					'https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/51a57145d748f696d280b352b8df7420.png'
 				],
 				dotsStyles: {
 					selectedBackgroundColor: '#fff',
@@ -261,7 +306,7 @@
 					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
-
+					text-align: center;
 				}
 
 				.code {
@@ -537,6 +582,104 @@
 					height: 70rpx;
 				}
 			}
+		}
+	}
+
+	.platformIntroduction {
+		transition: all .3s ease;
+		height: 0;
+		padding: 50rpx 40rpx;
+		padding-bottom: 0;
+		overflow-y: auto;
+		position: relative;
+		z-index: 999;
+		overflow: hidden;
+
+		.con-title {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 16rpx;
+
+			&>image {
+				width: 46rpx;
+				height: 22rpx;
+				position: relative;
+				top: 3rpx;
+			}
+
+			&>text {
+				color: #822151;
+				font-size: 32rpx;
+				margin: 0 18rpx;
+				font-weight: bold;
+			}
+		}
+
+		.lightspot {
+			color: #222;
+			font-size: 24rpx;
+			text-align: center;
+		}
+
+		.policy {
+			color: #222;
+			font-size: 24rpx;
+			line-height: 38rpx;
+		}
+
+		.packUpBtn {
+			transition: bottom 0.4s cubic-bezier(0, 0.5, 1, 2);
+			position: fixed;
+			bottom: 70vh;
+			left: 0;
+			// background-color: #f6f7fb;
+			visibility: hidden;
+			z-index: 999;
+
+			image {
+				width: 100vw;
+				height: 168rpx;
+			}
+			.btnBox{
+				background-color: #f6f7fb;
+				padding-bottom: 20rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-top: -34px;
+				position: relative;
+				z-index: 9;
+				&>view{
+					width: 99px;
+					    height: 26px;
+					    background-color: unset;
+					    border: 1px solid #822151;
+					    color: #822151;
+						text-align: center;
+						line-height: 24px;
+						font-size: 12px;
+					  
+				}
+			}
+		}
+
+		&.show {
+			height: auto;
+			padding-bottom: 260rpx;
+
+			.packUpBtn {
+				visibility: visible;
+				bottom: 0;
+			}
+		}
+	}
+
+	.conBox {
+
+
+		&.hide {
+			display: none;
 		}
 	}
 

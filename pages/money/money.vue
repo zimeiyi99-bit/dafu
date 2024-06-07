@@ -25,34 +25,79 @@
 			</view>
 			<view class="tui-card">
 				<view class="tui-cardItem" @click="onClickDeposit('存入金额')">
-					<image src="../../static/xiazai.png" mode=""></image>
+					<image src="../../static/cunru.png" mode=""></image>
 					<text class="">
 						存入
 					</text>
 				</view>
 				<view class="tui-border"></view>
 				<view class="tui-cardItem" @click="onClickDeposit('转出金额')">
-					<image src="../../static/xiazai.png" mode=""></image>
+					<image src="../../static/zhuanchu.png" mode=""></image>
 					<text class="">
 						转出
 					</text>
 				</view>
 				<view class="tui-border"></view>
 				<view class="tui-cardItem" @click="onClickParticulars">
-					<image src="../../static/xiazai.png" mode=""></image>
+					<image src="../../static/mingxi.png" mode=""></image>
 					<text class="">
 						明细
 					</text>
 				</view>
 			</view>
 			<view class="tui-grad">
-				<view class="tui-gradItem " v-for="(item,index) in 6" :key="index" :class="value">
-					<image src="../../static/cunru.png" mode=""></image>
+				<view :class="['tui-gradItem',{'show':gradItem>0}]">
+					<image src="../../static/yiqueren.png" mode=""></image>
 					<view class="title">
 						已确认份额
 					</view>
 					<view class="desc">
-						5
+						1283.25
+					</view>
+				</view>
+				<view :class="['tui-gradItem',{'show':gradItem>3}]">
+					<image src="../../static/daiqueren.png" mode=""></image>
+					<view class="title">
+						待确认份额
+					</view>
+					<view class="desc">
+						460.20
+					</view>
+				</view>
+				<view :class="['tui-gradItem',{'show':gradItem>2}]">
+					<image src="../../static/shouyi.png" mode=""></image>
+					<view class="title">
+						收益
+					</view>
+					<view class="desc">
+						25.28
+					</view>
+				</view>
+				<view :class="['tui-gradItem',{'show':gradItem>2}]">
+					<image src="../../static/shouyilu.png" mode=""></image>
+					<view class="title">
+						收益率
+					</view>
+					<view class="desc">
+						1%
+					</view>
+				</view>
+				<view :class="['tui-gradItem',{'show':gradItem>4}]">
+					<image src="../../static/jrrujin.png" mode=""></image>
+					<view class="title">
+						今日剩余入金次数
+					</view>
+					<view class="desc">
+						60
+					</view>
+				</view>
+				<view :class="['tui-gradItem',{'show':gradItem>1}]">
+					<image src="../../static/jrchujin.png" mode=""></image>
+					<view class="title">
+						今日剩余出金次数
+					</view>
+					<view class="desc">
+						60
 					</view>
 				</view>
 			</view>
@@ -64,8 +109,16 @@
 	export default {
 		data() {
 			return {
-
+				gradItem: 0
 			};
+		},
+		mounted() {
+			const timer = setInterval(_ => {
+				if (this.gradItem >= 5) {
+					clearInterval(timer)
+				}
+				this.gradItem++
+			}, 500)
 		},
 		methods: {
 			onClickDeposit(title) {
@@ -111,6 +164,19 @@
 			box-sizing: border-box;
 			background-color: #fff;
 			border-radius: 13px;
+			transition: all .5s ease;
+
+			&:nth-child(odd) {
+				transform: translateX(-200px);
+			}
+
+			&:nth-child(even) {
+				transform: translateX(200px);
+			}
+
+			&.show {
+				transform: translateX(0) !important;
+			}
 
 			.title {
 				color: #a8a9ac;

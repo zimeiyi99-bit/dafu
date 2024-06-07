@@ -68,6 +68,7 @@
 				<v-tabs :isTime="true" v-model="activeTab" :scroll="false" :tabs="tabs" color="rgb(168, 169, 172)"
 					activeColor="#222" bold lineColor="#822151" :lineScale="0.2" bgColor="#f6f7fb" :zIndex="1"></v-tabs>
 			</view>
+			<kline></kline>
 		</view>
 		<uni-drawer ref="showLeft" mode="left" :width="300">
 			<scroll-view style="height: 100%;" scroll-y="true">
@@ -127,6 +128,10 @@
 
 <script>
 	export default {
+		components: {
+			kline: () => import("@/components/kline/index.vue"),
+		},
+		
 		data() {
 			return {
 				title: '',

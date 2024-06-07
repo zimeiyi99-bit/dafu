@@ -19,7 +19,7 @@
 				<view class="tui-listItem">
 					<view class="flex-item flex">
 						<view class="title">
-							清楚缓存
+							清除缓存
 						</view>
 					</view>
 

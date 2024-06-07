@@ -98,7 +98,7 @@
 					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
-
+					text-align: center;
 				}
 
 				.code {
