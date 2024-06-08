@@ -13,8 +13,12 @@
 			return {}
 		},
 		mounted() {
-			this.$echarts.env.touchEventsSupported = false;
+
+			this.$echarts.env.touchEventsSupported = true;
 			this.$echarts.env.wxa = false;
+			this.$echarts.env.canvasSupported = false;
+			this.$echarts.env.svgSupported = true;
+			this.$echarts.env.domSupported = true;
 			this.init()
 		},
 		methods: {
