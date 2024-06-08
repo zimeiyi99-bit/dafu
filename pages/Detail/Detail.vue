@@ -113,7 +113,7 @@
 									</view>
 									<view style="justify-content: flex-end;" class="flex">
 										<view class="tui-end">
-											+0.165%
+											+0.16%
 										</view>
 									</view>
 								</view>

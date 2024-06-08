@@ -68,14 +68,14 @@
 			<!-- 内容 -->
 			<view class="tui-card">
 				<view class="tui-content animate__animated animate__fadeInTopRight">
-					<view class="item" v-for="(item,index) in list" :key="index" @click="onClickOpen(item,index)">
-						<template v-if="index != 6">
-							<image src="../../static/hand.png" mode=""></image>
+					<view class="item" v-for="(item,index) in menuList" :key="index" @click="onClickOpen(item,index)">
+						<template v-if="index < 6">
+							<image :src="item.icon" mode=""></image>
 							<view class="title">
 								{{item.title}}
 							</view>
 						</template>
-						<template v-if="index == 6">
+						<template v-else>
 							<view class="tui-itemLeft">
 								<view class="kefu">
 									{{item.title}}
@@ -85,7 +85,7 @@
 								</view>
 							</view>
 							<view class="tui-itemRight">
-								<image src="/static/kefu.png" mode=""></image>
+								<image :src="item.icon" mode=""></image>
 							</view>
 						</template>
 					</view>
@@ -133,7 +133,7 @@
 					</scroll-view>
 				</view>
 				<!-- 货币种类 -->
-				<view class="tui-variety animate__animated animate__slideInRight">
+				<view class="tui-variety animate__animated animate__bounceInRight">
 					<view class="title">
 						货币种类
 					</view>
@@ -161,7 +161,7 @@
 							</view>
 							<view style="justify-content: flex-end;" class="flex">
 								<view class="tui-end">
-									+0.165%
+									+0.16%
 								</view>
 							</view>
 						</view>
@@ -202,20 +202,27 @@
 					selectedBackgroundColor: '#fff',
 					selectedBorder: '#fff'
 				},
-				list: [{
+				menuList: [{
 					title: '快捷入金',
+					icon:require("@/static/kjrj.png")
 				}, {
 					title: '产品交易',
+					icon:require("@/static/cpjy.png")
 				}, {
 					title: '我的订单',
+					icon:require("@/static/wddd.png")
 				}, {
 					title: '出款方式',
+					icon:require("@/static/ckfs.png")
 				}, {
 					title: '关于我们',
+					icon:require("@/static/about.png")
 				}, {
 					title: '系统消息',
+					icon:require("@/static/xtxx.png")
 				}, {
 					title: '在线客服',
+					icon:require("@/static/kefu.png")
 				}]
 			}
 		},

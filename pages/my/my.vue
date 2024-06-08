@@ -84,7 +84,7 @@
 					</view>
 				</view>
 				<view class="tui-rightItem" @click="onClickMoney">
-					<image src="/static/rujin.png" mode=""></image>
+					<image src="/static/chujin.png" mode=""></image>
 					<view class="text">
 						出金
 					</view>
@@ -92,11 +92,12 @@
 			</view>
 		</view>
 		<view class="tui-list">
-			<view class="tui-listItem" v-for="(item,index) in Data" :key="index" @click="onClickPath(item,index)">
+			<view class="tui-listItem" v-for="(item,index) in settingList" :key="index"
+				@click="onClickPath(item,index)">
 				<view class="flex-item flex">
-					<image class="logo" src="/static/list-logo.png" mode=""></image>
+					<image class="logo" :src="item.icon"  mode=""></image>
 					<view class="title">
-						{{item}}
+						{{item.title}}
 					</view>
 				</view>
 				<image class="tui-rightIcon" src="../../static/youjian.png" mode=""></image>
@@ -109,13 +110,37 @@
 	export default {
 		data() {
 			return {
-				Data: ['实名认证', '订单记录', '入金明细', '出金明细', '资金记录', '出款账户', '设置', '退出登录', ]
+				settingList: [{
+					title: '实名认证',
+					icon: require("@/static/smrz.png")
+				}, {
+					title: '订单记录',
+					icon: require("@/static/wddd.png")
+				}, {
+					title: '入金明细',
+					icon: require("@/static/kjrj.png")
+				}, {
+					title: '出金明细',
+					icon: require("@/static/chujin.png")
+				}, {
+					title: '资金记录',
+					icon: require("@/static/cwjl.png")
+				}, {
+					title: '出款账户',
+					icon: require("@/static/ck.png")
+				}, {
+					title: '设置',
+					icon: require("@/static/sz.png")
+				}, {
+					title: '退出登录',
+					icon: require("@/static/tcdl.png")
+				}, ]
 			};
 		},
 		methods: {
 			onClickMoney() {
 				uni.navigateTo({
-					url:'/pages/withdraw-money/withdraw-money'
+					url: '/pages/withdraw-money/withdraw-money'
 				})
 			},
 			onClickPath(item, index) {
