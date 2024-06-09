@@ -44,13 +44,13 @@
 				{{policyText}}
 			</view>
 			<view class="packUpBtn">
-				<image src="/static/lucky_fold.png" ></image>
-			<view class="btnBox">
-				<view class="" @click="isFold=false">
-					点击收起
+				<image src="/static/lucky_fold.png"></image>
+				<view class="btnBox">
+					<view class="" @click="isFold=false">
+						点击收起
+					</view>
 				</view>
-			</view>
-			
+
 			</view>
 		</view>
 		<view :class="['conBox',{hide:isFold}]">
@@ -181,6 +181,9 @@
 
 <script>
 	import {
+		goods
+	} from '@/api/money.js'
+	import {
 		policyText
 	} from "./data.js";
 	export default {
@@ -204,25 +207,25 @@
 				},
 				menuList: [{
 					title: '快捷入金',
-					icon:require("@/static/kjrj.png")
+					icon: require("@/static/kjrj.png")
 				}, {
 					title: '产品交易',
-					icon:require("@/static/cpjy.png")
+					icon: require("@/static/cpjy.png")
 				}, {
 					title: '我的订单',
-					icon:require("@/static/wddd.png")
+					icon: require("@/static/wddd.png")
 				}, {
 					title: '出款方式',
-					icon:require("@/static/ckfs.png")
+					icon: require("@/static/ckfs.png")
 				}, {
 					title: '关于我们',
-					icon:require("@/static/about.png")
+					icon: require("@/static/about.png")
 				}, {
 					title: '系统消息',
-					icon:require("@/static/xtxx.png")
+					icon: require("@/static/xtxx.png")
 				}, {
 					title: '在线客服',
-					icon:require("@/static/kefu.png")
+					icon: require("@/static/kefu.png")
 				}]
 			}
 		},
@@ -230,6 +233,13 @@
 
 		},
 		methods: {
+			getGoods() {
+				goods().then(({
+					data
+				}) => {
+					console.log(data)
+				})
+			},
 			onClickDetail() {
 				uni.navigateTo({
 					url: '/pages/Detail/Detail'
@@ -648,7 +658,8 @@
 				width: 100vw;
 				height: 168rpx;
 			}
-			.btnBox{
+
+			.btnBox {
 				background-color: #f6f7fb;
 				padding-bottom: 20rpx;
 				display: flex;
@@ -657,16 +668,17 @@
 				margin-top: -34px;
 				position: relative;
 				z-index: 9;
-				&>view{
+
+				&>view {
 					width: 99px;
-					    height: 26px;
-					    background-color: unset;
-					    border: 1px solid #822151;
-					    color: #822151;
-						text-align: center;
-						line-height: 24px;
-						font-size: 12px;
-					  
+					height: 26px;
+					background-color: unset;
+					border: 1px solid #822151;
+					color: #822151;
+					text-align: center;
+					line-height: 24px;
+					font-size: 12px;
+
 				}
 			}
 		}

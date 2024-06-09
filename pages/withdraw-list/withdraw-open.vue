@@ -2,7 +2,7 @@
 	<view>
 		<guo-headerTitle title="入金明细"></guo-headerTitle>
 		<view class="tui-headerTitle">
-			<view class="tui-card">
+			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
 						2000.00
@@ -21,16 +21,54 @@
 				</view>
 			</view>
 		</view>
+		<!--加载loadding-->
+		<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+		<tui-nomore :visible="!pullUpOn" text="暂无入金记录">
+			<image src="../../static/rj.png" class="tui-allImage" mode=""></image>
+		</tui-nomore>
+		<!--加载loadding-->
 	</view>
 </template>
 
 <script>
+	import {
+		upmark_record
+	} from '@/api/money.js'
 	export default {
 
 		data() {
 			return {
-
+				List: [],
+				PageIndex: 1,
+				PageSize: 10,
+				loadding: false,
+				pullUpOn: true,
 			};
+		},
+		onLoad() {
+			this.upmark_record()
+		},
+		methods: {
+			upmark_record() {
+				upmark_record({
+					hideLoading: true,
+					page: this.PageIndex
+				}).then(({
+					data
+				}) => {
+					console.log(data)
+
+					if (!data.lists || data.lists.length < this.PageSize) {
+						this.pullUpOn = false;
+					}
+					this.loadding = false;
+					if (this.PageIndex == 1) {
+						this.List = data.lists
+					} else {
+						this.List = this.List.concat(data.lists)
+					}
+				})
+			}
 		}
 	}
 </script>

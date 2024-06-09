@@ -9,11 +9,23 @@ export const balanceInfo = function(data = {}) {
 export const withdraw_record = function(data = {}) {
 	return request.get('user/withdraw_record', data)
 }
+//入金记录
+export const upmark_record = function(data = {}) {
+	return request.get('user/upmark_record', data)
+}
 // 出金
 export const downmark = function(data = {}) {
-	return request.post('user/downmark', {...data})
+	return request.post('user/downmark', {
+		...data
+	})
 }
 // 实名认证
 export const doAuth = function(data = {}) {
-	return request.post('user/doAuth', {...data})
+	return request.post('user/doAuth', {
+		...data
+	})
+}
+// 商品列表
+export const goods = function(data = {}) {
+	return request.get('index/goods', data)
 }

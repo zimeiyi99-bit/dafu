@@ -18,49 +18,89 @@
 					</uni-forms-item>
 					<uni-forms-item label="请上传证件照片">
 						<view class="tui-certificate">
-							<view class="item" @click="onUploadImg">
-								<image :src="formData.id_img_1 == '' ?  require('@/static/front.png') : formData.id_img_1" mode=""></image>
-								<view class="first">
-									证件正面
+							<uni-forms-item label="" name="id_img_1" required>
+								<view class="item" @click="onUploadImg">
+									<image
+										:src="formData.id_img_1 == '' ?  require('@/static/front.png') : formData.id_img_1"
+										mode=""></image>
+									<view class="first">
+										证件正面
+									</view>
+									<view class="two">
+										点击上传证件人面像
+									</view>
 								</view>
-								<view class="two">
-									点击上传证件人面像
+							</uni-forms-item>
+							<uni-forms-item label="" name="id_img_2" required>
+								<view class="item" @click="onUploadImgReverse">
+									<image
+										:src="formData.id_img_2 == '' ? require('@/static/back.png') : formData.id_img_1"
+										mode=""></image>
+									<view class="first">
+										证件反面
+									</view>
+									<view class="two">
+										点击上传证件反面
+									</view>
 								</view>
-							</view>
-							<view class="item" @click="onUploadImgReverse">
-								
-								<image :src="formData.id_img_2 == '' ? require('@/static/back.png') : formData.id_img_1" mode=""></image>
-								<view class="first">
-									证件反面
-								</view>
-								<view class="two">
-									点击上传证件反面
-								</view>
-							</view>
+							</uni-forms-item>
+
 						</view>
 					</uni-forms-item>
+
 					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="onClickBtn">
 						提交
 					</view>
 				</uni-forms>
 			</view>
 		</view>
-
+		<!-- 认证审核过渡页 -->
+		<view class="tui-audit" v-if="userInfo.is_auth == 1">
+			<image class="circle" src="/static/rzz.png" mode=""></image>
+			<view class="mt-lg">
+				认证中
+			</view>
+			<view class="desc-lg">
+				认证资料已提交，请等待审核
+			</view>
+		</view>
+		<!-- 认证成功 -->
+		<view class="tui-audit" v-if="userInfo.is_auth == 2">
+			<image class="circle" src="/static/rzcg.png" mode=""></image>
+			<view class="mt-lg">
+				认证成功
+			</view>
+		</view>
+		<!-- 弹出框 -->
+		<uni-popup ref="popup" type="center">
+			<view class="tui-Model">
+				<view class="main">
+					<image class="icon-lg" src="/static/success-lg.png" mode=""></image>
+					<view class="title">
+						认证资料已提交，请等待审核
+					</view>
+				</view>
+				<view class="btn_box" @click="onClickCancle">
+					我知道了
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import {
-		doAuth
+		doAuth,
 	} from '@/api/money.js'
 	import {
-		mapState
-	} from 'vuex';
+		userInfo
+	} from "@/api/user.js"
 	import updateFile from "@/utils/upload.js"
 
 	export default {
 		data() {
 			return {
+				userInfo: {},
 				formData: {
 					real_name: '',
 					id_card: '',
@@ -90,14 +130,38 @@
 							required: true,
 							errorMessage: '请输入国籍',
 						}, ],
+					},
+					id_img_1: {
+						rules: [{
+							required: true,
+							errorMessage: '请上传证件照片',
+						}, ],
+					},
+					id_img_2: {
+						rules: [{
+							required: true,
+							errorMessage: '请上传证件照片',
+						}, ],
 					}
 				}
 			};
 		},
-		computed: {
-			...mapState(['userInfo']),
+		onLoad() {
+			this.getDetail()
 		},
 		methods: {
+			getDetail() {
+				userInfo({
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.userInfo = data
+				})
+			},
+			onClickCancle() {
+				this.$refs.popup.close()
+			},
 			onUploadImgReverse() {
 				uni.chooseImage({
 					count: 1, //上传图片的数量，默认是9
@@ -112,6 +176,9 @@
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
 						this.formData.id_img_2 = xhr.data.content
+						this.$refs.form.validate().then((res) => {
+							this.isBtn = true
+						})
 						uni.hideLoading()
 					}
 				});
@@ -130,28 +197,104 @@
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
 						this.formData.id_img_1 = xhr.data.content
+						this.$refs.form.validate().then((res) => {
+							this.isBtn = true
+						})
 						uni.hideLoading()
 					}
 				});
 			},
 			SetValue(value) {
-				this.$refs.form.validate([value], (err, formData) => {
+				this.$refs.form.validate([value, 'id_img_1', 'id_img_2'], (err, formData) => {
 					if (!err) {
+						this.isBtn = true
 						console.log('success', formData)
 					}
 				})
 			},
 
 			onClickBtn() {
-				this.$refs.form.validate().then((res) => {
-
-				}).catch((err) => {})
+				if (this.isBtn) {
+					this.$refs.form.validate().then((res) => {
+						this.isBtn = true
+						doAuth({
+							...this.formData,
+							checkFree: true
+						}).then((data) => {
+							this.$refs.popup.open()
+							this.getDetail()
+						})
+					})
+				}
 			}
 		}
 	}
 </script>
 
 <style lang="less">
+	.tui-audit {
+		margin-top: 208rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.circle {
+			width: 202rpx;
+			height: 202rpx;
+			border-radius: 50%;
+		}
+
+		.mt-lg {
+			padding-top: 40rpx;
+			font-size: 40rpx;
+			font-weight: 500;
+		}
+
+		.desc-lg {
+			color: #a8a9ac;
+			font-size: 30rpx;
+			padding-top: 20rpx;
+		}
+	}
+
+	.tui-Model {
+		width: 536rpx;
+		background-color: #fff;
+		border-radius: 13px;
+
+		.btn_box {
+			border-top: 1px solid #eee;
+			height: 88rpx;
+			overflow: hidden;
+			border-radius: 0 0 24rpx 24rpx;
+			font-size: 24rpx;
+			color: #222;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.main {
+			padding: 30rpx;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+
+			.icon-lg {
+				width: 66rpx;
+				height: 66rpx;
+			}
+
+			.title {
+				padding-top: 28rpx;
+				font-size: 28rpx;
+				color: #222;
+				font-weight: 500;
+			}
+		}
+	}
+
 	.tui-certificate {
 		display: flex;
 		justify-content: space-between;
@@ -196,7 +339,7 @@
 	}
 
 	.tui-ok {
-		background-color: rgb(241, 243, 246) !important;
+		background-color: #822151 !important;
 		color: #fff !important;
 	}
 
