@@ -1,7 +1,8 @@
 <template>
 	<view>
 		<guo-headerTitle title="出金明细"></guo-headerTitle>
-		<view class="tui-headerTitle">
+
+		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
@@ -12,7 +13,8 @@
 					</view>
 				</view>
 				<view class="tui-right">
-					<view class="message">
+					<view class="message"
+						:style="{color:item.status == 1 ? '#25BC73' : item.status == 2 ? '#222' : '#f33b50'}">
 						{{item.status == 1 ? '成功' : item.status == 2 ? '审核中' : '失败'}}
 					</view>
 					<view class="time">
@@ -20,13 +22,17 @@
 					</view>
 				</view>
 			</view>
+			<!--加载loadding-->
+			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+			<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+			<!--加载loadding-->
 		</view>
-		<!--加载loadding-->
-		<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-		<tui-nomore :visible="!pullUpOn" text="暂无出金记录">
-			<image src="../../static/cj.png" class="tui-allImage" mode=""></image>
-		</tui-nomore>
-		<!--加载loadding-->
+
+		<template v-if="isData">
+			<tui-noData title="暂无出金记录">
+				<image src="../../static/cj.png" class="tui-allImage" mode=""></image>
+			</tui-noData>
+		</template>
 	</view>
 </template>
 
@@ -34,6 +40,7 @@
 	import {
 		withdraw_record
 	} from '@/api/money.js'
+
 	export default {
 
 		data() {
@@ -43,21 +50,40 @@
 				PageSize: 10,
 				loadding: false,
 				pullUpOn: true,
+				isData: true,
+				pageCount: 0
 			};
 		},
 		onLoad() {
 			this.withdraw_record()
 		},
+		// 上拉加载
+		async onReachBottom() {
+			if (!this.pullUpOn) return;
+			this.PageIndex = this.PageIndex + 1;
+			this.loadding = true;
+			if (this.PageIndex <= this.pageCount) {
+				await this.withdraw_record()
+			} else {
+				this.loadding = false;
+				this.pullUpOn = false
+			}
+
+			console.log(this.FileInfoList.length)
+		},
 		methods: {
 			withdraw_record() {
 				withdraw_record({
-					hideLoading: true,
+
 					page: this.PageIndex
 				}).then(({
 					data
 				}) => {
 					console.log(data)
-
+					if (data.lists.length !== 0) {
+						this.isData = false
+					}
+					this.pageCount = data.lastPage
 					if (!data.lists || data.lists.length < this.PageSize) {
 						this.pullUpOn = false;
 					}
