@@ -36,12 +36,12 @@
 					</view>
 					<view class="pice">
 						<text class="unit">￥</text>
-						66666.66
+						{{userInfo.money}}
 					</view>
 					<view class="mt-sm">
 						<text>≈</text>
 						<view class="unit">
-							666.66USDT
+							{{userInfo.usdt_money}}USDT
 						</view>
 					</view>
 				</view>
@@ -74,7 +74,7 @@
 						可用余额(CNY)
 					</view>
 					<view class="pice">
-						￥66666.66
+						￥{{userInfo.money}}
 					</view>
 				</view>
 				<view class="tui-rightItem">

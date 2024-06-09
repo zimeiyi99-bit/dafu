@@ -1,12 +1,13 @@
 <template>
 	<view>
 		<guo-headerTitle title="实名认证"></guo-headerTitle>
-		<view class="tui-register">
+		<view class="tui-register" v-if="userInfo.is_auth == 0">
 			<view class="tui-form">
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
-					<uni-forms-item label="姓名">
-						<uni-easyinput v-model="formData.name" placeholder="请输入姓名" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px"
+					:rules="rules">
+					<uni-forms-item label="姓名" name="real_name" required>
+						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<uni-forms-item label="证件号">
 						<uni-easyinput v-model="formData.age" placeholder="请输入证件号" :inputBorder="true" :styles="styles"
@@ -38,35 +39,68 @@
 							</view>
 						</view>
 					</uni-forms-item>
-					<view class="tui-submit tui-cancle">
+					<view class="tui-submit tui-cancle" @click="onClickBtn">
 						提交
 					</view>
 				</uni-forms>
 			</view>
 		</view>
+
 	</view>
 </template>
 
 <script>
+	import {
+		doAuth
+	} from '@/api/money.js'
+	import {
+		mapState
+	} from 'vuex';
+
 	export default {
 		data() {
 			return {
-				formData: {},
+				formData: {
+					real_name: '',
+					id_card: '',
+					gj: '',
+					id_img_1: '',
+					id_img_2: '',
+
+				},
 				styles: {
 					'borderColor': '#fff'
+				},
+				rules: {
+					real_name: {
+						rules: [{
+							required: true,
+							errorMessage: '请填写姓名',
+						}, ],
+					}
 				}
 			};
+		},
+		computed: {
+			...mapState(['userInfo']),
+		},
+		methods: {
+			onClickBtn() {
+				
+			}
 		}
 	}
 </script>
 
 <style lang="less">
-	.tui-certificate{
+	.tui-certificate {
 		display: flex;
 		justify-content: space-between;
+
 		.item:nth-child(2) {
 			margin-right: 0;
 		}
+
 		.item {
 			flex: 1;
 			background-color: #fff;
@@ -77,22 +111,26 @@
 			padding: 20rpx;
 			box-sizing: border-box;
 			margin-right: 20rpx;
-			.first{
+
+			.first {
 				font-size: 28rpx;
 				padding-top: 20rpx;
 				color: #222;
 			}
+
 			.two {
 				color: #a8a9ac;
 				font-size: 20rpx;
 				padding-top: 6rpx;
 			}
+
 			image {
 				width: 294rpx;
 				height: 182rpx;
 			}
 		}
 	}
+
 	.tui-cancle {
 		background-color: rgb(241, 243, 246) !important;
 		color: #a8a9ac !important;

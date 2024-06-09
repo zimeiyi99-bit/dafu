@@ -23,10 +23,17 @@
 		src: url('/static/font/font_2225171_8kdcwk4po24.ttf') format('truetype');
 		/* 指定字体文件路径 */
 	}
+
 	page {
 		background-color: #f6f7fb;
 	}
+
 	/deep/.uni-modal__ft {
 		font-size: 26rpx !important;
+	}
+
+	.tui-allImage {
+		width: 183px;
+		height: 183px;
 	}
 </style>

@@ -6,7 +6,7 @@
 				activeColor="#222" bold lineColor="#822151" :lineScale="0.1"></v-tabs>
 		</view>
 		<view class="tui-card">
-			<view class="tui-box">
+			<view class="tui-box" v-for="(item,index) in List" :key="index">
 				<view class="tui-title">
 					<view class="flex flex-item">
 						<text class="name">欧元/美元</text>
@@ -78,17 +78,60 @@
 				</view>
 			</view>
 		</view>
+
+		<!--加载loadding-->
+		<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+		<tui-nomore :visible="!pullUpOn" text="暂无订单记录">
+			<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
+		</tui-nomore>
+		<!--加载loadding-->
 	</view>
 </template>
 
 <script>
+	import {
+		orderlist
+	} from '@/api/order.js'
+
 	export default {
 		data() {
 			return {
 				backgroundColor: '#fff',
-				activeTab: 0
+				activeTab: 0,
+				List: [],
+				PageIndex: 1,
+				PageSize: 10,
+				loadding: false,
+				pullUpOn: true,
+
 			};
-		}
+		},
+		onLoad() {
+			this.orderlist()
+		},
+		methods: {
+			orderlist() {
+				orderlist({
+					hideLoading: true,
+					status: this.activeTab == 0 ? 1 : 3
+				}).then(({
+					data
+				}) => {
+					console.log(data)
+					
+					if (!data.lists || data.lists.length < this.PageSize) {
+						this.pullUpOn = false;
+					}
+					this.loadding = false;
+					if (this.PageIndex == 1) {
+						this.List = data.lists
+					} else {
+						this.List = this.List.concat(data.lists)
+					}
+				})
+			}
+		},
+
 	}
 </script>
 
@@ -96,6 +139,8 @@
 	.flex-wrap {
 		flex-wrap: wrap;
 	}
+
+
 
 	.w-100 {
 		width: 100%;

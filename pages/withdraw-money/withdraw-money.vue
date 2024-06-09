@@ -17,7 +17,7 @@
 									<input type="text" class="input" />
 								</view>
 								<view class="bottom">
-									可用余额: <text>￥0.00</text>
+									可用余额: <text>￥{{userInfo.money}}</text>
 								</view>
 							</view>
 						</view>
@@ -108,7 +108,7 @@
 							</view>
 						</uni-forms-item>
 						<uni-forms-item label="交易密码">
-							
+
 							<uni-easyinput v-model="formData.name" type="password" passwordIcon :inputBorder="true"
 								:styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
@@ -159,6 +159,10 @@
 </template>
 
 <script>
+	import {
+		userInfo
+	} from "@/api/user.js"
+
 	export default {
 		data() {
 			return {
@@ -169,10 +173,23 @@
 				isShow: true,
 				styles: {
 					'borderColor': '#fff'
-				}
+				},
+				userInfo: {},
 			};
 		},
+		onLoad() {
+			this.getDetail()
+		},
 		methods: {
+			getDetail() {
+				userInfo({
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.userInfo = data
+				})
+			},
 			maskClick() {
 				this.isShow = true
 			},
