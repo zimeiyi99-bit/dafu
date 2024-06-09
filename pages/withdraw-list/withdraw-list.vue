@@ -28,7 +28,7 @@
 			<!--加载loadding-->
 		</view>
 
-		<template v-if="isData">
+		<template v-else>
 			<tui-noData title="暂无出金记录">
 				<image src="../../static/cj.png" class="tui-allImage" mode=""></image>
 			</tui-noData>

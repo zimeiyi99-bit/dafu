@@ -3,88 +3,93 @@
 		<guo-headerTitle title="订单记录" :backgroundColor="backgroundColor"></guo-headerTitle>
 		<view class="tui-tabs">
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="['持仓列表', '平仓记录']" color="rgb(168, 169, 172)"
-				activeColor="#222" bold lineColor="#822151" :lineScale="0.1"></v-tabs>
+				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-card">
-			<view class="tui-box" v-for="(item,index) in List" :key="index">
-				<view class="tui-title">
-					<view class="flex flex-item">
-						<text class="name">欧元/美元</text>
-						<text class="desc">360S</text>
-					</view>
-					<view class="right tui-red">
-						收购
-					</view>
-				</view>
-				<view class="tui-orderTitle">
-					<view class="">
-						订单编号
-					</view>
-					<view class="code">
-						BOSTT8WRPWXA3TR
-					</view>
-				</view>
-				<view class="flex flex-wrap">
-					<view class="tui-wrapItem">
-						<view class="">
-							金额
-						</view>
-						<view class="pice">
-							5000.00
-						</view>
-					</view>
-					<view class="tui-wrapItem" style="width: 46%;">
-						<view class="">
-							盈亏
-						</view>
-						<view class="pice tui-green">
-							250.00
-						</view>
-					</view>
-					<view class="tui-wrapItem text-des-color">
-						<view class="">
-							购买价
-						</view>
-						<view class="pice">
-							1.08
-						</view>
-					</view>
-					<view class="tui-wrapItem text-des-color" style="width: 46%;">
-						<view class="">
-							成交价
-						</view>
-						<view class="pice">
-							1.140000
-						</view>
-					</view>
-					<view class="flex flex-item flex-between w-100 text-des-color p-2">
-						<view class="left">
-							<view class="">
-								持仓时间
-							</view>
-							<view class="pice">
-								2024-05-25 17:41:28
-							</view>
-						</view>
-						<view class="right" style="width: 46%;">
-							<view class="">
-								平仓时间
-							</view>
-							<view class="pice">
-								2024-05-25 17:44:28
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
 
-		<!--加载loadding-->
-		<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-		<tui-nomore :visible="!pullUpOn" text="暂无订单记录">
-			<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
-		</tui-nomore>
-		<!--加载loadding-->
+			<block v-if="!isData">
+				<view class="tui-box" v-for="(item,index) in List" :key="index">
+					<view class="tui-title">
+						<view class="flex flex-item">
+							<text class="name">欧元/美元</text>
+							<text class="desc">360S</text>
+						</view>
+						<view class="right tui-red">
+							收购
+						</view>
+					</view>
+					<view class="tui-orderTitle">
+						<view class="">
+							订单编号
+						</view>
+						<view class="code">
+							BOSTT8WRPWXA3TR
+						</view>
+					</view>
+					<view class="flex flex-wrap">
+						<view class="tui-wrapItem">
+							<view class="">
+								金额
+							</view>
+							<view class="pice">
+								5000.00
+							</view>
+						</view>
+						<view class="tui-wrapItem" style="width: 46%;">
+							<view class="">
+								盈亏
+							</view>
+							<view class="pice tui-green">
+								250.00
+							</view>
+						</view>
+						<view class="tui-wrapItem text-des-color">
+							<view class="">
+								购买价
+							</view>
+							<view class="pice">
+								1.08
+							</view>
+						</view>
+						<view class="tui-wrapItem text-des-color" style="width: 46%;">
+							<view class="">
+								成交价
+							</view>
+							<view class="pice">
+								1.140000
+							</view>
+						</view>
+						<view class="flex flex-item flex-between w-100 text-des-color p-2">
+							<view class="left">
+								<view class="">
+									持仓时间
+								</view>
+								<view class="pice">
+									2024-05-25 17:41:28
+								</view>
+							</view>
+							<view class="right" style="width: 46%;">
+								<view class="">
+									平仓时间
+								</view>
+								<view class="pice">
+									2024-05-25 17:44:28
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<!--加载loadding-->
+				<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+				<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+				<!--加载loadding-->
+			</block>
+		</view>
+		<template v-if="isData">
+			<tui-noData title="暂无订单记录">
+				<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
+			</tui-noData>
+		</template>
 	</view>
 </template>
 
@@ -103,22 +108,45 @@
 				PageSize: 10,
 				loadding: false,
 				pullUpOn: true,
-
+				isData: true,
+				pageCount: 0
 			};
 		},
 		onLoad() {
 			this.orderlist()
 		},
+		// 上拉加载
+		async onReachBottom() {
+			if (!this.pullUpOn) return;
+			this.PageIndex = this.PageIndex + 1;
+			this.loadding = true;
+			if (this.PageIndex <= this.pageCount) {
+				await this.orderlist()
+			} else {
+				this.loadding = false;
+				this.pullUpOn = false
+			}
+
+			console.log(this.FileInfoList.length)
+		},
 		methods: {
+			onChangeTab(e) {
+				console.log(e)
+				this.PageIndex = 1;
+				this.orderlist()
+			},
 			orderlist() {
 				orderlist({
-					hideLoading: true,
 					status: this.activeTab == 0 ? 1 : 3
 				}).then(({
 					data
 				}) => {
 					console.log(data)
-					
+					if (data.lists.length !== 0) {
+						this.isData = false
+					} else {
+						this.isData = true
+					}
 					if (!data.lists || data.lists.length < this.PageSize) {
 						this.pullUpOn = false;
 					}

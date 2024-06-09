@@ -8,7 +8,7 @@
 			</view>
 			<view class="">
 				<l-circularProgress :fontShow="false" :percent="pageData.zb" type="halfCircular" :lineWidth="20"
-					:boxWidth="360" progressColor="#822151" bgColor="#fff">
+					:boxWidth="330" progressColor="#822151" bgColor="#fff">
 					<view class="tui-progress">
 						<view class="title">余额宝总额</view>
 						<view class="price">￥{{pageData.all_money}}</view>
@@ -255,7 +255,7 @@
 		left: 0;
 		right: 0;
 		margin: auto;
-		width: 350px;
+		width: 310px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
