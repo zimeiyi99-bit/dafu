@@ -108,22 +108,23 @@
 						产品推荐
 					</view>
 					<scroll-view class="prefer-scroll" scroll-x="true">
-						<block v-for="item in 5" :key="item">
+
+						<block v-for="(item,index) in goodsList" :key="index">
 							<view class="image-box" @click="onClickDetail">
-								<view class="name">欧元/美元</view>
+								<view class="name">{{item.title}}</view>
 								<view class="desc">
-									EURUSD
+									{{item.codename}}
 								</view>
 								<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
 								<view class="proportion">
-									1.08483
+									{{item.price}}
 								</view>
 								<view class="parities">
-									<text>0.00212</text>
+									<text>{{item.zf}}</text>
 									<view class="tui-rightParities">
 										<image class="down" src="../../static/red_up.png" mode=""></image>
 										<view class="rise">
-											+0.19%
+											{{item.zf}}
 										</view>
 									</view>
 								</view>
@@ -147,21 +148,21 @@
 						</view>
 					</view>
 					<view class="tui-varietyContent">
-						<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index"
+						<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
 							@click="onClickDetail">
 							<view class="name">
-								<text class="piceName">欧元/美元</text>
+								<text class="piceName">{{item.title}}</text>
 								<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
 									<text>24H量</text>
-									<text>961k</text>
+									<text>{{item.vol}}</text>
 								</view>
 							</view>
 							<view class="code">
-								1.08484
+								{{item.price}}
 							</view>
 							<view style="justify-content: flex-end;" class="flex">
 								<view class="tui-end">
-									+0.16%
+									{{item.zf}}
 								</view>
 							</view>
 						</view>
@@ -226,18 +227,50 @@
 				}, {
 					title: '在线客服',
 					icon: require("@/static/kefu.png")
-				}]
+				}],
+				goodsList: [],
+				timer: null
+			}
+		},
+		onUnload() {
+			// 页面销毁时清除定时器
+			if (this.timer) {
+				clearInterval(this.timer);
+			}
+			console.log('页面销毁')
+		},
+		onHide() {
+			console.log('页面销毁')
+			if (this.timer) {
+				clearInterval(this.timer);
 			}
 		},
 		onLoad() {
+			this.getGoods()
+		},
+		onShow() {
+			this.timer = setInterval(() => {
+				
+				goods({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+					
+					this.goodsList = data
+				})
+			}, 5000);
 
 		},
 		methods: {
 			getGoods() {
-				goods().then(({
+				goods({
+					hideLoading: true,
+				}).then(({
 					data
 				}) => {
-					console.log(data)
+					
+					this.goodsList = data
 				})
 			},
 			onClickDetail() {

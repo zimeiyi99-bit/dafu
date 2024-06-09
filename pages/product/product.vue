@@ -11,7 +11,7 @@
 		</view>
 		<!-- 货币种类 -->
 		<view class="tui-variety">
-			
+
 			<view class="tui-classify">
 				<view class="" style="flex: 1;">
 					名称
@@ -22,20 +22,20 @@
 				</view>
 			</view>
 			<view class="tui-varietyContent">
-				<view class="tui-varietyContentItem" v-for="(item,index) in 10" :key="index">
+				<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index">
 					<view class="name">
-						<text class="piceName">欧元/美元</text>
+						<text class="piceName">{{item.title}}</text>
 						<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
 							<text>24H量</text>
-							<text>961k</text>
+							<text>{{item.vol}}</text>
 						</view>
 					</view>
 					<view class="code">
-						1.08484
+						{{item.price}}
 					</view>
 					<view style="justify-content: flex-end;" class="flex">
 						<view class="tui-end">
-							+0.16%
+							{{item.zf}}
 						</view>
 					</view>
 				</view>
@@ -48,6 +48,9 @@
 </template>
 
 <script>
+	import {
+		goods
+	} from '@/api/money.js'
 	export default {
 		data() {
 			return {
@@ -55,10 +58,52 @@
 					'borderColor': '#fff'
 				},
 				current: 0,
-				tabs: ['货币种类']
+				tabs: ['货币种类'],
+				goodsList: [],
+				timer: null
 			};
 		},
+		onUnload() {
+			// 页面销毁时清除定时器
+			if (this.timer) {
+				clearInterval(this.timer);
+			}
+			console.log('页面销毁')
+		},
+		onHide() {
+			console.log('页面销毁')
+			if (this.timer) {
+				clearInterval(this.timer);
+			}
+		},
+		onLoad() {
+			this.getGoods()
+		},
+		onShow() {
+			this.timer = setInterval(() => {
+
+				goods({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.goodsList = data
+				})
+			}, 5000);
+
+		},
 		methods: {
+			getGoods() {
+				goods({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.goodsList = data
+				})
+			},
 			changeTab(index) {
 				console.log('当前选中的项：' + index)
 			}
@@ -72,10 +117,11 @@
 	}
 
 	.tui-variety {
-		
+
 		position: relative;
 		padding: 0 30rpx;
 		padding-bottom: 60rpx;
+
 		.tui-varietyContent {
 			display: flex;
 			flex-direction: column;
