@@ -62,7 +62,7 @@
 		position: relative;
 		display: flex;
 		justify-content: center;
-		margin-top: 248rpx;
+		margin-top: 20rpx;
 		padding-bottom: 6rpx;
 		flex-direction: column;
 		align-items: center;

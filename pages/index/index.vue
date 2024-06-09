@@ -1,6 +1,6 @@
 <template>
 	<view class="tui-header">
-		<view class="tui-NavHeader">
+		<view class="tui-NavHeader" :style="stickyStyle">
 			<view class="tui-img">
 				<image src="../../static/logo.png" mode=""></image>
 			</view>
@@ -229,7 +229,8 @@
 					icon: require("@/static/kefu.png")
 				}],
 				goodsList: [],
-				timer: null
+				timer: null,
+				stickyStyle: '', // 吸顶元素的样式
 			}
 		},
 		onUnload() {
@@ -237,12 +238,26 @@
 			if (this.timer) {
 				clearInterval(this.timer);
 			}
+			this.stickyStyle = ''
 			console.log('页面销毁')
 		},
 		onHide() {
 			console.log('页面销毁')
+			this.stickyStyle = ''
 			if (this.timer) {
 				clearInterval(this.timer);
+			}
+		},
+		onPageScroll(e) {
+			// 监听页面滚动事件
+			if (e.scrollTop > 100) {
+				// 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
+				this.stickyStyle = 'position: fixed; top: 0; left: 0; width: 100%; z-index: 999;background-color: #f6f7fb;'
+				
+			} else {
+				// 滚动距离不足100时，取消吸顶效果
+				this.stickyStyle = ''
+				
 			}
 		},
 		onLoad() {
@@ -250,13 +265,13 @@
 		},
 		onShow() {
 			this.timer = setInterval(() => {
-				
+
 				goods({
 					hideLoading: true,
 				}).then(({
 					data
 				}) => {
-					
+
 					this.goodsList = data
 				})
 			}, 5000);
@@ -269,7 +284,7 @@
 				}).then(({
 					data
 				}) => {
-					
+
 					this.goodsList = data
 				})
 			},
@@ -834,6 +849,8 @@
 		justify-content: space-between;
 		position: relative;
 		height: 100rpx;
+		background: url(/static/bg.png) no-repeat;
+		
 
 		.tui-img {
 

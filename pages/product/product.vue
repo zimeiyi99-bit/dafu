@@ -2,8 +2,8 @@
 	<view>
 		<view class="tui-search">
 			<uni-easyinput class="uni-mt-5" suffixIcon="search" placeholder="请输入产品名称" :inputBorder="true"
-				:styles="styles" primaryColor="#822151"
-				placeholderStyle="color:#c9c9c9;font-size:28rpx"></uni-easyinput>
+				:styles="styles" primaryColor="#822151" placeholderStyle="color:#c9c9c9;font-size:28rpx"
+				v-model="searchText"></uni-easyinput>
 		</view>
 		<view class="tui-tabs">
 			<v-tabs v-model="current" :tabs="tabs" @change="changeTab" color="#a8a9ac" activeColor="#222"
@@ -24,7 +24,9 @@
 			<view class="tui-varietyContent">
 				<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index">
 					<view class="name">
-						<text class="piceName">{{item.title}}</text>
+						<view class="flex flex-item">
+							<text class="piceName" v-for="(v,i) in item.title.split('')" :key="" :style="setColor(v)">{{ v }}</text>
+						</view>
 						<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
 							<text>24H量</text>
 							<text>{{item.vol}}</text>
@@ -60,7 +62,8 @@
 				current: 0,
 				tabs: ['货币种类'],
 				goodsList: [],
-				timer: null
+				timer: null,
+				searchText: ''
 			};
 		},
 		onUnload() {
@@ -68,10 +71,10 @@
 			if (this.timer) {
 				clearInterval(this.timer);
 			}
-			console.log('页面销毁')
+			console.log('页面销毁1')
 		},
 		onHide() {
-			console.log('页面销毁')
+			console.log('页面销毁1')
 			if (this.timer) {
 				clearInterval(this.timer);
 			}
@@ -94,6 +97,11 @@
 
 		},
 		methods: {
+			setColor(e) {
+				if (this.searchText.indexOf(e) != -1) {
+					return 'color:#822151' //自定义颜色
+				}
+			},
 			getGoods() {
 				goods({
 					hideLoading: true,
@@ -157,6 +165,7 @@
 
 				.name {
 					display: flex;
+					
 					flex-direction: column;
 					flex: 1;
 
