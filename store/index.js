@@ -2,17 +2,19 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex);
-
-const store = new Vuex.Store({
-	state: {
+const initialState = () => {
+	return {
 		token: '',
 		//用户头像名称等
 		userInfo: {},
 		//公共配置
 		appInfo: {},
 		//注册信息
-		registerInfo:{}
-	},
+		registerInfo: {}
+	};
+};
+const store = new Vuex.Store({
+	state: initialState(),
 	getters: {
 		nickname: function(state) {
 			return state.userInfo.nickname
@@ -31,6 +33,10 @@ const store = new Vuex.Store({
 		setRegister: function(state, data) {
 			state.registerInfo = data
 		},
+		RESET_STATE(state) {
+			// 这里的 Object.assign 可以重置 state 到 initialState
+			Object.assign(state, initialState());
+		}
 	},
 	plugins: [
 		createPersistedState({
