@@ -16,7 +16,7 @@
 						<image class="tui-rightIcon" src="/static/youjian.png" mode=""></image>
 					</view>
 				</view>
-				<view class="tui-listItem">
+				<view class="tui-listItem" @click="beforeClearAllCache">
 					<view class="flex-item flex">
 						<view class="title">
 							清除缓存
@@ -41,9 +41,8 @@
 </template>
 
 <script>
-	
 	export default {
-		
+
 		data() {
 			return {
 
@@ -52,6 +51,51 @@
 		methods: {
 			onClickLeft() {
 				uni.navigateBack(-1)
+			},
+			beforeClearAllCache() {
+				uni.showModal({
+					title: '提示',
+					content: "清除缓存后需要重新登录,是否继续?",
+				}).then(res => {
+					if (res.confirm) {
+						this.clearAllCache()
+					}
+				})
+			},
+			async clearAllCache() {
+				// 清除 localStorage
+				localStorage.clear();
+
+				// 清除 sessionStorage
+				sessionStorage.clear();
+
+				// 清除 cookies
+				const cookies = document.cookie.split("; ");
+				for (let i = 0; i < cookies.length; i++) {
+					const cookie = cookies[i];
+					const eqPos = cookie.indexOf("=");
+					const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+					document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+				}
+
+				// 清除 IndexedDB (需要异步操作)
+				const databases = await indexedDB.databases();
+				for (const db of databases) {
+					indexedDB.deleteDatabase(db.name);
+				}
+
+				// 清除缓存存储（Cache Storage）
+				if ('caches' in window) {
+					caches.keys().then(function(keyList) {
+						return Promise.all(keyList.map(function(key) {
+							return caches.delete(key);
+						}));
+					});
+				}
+				this.$store.commit('RESET_STATE')
+				uni.reLaunch({
+					url: "/pages/welcome/welcome"
+				})
 			}
 		}
 	}
