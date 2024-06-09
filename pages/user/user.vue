@@ -113,7 +113,9 @@
 	export default {
 		data() {
 			return {
-				userInfo: {},
+				userInfo: {
+					real_name:'',
+				},
 				settingList: [{
 					title: '实名认证',
 					icon: require("@/static/smrz.png")

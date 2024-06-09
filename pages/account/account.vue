@@ -8,9 +8,9 @@
 					<view class="title">
 						选择账户类型
 					</view>
-					<view class="tui-listItem" @click="onClickDetail('银行卡账户')">
+					<view class="tui-listItem" @click="onClickDetail('bank_card')">
 						<view class="flex flex-column" style="padding: 0 30rpx;">
-							<image src="../../static/yinhangka.png" class="tui-bank" mode=""></image>
+							<image src="@/static/yinhangka.png" class="tui-bank" mode=""></image>
 							<view class="bank">
 								银行卡
 							</view>
@@ -19,9 +19,9 @@
 							<uni-icons type="right" size="15" style="color: #fff;"></uni-icons>
 						</view>
 					</view>
-					<view class="tui-listItem trc-bg" @click="onClickDetail('USDT-TRC20账户')">
+					<view class="tui-listItem trc-bg" @click="onClickDetail('usdt-trc20')">
 						<view class="flex flex-column" style="padding: 0 30rpx;">
-							<image src="../../static/t.png" class="tui-bank" mode=""></image>
+							<image src="@/static/t.png" class="tui-bank" mode=""></image>
 							<view class="bank">
 								USDT-TRC20
 							</view>
@@ -30,9 +30,9 @@
 							<uni-icons type="right" size="15" style="color: #fff;"></uni-icons>
 						</view>
 					</view>
-					<view class="tui-listItem erc-bg" @click="onClickDetail('USDT-ERC20账户')">
+					<view class="tui-listItem erc-bg" @click="onClickDetail('usdt-erc20')">
 						<view class="flex flex-column" style="padding: 0 30rpx;">
-							<image src="../../static/t.png" class="tui-bank" mode=""></image>
+							<image src="@/static/t.png" class="tui-bank" mode=""></image>
 							<view class="bank">
 								USDT-ERC20
 							</view>
@@ -58,7 +58,7 @@
 		methods: {
 			onClickDetail(type) {
 				uni.navigateTo({
-					url: '/pages/account/account-detail?Type=' + type
+					url: '/pages/account/account-detail?pay_type=' + type
 				})
 			}
 		}
