@@ -26,9 +26,15 @@
 				if (this.progressNum + getNum > 100) {
 					this.progressNum = 100;
 					clearInterval(timer)
-					uni.switchTab({
-						url:'/pages/index/index'
-					})
+					if (this.$store.state.token) {
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+					} else {
+						uni.redirectTo({
+							url: '/pages/login/login'
+						})
+					}
 				} else {
 
 					this.progressNum += getNum
@@ -44,7 +50,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 16vh;
+		padding-top: 12vh;
 		width: 100vw;
 		height: 100vh;
 
@@ -58,7 +64,7 @@
 			background-color: #fff;
 			border-radius: 4px;
 			margin-top: auto;
-			margin-bottom: 10vh;
+			margin-bottom: 25vh;
 
 			.progressNow {
 				height: 100%;

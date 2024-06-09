@@ -22,14 +22,14 @@
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<uni-forms-item label="账号">
-						<uni-easyinput v-model="formData.name" placeholder="请输入账号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-model="formData.account" placeholder="请输入账号" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<uni-forms-item label="密码">
-						<uni-easyinput v-model="formData.age" placeholder="请输入密码" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput type="password" v-model="formData.passwd" placeholder="请输入密码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<view class="tui-submit tui-cancle">
+					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onClickLogin">
 						登录
 					</view>
 				</uni-forms>
@@ -42,7 +42,6 @@
 					立即注册
 				</view>
 				<view class="symbol">
-					|
 				</view>
 				<view class="">
 					在线客服
@@ -61,19 +60,62 @@
 </template>
 
 <script>
+	import {
+		userLogin,
+		userInfo
+	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
-				formData: {},
+				formData: {
+					account: 'user66',
+					passwd: '666666'
+				},
 				styles: {
 					'borderColor': '#fff'
 				}
 			};
 		},
+		computed: {
+			btnDisabled() {
+				try {
+					Object.values(this.formData).forEach(item => {
+						if (!item) {
+							throw ('有空值')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+					return true
+				}
+				return false
+			}
+		},
 		methods: {
+			onClickLogin() {
+				if (this.btnDisabled) return
+				userLogin({
+					...this.formData,
+					checkFree: true
+				}).then(({
+					data: {
+						token
+					}
+				}) => {
+					this.$store.commit('setToken', token)
+					userInfo().then(({
+						data
+					}) => {
+						this.$store.commit('setUser', data)
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+					})
+				})
+			},
 			onClickRegister() {
 				uni.navigateTo({
-					url: '/pages/login/register'
+					url: '/pages/login/registerCheck'
 				})
 			}
 		}
@@ -122,7 +164,10 @@
 		font-size: 29rpx;
 
 		.symbol {
-			padding: 0 20rpx;
+			background-color: #a8a9ac;
+			width: 1px;
+			height: 11px;
+			margin: 0 9px;
 		}
 	}
 

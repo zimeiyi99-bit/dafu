@@ -70,7 +70,7 @@
 				<view class="tui-content animate__animated animate__fadeInTopRight">
 					<view class="item" v-for="(item,index) in menuList" :key="index" @click="onClickOpen(item,index)">
 						<template v-if="index < 6">
-							<image :src="item.icon" mode=""></image>
+							<image :src="item.icon" mode="aspectFill"></image>
 							<view class="title">
 								{{item.title}}
 							</view>
@@ -85,7 +85,7 @@
 								</view>
 							</view>
 							<view class="tui-itemRight">
-								<image :src="item.icon" mode=""></image>
+								<image :src="item.icon" mode="aspectFill"></image>
 							</view>
 						</template>
 					</view>

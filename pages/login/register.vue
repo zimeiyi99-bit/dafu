@@ -4,7 +4,7 @@
 		<uni-nav-bar :border="false" statusBar leftWidth="230rpx" rightWidth="230rpx" backgroundColor="#f6f7fb"
 			height="120rpx">
 			<template v-slot:left>
-				<view class="tui-leftIcon">
+				<view class="tui-leftIcon" @click="back">
 					<uni-icons type="arrow-left" size="25" style="color: #fff;"></uni-icons>
 				</view>
 			</template>
@@ -12,28 +12,28 @@
 		<!-- 注册 -->
 		<view class="tui-register">
 			<view class="tui-title">
-				账号注册
+				设置密码
 			</view>
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
-					<uni-forms-item label="账号">
-						<uni-easyinput v-model="formData.name" placeholder="请输入账号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="密码">
+						<uni-easyinput v-model="formData.passwd" placeholder="请输入密码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="手机号">
-						<uni-easyinput v-model="formData.age" placeholder="请输入手机号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="确认密码">
+						<uni-easyinput v-model="formData.o_passwd" placeholder="请输入确认密码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="姓名">
-						<uni-easyinput v-model="formData.age" placeholder="请输入姓名" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="交易密码">
+						<uni-easyinput v-model="formData.mpasswd" placeholder="请输入交易密码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="开户码">
-						<uni-easyinput v-model="formData.age" placeholder="请输入开户码" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="确认交易密码">
+						<uni-easyinput v-model="formData.o_mpasswd" placeholder="请输入确认交易密码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<view class="tui-submit tui-cancle">
-						下一步
+					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onRegister">
+						完成注册
 					</view>
 				</uni-forms>
 			</view>
@@ -42,7 +42,7 @@
 		<view class="bottom">
 			<view class="tui-Two">
 				<view class="">
-					登录即表示同意APP
+					注册即表示同意APP
 				</view>
 				<view class="policy">
 					隐私政策
@@ -53,15 +53,74 @@
 </template>
 
 <script>
+	import {
+		userRegister
+	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
-				formData: {},
+				formData: {
+					passwd: '666666',
+					o_passwd: '666666',
+					mpasswd: '888888',
+					o_mpasswd: '888888'
+				},
 				styles: {
 					'borderColor': '#fff'
 				}
 			};
-		}
+		},
+		computed: {
+			btnDisabled() {
+				try {
+					Object.values(this.formData).forEach(item => {
+						if (!item) {
+							throw ('有空值')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+					return true
+				}
+				return false
+			}
+		},
+		methods: {
+			onRegister() {
+				if(this.btnDisabled) return
+				if (this.formData.passwd !== this.formData.o_passwd) {
+					return uni.showToast({
+						title: "两次密码不一致",
+						icon: 'none'
+					})
+				}
+				if (this.formData.mpasswd !== this.formData.o_mpasswd) {
+					return uni.showToast({
+						title: "两次交易密码不一致",
+						icon: 'none'
+					})
+				}
+				userRegister({
+					...this.$store.state.registerInfo,
+					...this.formData,
+					checkFree: true
+				}).then(_ => {
+					uni.showModal({
+						title: '注册成功',
+						content: "即将前往登录页",
+						showCancel: false,
+
+					}).then(_ => {
+						uni.reLaunch({
+							url: "/pages/login/login"
+						})
+					})
+				})
+			},
+			back() {
+				uni.navigateBack()
+			}
+		},
 	}
 </script>
 
@@ -100,7 +159,7 @@
 		}
 	}
 
-	
+
 
 	.tui-cancle {
 		background-color: rgb(241, 243, 246) !important;

@@ -22,14 +22,20 @@
 			}
 		},
 		{
-			"path": "pages/login/register",
+			"path": "pages/login/registerCheck",
 			"style": {
 				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom"
 			}
+		},	{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "设置密码",
+				"navigationStyle": "custom"
+			}
 		},
 		{
-			"path": "pages/my/my",
+			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "个人中心",
 				"navigationStyle": "custom"
@@ -180,7 +186,7 @@
 				"selectedIconPath": "/static/tabbar/yue_active.png"
 			},
 			{
-				"pagePath": "pages/my/my",
+				"pagePath": "pages/user/user",
 				"text": "个人中心",
 				"iconPath": "/static/tabbar/my.png",
 				"selectedIconPath": "/static/tabbar/my_active.png"

@@ -106,9 +106,13 @@
 </template>
 
 <script>
+	import {
+		balanceInfo
+	} from "@/api/money.js"
 	export default {
 		data() {
 			return {
+				pageData: {},
 				gradItem: 0
 			};
 		},
@@ -120,7 +124,19 @@
 				this.gradItem++
 			}, 500)
 		},
+		onShow() {
+			this.getDetail()
+		},
 		methods: {
+			getDetail() {
+				balanceInfo({
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.pageData = data
+				})
+			},
 			onClickDeposit(title) {
 				uni.navigateTo({
 					url: '/pages/transfer/transfer?title=' + title
