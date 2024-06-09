@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<guo-headerTitle :title="title"></guo-headerTitle>
+		<guo-headerTitle :title="typeList[formData.pay_type]"></guo-headerTitle>
 		<!-- 注册 -->
 		<view class="tui-register">
 			<view class="tui-form">
@@ -53,15 +53,19 @@
 		data() {
 			return {
 				binded: false,
-				title: '',
+				typeList: {
+					'bank_card': '银行卡',
+					'usdt-trc20': 'USDT-TRC20',
+					'usdt-erc20': 'USDT-ERC20',
+				},
 				formData: {
 					user_name: '',
 					gj: '',
 					bank_name: '',
 					account: '',
 					bank_branch: '',
+					usdt_url: '',
 					pay_type: '',
-					usdt_url: ''
 				},
 				styles: {
 					'borderColor': '#fff'
@@ -122,7 +126,6 @@
 				if (this.btnDisabled) return
 				userBindWithdraw({
 					...this.formData,
-					checkFree: true
 				}).then(({
 					data
 				}) => {

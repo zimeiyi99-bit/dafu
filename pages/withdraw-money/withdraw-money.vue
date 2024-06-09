@@ -14,7 +14,7 @@
 									<view class="font-bolder">
 										￥
 									</view>
-									<input type="text" class="input" />
+									<input v-model="formData.money" type="text" class="input" />
 								</view>
 								<view class="bottom">
 									可用余额: <text>￥{{userInfo.money}}</text>
@@ -27,19 +27,20 @@
 							<view class="tui-listItem" @click="onClickOpen">
 								<view class="flex-item flex">
 									<view class="title">
-										{{title}}
+										{{typeList[formData.pay_type]}}
 									</view>
 								</view>
 								<view class="flex flex-item">
-									<uni-icons :type="isShow ? 'down' : 'up'" size="20"
+									<uni-icons :type="typeShow ? 'down' : 'up'" size="20"
 										style="color: rgb(96, 98, 102)"></uni-icons>
 								</view>
 							</view>
-							<view class="tui-listItem"
-								style="background-color: #f4eadd;padding: 30rpx;margin-top: 40rpx;">
+							<view v-if="!binded" class="tui-listItem"
+								style="background-color: #f4eadd;padding: 30rpx;margin-top: 40rpx;"
+								@click="onClickDetail(formData.pay_type)">
 								<view class="flex-item flex">
 									<view class="title" style="color: #fc6d22;">
-										您还未绑定银行卡
+										您还未绑定{{typeList[formData.pay_type]}}
 									</view>
 								</view>
 								<view class="flex flex-item">
@@ -51,13 +52,13 @@
 						</view>
 					</uni-forms-item>
 					<!-- 绑定过银行卡展示的-->
-					<template>
+					<template v-if="formData.pay_type == 'bank_card'">
 						<uni-forms-item label="姓名">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.user_name}}
 										</view>
 									</view>
 								</view>
@@ -68,7 +69,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.gj}}
 										</view>
 									</view>
 								</view>
@@ -79,7 +80,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.bank_branch}}
 										</view>
 									</view>
 								</view>
@@ -90,7 +91,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.bank_name}}
 										</view>
 									</view>
 								</view>
@@ -101,29 +102,21 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.account}}
 										</view>
 									</view>
 								</view>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item label="交易密码">
-
-							<uni-easyinput v-model="formData.name" type="password" passwordIcon :inputBorder="true"
-								:styles="styles" primaryColor="#822151" />
-						</uni-forms-item>
-						<view class="tui-submit tui-cancle">
-							确定出金
-						</view>
 					</template>
 					<!-- trc和erc的 -->
-					<template>
+					<template v-else>
 						<uni-forms-item label="地址">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											阿斯顿*
+											{{selectCashInfo.usdt_url}}
 										</view>
 									</view>
 								</view>
@@ -133,6 +126,15 @@
 							确定出金
 						</view>
 					</template>
+					<uni-forms-item label="交易密码">
+
+						<uni-easyinput v-model="formData.mpwd" type="password" passwordIcon :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
+					</uni-forms-item>
+					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit">
+						确定出金
+					</view>
+
 				</uni-forms>
 			</view>
 		</view>
@@ -147,9 +149,9 @@
 					</view>
 				</view>
 				<view class="tui-content">
-					<view class="tui-contentItem" v-for="(item,index) in list" :key="index"
-						@click="onClickCurrentIndex(item,index)" :class="currentIndex == index ? 'tui-activite' : ''">
-						{{item}}
+					<view class="tui-contentItem" v-for="(value,key,index) in typeList" :key="index"
+						@click="onClickCurrentIndex(key,index)" :class="[{'tui-activite':formData.pay_type==key}]">
+						{{value}}
 					</view>
 
 				</view>
@@ -160,52 +162,136 @@
 
 <script>
 	import {
-		userInfo
+		userInfo,
+		userGetCash,
+		userWithdraw
 	} from "@/api/user.js"
 
 	export default {
 		data() {
 			return {
-				formData: {},
-				list: ['USDT-TRC20', 'USDT-ERC20', '银行卡'],
-				currentIndex: 2,
-				title: '银行卡',
-				isShow: true,
+				formData: {
+					money: '',
+					pay_type: 'bank_card',
+					mpwd: ''
+				},
+				typeList: {
+					'bank_card': '银行卡',
+					'usdt-trc20': 'USDT-TRC20',
+					'usdt-erc20': 'USDT-ERC20',
+				},
+
+				typeShow: true,
 				styles: {
 					'borderColor': '#fff'
 				},
 				userInfo: {},
+				cashInfo: {}
 			};
 		},
-		onLoad() {
+		onShow() {
 			this.getDetail()
 		},
+		computed: {
+			btnDisabled() {
+				const {
+					formData
+				} = this
+				if (!this.binded) {
+					return true
+				}
+				try {
+					Object.entries(formData).forEach(([key, val]) => {
+						if (!val && key !== 'usdt_url') {
+							throw ('有空值')
+						}
+					})
+				} catch (e) {
+					return true
+				}
+
+				return false
+			},
+			binded() {
+				const {
+					cashInfo,
+					formData: {
+						pay_type
+					}
+				} = this
+				if (cashInfo[pay_type]) {
+					try {
+						Object.entries(cashInfo[pay_type]).forEach(([key, val]) => {
+							if (!val) {
+								throw ('有空值')
+							}
+						})
+					} catch (e) {
+						return false
+					}
+					return true
+				}
+			},
+			selectCashInfo() {
+				const {
+					cashInfo,
+					formData: {
+						pay_type
+					}
+				} = this
+				return cashInfo[pay_type]
+			}
+		},
 		methods: {
-			getDetail() {
-				userInfo({
-					hideLoading: true
+			onSubmit() {
+				if (this.btnDisabled) return
+				userWithdraw({
+					...this.formData,
 				}).then(({
+					data
+				}) => {
+					uni.showModal({
+						title: '操作成功',
+						content: "请耐心等待到账",
+						showCancel: false,
+					}).then(_ => {
+						uni.navigateBack()
+					})
+
+				})
+			},
+			onClickDetail(type) {
+				uni.navigateTo({
+					url: '/pages/account/account-detail?pay_type=' + type
+				})
+			},
+			getDetail() {
+				userInfo().then(({
 					data
 				}) => {
 					this.userInfo = data
 				})
+				userGetCash().then(({
+					data
+				}) => {
+					this.cashInfo = data
+				})
 			},
 			maskClick() {
-				this.isShow = true
+				this.typeShow = true
 			},
 			onClickOpen() {
 				this.$refs.popup.open()
-				this.isShow = false
+				this.typeShow = false
 			},
 			onClickCancle() {
 				this.$refs.popup.close()
-				this.isShow = true
+				this.typeShow = true
 			},
 			onClickCurrentIndex(item, index) {
-				this.title = item;
-				this.currentIndex = index
+				this.formData.pay_type = item;
 				this.$refs.popup.close()
-				this.isShow = true
+				this.typeShow = true
 			}
 		}
 	}
