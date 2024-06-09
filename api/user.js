@@ -16,3 +16,11 @@ export const userLogin = function(data = {}) {
 export const userInfo = function(data = {}) {
 	return request.get('/user/getUserInfo', data)
 }
+//获取已绑定
+export const userGetCash = function(data = {}) {
+	return request.post('user/getCash', data)
+}
+//绑定c出金账户
+export const userBindWithdraw = function(data = {}) {
+	return request.post('user/cash_save', data)
+}

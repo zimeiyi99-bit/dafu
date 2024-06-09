@@ -7,11 +7,11 @@
 				</view>
 			</view>
 			<view class="">
-				<l-circularProgress :fontShow="false" :percent="66" type="halfCircular" :lineWidth="20" :boxWidth="360"
-					progressColor="#822151" bgColor="#fff">
+				<l-circularProgress :fontShow="false" :percent="pageData.zb" type="halfCircular" :lineWidth="20"
+					:boxWidth="360" progressColor="#822151" bgColor="#fff">
 					<view class="tui-progress">
 						<view class="title">余额宝总额</view>
-						<view class="price">￥1258.00</view>
+						<view class="price">￥{{pageData.all_money}}</view>
 					</view>
 					<view class="tui-progressBottom">
 						<view class="">
@@ -52,7 +52,7 @@
 						已确认份额
 					</view>
 					<view class="desc">
-						1283.25
+						{{pageData.yue_start_money}}
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>3}]">
@@ -61,7 +61,7 @@
 						待确认份额
 					</view>
 					<view class="desc">
-						460.20
+						{{pageData.yue_stop_money}}
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>2}]">
@@ -70,7 +70,7 @@
 						收益
 					</view>
 					<view class="desc">
-						25.28
+						666
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>2}]">
@@ -79,7 +79,7 @@
 						收益率
 					</view>
 					<view class="desc">
-						1%
+						{{pageData.yield}}
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>4}]">
@@ -88,7 +88,7 @@
 						今日剩余入金次数
 					</view>
 					<view class="desc">
-						60
+						{{pageData.ru_count}}
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>1}]">
@@ -97,7 +97,7 @@
 						今日剩余出金次数
 					</view>
 					<view class="desc">
-						60
+						{{pageData.chu_count}}
 					</view>
 				</view>
 			</view>
