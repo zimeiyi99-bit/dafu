@@ -293,7 +293,7 @@
 			// 处理外层样式的style
 			boxStyle() {
 				return `color:${
-					this.inputBorder && this.msg ? '#e43d33' : this.styles.color
+					this.inputBorder && this.msg ? '#222' : this.styles.color
 				};`;
 			},
 			// input 内容的类和样式处理
@@ -523,7 +523,7 @@
 </script>
 
 <style lang="scss">
-	$uni-error: #e43d33;
+	$uni-error: #222;
 	$uni-border-1: #dcdfe6 !default;
 
 	.uni-easyinput {

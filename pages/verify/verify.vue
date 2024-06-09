@@ -3,24 +3,23 @@
 		<guo-headerTitle title="实名认证"></guo-headerTitle>
 		<view class="tui-register" v-if="userInfo.is_auth == 0">
 			<view class="tui-form">
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px"
-					:rules="rules">
+				<uni-forms ref="form" :modelValue="formData" label-position="top" label-width="200px" :rules="rules">
 					<uni-forms-item label="姓名" name="real_name" required>
 						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+							:styles="styles" primaryColor="#822151" @blur="SetValue('real_name')" />
 					</uni-forms-item>
-					<uni-forms-item label="证件号">
-						<uni-easyinput v-model="formData.age" placeholder="请输入证件号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="证件号" name="id_card" required>
+						<uni-easyinput type="number" v-model="formData.id_card" placeholder="请输入证件号" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" @blur="SetValue('id_card')" />
 					</uni-forms-item>
-					<uni-forms-item label="国籍">
-						<uni-easyinput v-model="formData.age" placeholder="请输入国籍" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+					<uni-forms-item label="国籍" name="gj" required>
+						<uni-easyinput v-model="formData.gj" placeholder="请输入国籍" :inputBorder="true" :styles="styles"
+							primaryColor="#822151" @blur="SetValue('gj')" />
 					</uni-forms-item>
 					<uni-forms-item label="请上传证件照片">
 						<view class="tui-certificate">
-							<view class="item">
-								<image src="../../static/front.png" mode=""></image>
+							<view class="item" @click="onUploadImg">
+								<image :src="formData.id_img_1 == '' ?  require('@/static/front.png') : formData.id_img_1" mode=""></image>
 								<view class="first">
 									证件正面
 								</view>
@@ -28,8 +27,9 @@
 									点击上传证件人面像
 								</view>
 							</view>
-							<view class="item">
-								<image src="../../static/back.png" mode=""></image>
+							<view class="item" @click="onUploadImgReverse">
+								
+								<image :src="formData.id_img_2 == '' ? require('@/static/back.png') : formData.id_img_1" mode=""></image>
 								<view class="first">
 									证件反面
 								</view>
@@ -39,7 +39,7 @@
 							</view>
 						</view>
 					</uni-forms-item>
-					<view class="tui-submit tui-cancle" @click="onClickBtn">
+					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="onClickBtn">
 						提交
 					</view>
 				</uni-forms>
@@ -56,6 +56,7 @@
 	import {
 		mapState
 	} from 'vuex';
+	import updateFile from "@/utils/upload.js"
 
 	export default {
 		data() {
@@ -66,16 +67,28 @@
 					gj: '',
 					id_img_1: '',
 					id_img_2: '',
-
 				},
 				styles: {
 					'borderColor': '#fff'
 				},
+				isBtn: false,
 				rules: {
 					real_name: {
 						rules: [{
 							required: true,
-							errorMessage: '请填写姓名',
+							errorMessage: '请输入姓名',
+						}, ],
+					},
+					id_card: {
+						rules: [{
+							required: true,
+							errorMessage: '请输入证件号',
+						}, ],
+					},
+					gj: {
+						rules: [{
+							required: true,
+							errorMessage: '请输入国籍',
 						}, ],
 					}
 				}
@@ -85,8 +98,54 @@
 			...mapState(['userInfo']),
 		},
 		methods: {
+			onUploadImgReverse() {
+				uni.chooseImage({
+					count: 1, //上传图片的数量，默认是9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+
+					success: async (res) => {
+						const tempFilePaths = res.tempFilePaths; //拿到选择的图片，是一个数组\
+						uni.showLoading({
+							title: '上传中'
+						})
+
+						let xhr = await updateFile(tempFilePaths[0])
+						console.log(xhr)
+						this.formData.id_img_2 = xhr.data.content
+						uni.hideLoading()
+					}
+				});
+			},
+			onUploadImg() {
+				uni.chooseImage({
+					count: 1, //上传图片的数量，默认是9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+
+					success: async (res) => {
+						const tempFilePaths = res.tempFilePaths; //拿到选择的图片，是一个数组\
+						uni.showLoading({
+							title: '上传中'
+						})
+
+						let xhr = await updateFile(tempFilePaths[0])
+						console.log(xhr)
+						this.formData.id_img_1 = xhr.data.content
+						uni.hideLoading()
+					}
+				});
+			},
+			SetValue(value) {
+				this.$refs.form.validate([value], (err, formData) => {
+					if (!err) {
+						console.log('success', formData)
+					}
+				})
+			},
+
 			onClickBtn() {
-				
+				this.$refs.form.validate().then((res) => {
+
+				}).catch((err) => {})
 			}
 		}
 	}
@@ -136,10 +195,13 @@
 		color: #a8a9ac !important;
 	}
 
+	.tui-ok {
+		background-color: rgb(241, 243, 246) !important;
+		color: #fff !important;
+	}
+
 	.tui-submit {
 		margin-top: 44rpx;
-		background: #822151;
-		color: #fff;
 		width: 100%;
 		display: flex;
 		align-items: center;
