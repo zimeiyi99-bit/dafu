@@ -24,3 +24,7 @@ export const userGetCash = function(data = {}) {
 export const userBindWithdraw = function(data = {}) {
 	return request.post('user/cash_save', data)
 }
+//出金
+export const userWithdraw = function(data = {}) {
+	return request.post('user/downmark', data)
+}
