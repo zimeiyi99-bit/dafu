@@ -4,6 +4,14 @@ import request from '@/utils/request.js';
 export const balanceInfo = function(data = {}) {
 	return request.get('yuebao/getdata', data)
 }
+//余额宝转出
+export const balanceSell = function(data = {}) {
+	return request.post('/yuebao/sell', data)
+}
+//余额宝转入
+export const balanceBuy = function(data = {}) {
+	return request.post('/yuebao/buy', data)
+}
 
 //出金记录
 export const withdraw_record = function(data = {}) {

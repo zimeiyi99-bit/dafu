@@ -24,14 +24,14 @@
 				</l-circularProgress>
 			</view>
 			<view class="tui-card">
-				<view class="tui-cardItem" @click="onClickDeposit('存入金额')">
+				<view class="tui-cardItem" @click="onClickDeposit('buy')">
 					<image src="../../static/cunru.png" mode=""></image>
 					<text class="">
 						存入
 					</text>
 				</view>
 				<view class="tui-border"></view>
-				<view class="tui-cardItem" @click="onClickDeposit('转出金额')">
+				<view class="tui-cardItem" @click="onClickDeposit('sell')">
 					<image src="../../static/zhuanchu.png" mode=""></image>
 					<text class="">
 						转出
@@ -137,9 +137,9 @@
 					this.pageData = data
 				})
 			},
-			onClickDeposit(title) {
+			onClickDeposit(type) {
 				uni.navigateTo({
-					url: '/pages/transfer/transfer?title=' + title
+					url: '/pages/transfer/transfer?type=' + type
 				})
 			},
 			onClickParticulars() {

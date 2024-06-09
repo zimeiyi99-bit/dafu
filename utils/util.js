@@ -130,7 +130,8 @@ const formatDateWx = {
 		var _format = function(number) {
 			return (number < 10 ? ('0' + number) : number);
 		};
-		const timeStr = date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date.getDate()) +
+		const timeStr = date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date
+				.getDate()) +
 			' ' +
 			_format(date.getHours()) + ':' + _format(date.getMinutes());
 		return timeStr
@@ -236,7 +237,30 @@ const regCheckNum = function(str) {
 const regEmail = function(str) {
 	return !RegExp(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/).test(str);
 }
-
+const validateAmount = function(val, max = '99999') {
+	let value = val.toString();
+	if (!value) return '';
+	// 仅保留数字和小数点
+	value = value.replace(/[^0-9.]/g, '');
+	// 确保只有一个小数点
+	if ((value.match(/\./g) || []).length > 1) {
+		value = value.replace(/\.+$/, "");
+	}
+	// 确保值在范围内
+	if (value !== '' && value <= 0) {
+		value = '1';
+	} else if (value !== '' && value > max) {
+		value = max;
+	}
+	// 保留最多两位小数
+	if (value.indexOf('.') !== -1) {
+		const parts = value.split('.');
+		if (parts[1].length > 2) {
+			value = `${parts[0]}.${parts[1].substring(0, 2)}`;
+		}
+	}
+	return value
+}
 export default {
 	imgUrl,
 	h5Appid,
@@ -257,4 +281,5 @@ export default {
 	regPhoneFormat,
 	regCheckNum,
 	regEmail,
+	validateAmount
 }

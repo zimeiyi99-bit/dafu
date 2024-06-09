@@ -1,87 +1,105 @@
 <template>
 	<view>
-		<guo-headerTitle :title="title"></guo-headerTitle>
+		<guo-headerTitle :title="typeList[type]+'金额'"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-form">
 				<view class="title">
-					{{title}}
+					{{typeList[type]}}'金额'
 				</view>
 				<view class="flex flex-column">
 					<view class="tui-inputBox">
 						<view class="font-bolder">
 							￥
 						</view>
-						<input type="text" class="input" disabled />
+						<input v-model="amount" type="text" class="input" disabled />
 					</view>
 					<view class="bottom">
-						可{{title}}1007992.00CNY, <text>{{title ==  '存入' ? '全部存入' : '全部转出'}}</text>
+						可{{typeList[type]}}金额1007992.00CNY, <text>全部{{typeList[type]}}</text>
 					</view>
 				</view>
 			</view>
 			<view class="keyboard">
 				<view class="capsule">
-					<view class="jq_key">
-						<button class="tui-keyboard" hover-class="hover-click">
-							1
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							2
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							3
-						</button>
-					</view>
-					<view class="jq_key">
-						<button class="tui-keyboard" hover-class="hover-click">
-							4
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							5
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							6
-						</button>
-					</view>
-					<view class="jq_key">
-						<button class="tui-keyboard" hover-class="hover-click">
-							7
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							8
-						</button>
-						<button class="tui-keyboard" hover-class="hover-click">
-							9
-						</button>
-					</view>
-					<view class="jq_key">
-						<button class="tui-keyboard end" hover-class="hover-click">
-							.
-						</button>
-						<button class="tui-keyboard end" hover-class="hover-click">
-							0
-						</button>
-						<button class="tui-keyboard end" hover-class="hover-click">
-							<image src="../../static/clear.png" mode=""></image>
-						</button>
-					</view>
-				</view>
-				<view class="tui-submit tui-cancle">
-					确定
+					<button class="tui-keyboard" hover-class="hover-click" v-for="(item,index) in keyList" :key="index"
+						@click="keyUp(item)">
+						{{item}}
+					</button>
+					<button class="tui-keyboard end" hover-class="hover-click" @click="backSp">
+						<image src="../../static/clear.png" mode=""></image>
+					</button>
 				</view>
 			</view>
+			<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit">
+				确定
+			</view>
 		</view>
+	</view>
 	</view>
 </template>
 
 <script>
+	import {
+		balanceBuy,
+		balanceSell
+	} from "@/api/money.js"
 	export default {
 		data() {
 			return {
-				title: ''
+				typeList: {
+					'buy': '存入',
+					'sell': '转出',
+				},
+				type: {},
+				keyList: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'],
+				amount: ''
 			};
 		},
+		computed: {
+			btnDisabled() {
+				const {
+					amount
+				} = this
+				return !amount || amount <= 0
+			},
+		},
 		onLoad(e) {
-			this.title = e.title
+			this.type = e.type
+		},
+		methods: {
+			keyUp(val) {
+				const newAmout = this.amount + val
+				let value = this.$utils.validateAmount(newAmout);
+				this.$nextTick(_ => {
+					// 更新 v-model
+					this.amount = value;
+				})
+			},
+			backSp() {
+				this.amount = this.amount.slice(0, -1);
+			},
+			onSubmit() {
+				if (this.btnDisabled) return
+				let queryApi = null
+				if (this.type == 'buy') {
+					queryApi = balanceBuy
+				} else if (this.type == 'sell') {
+					queryApi = balanceSell
+				}
+				queryApi({
+					amount: this.amount,
+				}).then(({
+					data
+				}) => {
+					uni.showModal({
+						title: '操作成功',
+						content: "请耐心等待到账",
+						showCancel: false,
+					}).then(_ => {
+						uni.navigateBack()
+					})
+
+				})
+			}
 		}
 	}
 </script>
@@ -132,31 +150,28 @@
 				height: 100%;
 				position: relative;
 				background-color: #fff;
+				display: flex;
+				flex-wrap: wrap;
 
-				.jq_key {
+
+				.tui-keyboard {
+					background-color: #f5f7fb;
+					box-sizing: border-box;
+					margin-bottom: 40rpx;
+					width: 200rpx;
+					height: 90rpx;
+					line-height: 90rpx;
+					border-radius: 22px;
+					font-size: 40rpx;
+					font-weight: 600;
 					display: flex;
-					justify-content: space-between;
-					height: 25%;
+					justify-content: center;
+					align-items: Center;
+					border: 1px solid #f5f7fb;
 
-					.tui-keyboard {
-						background-color: #f5f7fb;
-						box-sizing: border-box;
-						margin-bottom: 40rpx;
-						width: 200rpx;
-						height: 90rpx;
-						line-height: 90rpx;
-						border-radius: 22px;
-						font-size: 40rpx;
-						font-weight: 600;
-						display: flex;
-						justify-content: center;
-						align-items: Center;
-						border: 1px solid #f5f7fb;
-
-						image {
-							width: 32px;
-							height: 32px;
-						}
+					image {
+						width: 32px;
+						height: 32px;
 					}
 				}
 			}

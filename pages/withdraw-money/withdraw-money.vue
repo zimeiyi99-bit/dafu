@@ -248,27 +248,7 @@
 		},
 		methods: {
 			validateInput() {
-				let value = this.formData.money.toString();
-				if (!value) return;
-				// 仅保留数字和小数点
-				value = value.replace(/[^0-9.]/g, '');
-				// 确保只有一个小数点
-				if ((value.match(/\./g) || []).length > 1) {
-					value = value.replace(/\.+$/, "");
-				}
-				// 确保值在范围内
-				if (value !== '' && value <= 0) {
-					value = '1';
-				} else if (value !== '' && value > this.userInfo.money) {
-					value = this.userInfo.money;
-				}
-				// 保留最多两位小数
-				if (value.indexOf('.') !== -1) {
-					const parts = value.split('.');
-					if (parts[1].length > 2) {
-						value = `${parts[0]}.${parts[1].substring(0, 2)}`;
-					}
-				}
+				let value = this.$utils.validateAmount(this.formData.money, this.userInfo.money);
 				this.$nextTick(_ => {
 					// 更新 v-model
 					this.formData.money = value;
