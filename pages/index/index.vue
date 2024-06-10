@@ -110,7 +110,7 @@
 					<scroll-view class="prefer-scroll" scroll-x="true">
 
 						<block v-for="(item,index) in goodsList" :key="index">
-							<view class="image-box" @click="onClickDetail">
+							<view class="image-box" @click="onClickDetail(item)">
 								<view class="name">{{item.title}}</view>
 								<view class="desc">
 									{{item.codename}}
@@ -149,7 +149,7 @@
 					</view>
 					<view class="tui-varietyContent">
 						<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
-							@click="onClickDetail">
+							@click="onClickDetail(item)">
 							<view class="name">
 								<text class="piceName">{{item.title}}</text>
 								<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
@@ -253,11 +253,11 @@
 			if (e.scrollTop > 100) {
 				// 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
 				this.stickyStyle = 'position: fixed; top: 0; left: 0; width: 100%; z-index: 999;background-color: #f6f7fb;'
-				
+
 			} else {
 				// 滚动距离不足100时，取消吸顶效果
 				this.stickyStyle = ''
-				
+
 			}
 		},
 		onLoad() {
@@ -850,7 +850,7 @@
 		position: relative;
 		height: 100rpx;
 		background: url(/static/bg.png) no-repeat;
-		
+
 
 		.tui-img {
 
