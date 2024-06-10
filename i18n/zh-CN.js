@@ -1,6 +1,8 @@
 export default {
 	'app.yymc':'简体中文',
 	'app.yysz':'语言设置',
+	'app.qr':'确认',
+	'app.qx':'取消',
 	'home.dj.w': '点击我',
 	'home.dj.sq': '点击收起',
 	'home.kjrj': '快捷入金',

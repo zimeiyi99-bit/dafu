@@ -4,10 +4,10 @@
 			<view class="tui-popupContent">
 				<view class="flex flex-between flex-item p-26">
 					<view class="title">
-						选择出金方式
+						{{$t('app.yysz')}}
 					</view>
 					<view class="cancle" @click="onClickCancle">
-						取消
+						{{$t('app.qx')}}
 					</view>
 				</view>
 				<view class="tui-content">
