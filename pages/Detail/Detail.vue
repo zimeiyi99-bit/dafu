@@ -53,12 +53,102 @@
 				</view>
 			</view>
 			<view class="tui-tabs">
-				<v-tabs :isTime="true" v-model="timeActive" @change="getDetail()" :scroll="false" :tabs="timeTabs.map(item=>item.text)"
-					color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#822151" :lineScale="0.2"
-					bgColor="#f6f7fb" :zIndex="1"></v-tabs>
+				<v-tabs :isTime="true" v-model="timeActive" @change="getDetail()" :scroll="false"
+					:tabs="timeTabs.map(item=>item.text)" color="rgb(168, 169, 172)" activeColor="#222" bold
+					lineColor="#822151" :lineScale="0.2" bgColor="#f6f7fb" :zIndex="1"></v-tabs>
 			</view>
 			<kline ref="kline" :data="klineList"></kline>
+			<view class="tui-btn">
+				<button class="btn" style="background-color: #f33b50;" @click="onClickBuy('收购')">收购</button>
+				<button class="btn" style="background-color: #0bb563;" @click="onClickBuy('售出')">售出</button>
+			</view>
 		</view>
+		<uni-popup ref="popup" type="bottom">
+			<view class="tui-bottomPopup">
+				<view class="tui-purchase">
+					<view class="tui-title">
+						<view class="flex">
+							<text class="name">{{pageDetail.title}}</text>
+							<text class="bade"
+								:style="{background:isType == '售出' ? '#0bb563' : '#f33b50'}">{{isType}}</text>
+						</view>
+						<view class="tui-cancleText" @click="onClickPopupCancle">
+							取消
+						</view>
+					</view>
+					<view class="tui-firstTitle">
+						金额
+					</view>
+					<view class="items">
+						<view class="tui-item" v-for="(item,index) in isNumber" :key="index"
+							@click="onClickIsNumber(item,index)" :class="currentIndex == index ? 'tui-activite' : ''">
+							{{item}}
+						</view>
+					</view>
+					<view class="tui-inputBox">
+						<input class="tui-input" v-model="isInputText" @focus="onClickBlur" placeholder="请输入其它金额"
+							type="text" />
+						<text>CNY</text>
+					</view>
+					<view class="flex flex-between flex-item" style="margin-top: 16rpx;">
+						<view class="flex flex-item">
+							<view class="tui-money">
+								余额：<text>{{userInfo.money}}</text> <text class="tui-cny">CNY</text>
+							</view>
+						</view>
+						<view class="tui-alling" @click="onClickAllPice">
+							全部下单
+						</view>
+					</view>
+					<view class="tui-firstTitle">
+						时间
+					</view>
+					<view class="items">
+						<view class="tui-item" v-for="(item,index) in times" :key="index"
+							@click="onClickTimeIndex(item,index)" :class="current == index ? 'tui-activite' : ''">
+							{{item}}
+						</view>
+					</view>
+					<view class="tui-detail">
+						<view class="flex flex-item flex-column">
+							<view class="text-ts">
+								当前价
+							</view>
+							<view class="pice">
+								{{pageDetail.price}}
+							</view>
+						</view>
+						<view class="flex flex-item flex-column">
+							<view class="text-ts">
+								金额
+							</view>
+							<view class="pice">
+								{{isInputText == '' ? 0 : isInputText}}
+							</view>
+						</view>
+						<view class="flex flex-item flex-column">
+							<view class="text-ts">
+								收益率
+							</view>
+							<view class="pice">
+								1.07569
+							</view>
+						</view>
+						<view class="flex flex-item flex-column">
+							<view class="text-ts">
+								预估
+							</view>
+							<view class="pice">
+								1.07569
+							</view>
+						</view>
+					</view>
+					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'">
+						确定
+					</view>
+				</view>
+			</view>
+		</uni-popup>
 		<uni-drawer ref="showLeft" mode="left" :width="300">
 			<scroll-view style="height: 100%" scroll-y="true">
 				<view class="tui-draw">
@@ -119,6 +209,9 @@
 	import {
 		goods
 	} from '@/api/money.js'
+	import {
+		userInfo
+	} from "@/api/user.js"
 	export default {
 		components: {
 			kline: () => import("@/components/kline/index.vue"),
@@ -126,6 +219,9 @@
 
 		data() {
 			return {
+				userInfo: {},
+				isNumber: ['5000', '10000', '50000', '10000', '20000', '500000'],
+				times: ['540S', '360S', '180S'],
 				timeTabs: [{
 					text: "1m",
 					value: '1min'
@@ -141,7 +237,7 @@
 				}, {
 					text: "4h",
 					value: '4hour'
-				},  {
+				}, {
 					text: "1d",
 					value: '1day'
 				}, {
@@ -153,18 +249,23 @@
 				styles: {
 					borderColor: "#f6f8fa",
 				},
-
+				isBtn: false,
 				options: {},
 				timer: null,
 				pageDetail: {},
 				klineList: [],
 				goodsList: [],
-				searchText: ''
+				searchText: '',
+				currentIndex: -1,
+				isInputText: '',
+				current: -1,
+				isType: ''
 			};
 		},
 		onLoad(options) {
 			this.options = options;
 			this.getDetail();
+			this.getDetailUserInfo()
 			this.timer = setInterval((_) => {
 				this.getDetail();
 			}, 5000);
@@ -181,6 +282,35 @@
 			}
 		},
 		methods: {
+			onClickTimeIndex(item, index) {
+				this.current = index
+			},
+			onClickAllPice() {
+				this.isInputText = this.userInfo.money
+			},
+			onClickBlur() {
+				this.currentIndex = -1
+			},
+			onClickIsNumber(item, index) {
+				this.isInputText = item
+				this.currentIndex = index
+			},
+			getDetailUserInfo() {
+				userInfo({
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.userInfo = data
+				})
+			},
+			onClickPopupCancle() {
+				this.$refs.popup.close()
+			},
+			onClickBuy(type) {
+				this.isType = type
+				this.$refs.popup.open()
+			},
 			onClickDetail(item) {
 				console.log(this.options, 'options')
 				this.options = {
@@ -249,6 +379,202 @@
 	.tui-hover {
 		background-color: #fffaf9 !important;
 		transform: seale(1.03);
+	}
+
+	.tui-cancle {
+		background-color: #ebeff1 !important;
+		color: #a8a9ac !important;
+		opacity: .5;
+	}
+
+	.tui-ok {
+		background-color: #822151 !important;
+		color: #fff !important;
+	}
+
+	.tui-submit {
+
+		width: 178px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 20rpx;
+		padding: 30rpx 0;
+		font-size: 32rpx;
+		margin: 0 auto;
+		margin-top: 44rpx;
+	}
+
+	.tui-detail {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 40rpx;
+
+		.text-ts {
+			color: #a8a9ac;
+			font-size: 10px;
+		}
+
+		.pice {
+			color: #222;
+			font-size: 10px;
+			padding-top: 8rpx;
+		}
+	}
+
+	.flex-item {
+		align-items: center;
+	}
+
+	.tui-bottomPopup {
+
+		padding: 48rpx 0 0;
+		border-radius: 48rpx 48rpx 0 0;
+		background-color: #fff;
+		z-index: 9999;
+
+		.tui-purchase {
+			padding: 0 32rpx;
+			padding-bottom: 40rpx;
+
+			.tui-firstTitle {
+				color: #a8a9ac;
+				font-size: 28rpx;
+				margin-top: 60rpx;
+
+			}
+
+			.tui-alling {
+				color: #f56c6c;
+				font-size: 24rpx;
+			}
+
+			.tui-money {
+				display: flex;
+				justify-content: flex-start;
+				color: #c9c9c9;
+				font-size: 24rpx;
+
+				.tui-cny {
+					margin-left: 4rpx;
+					font-size: 8px;
+					line-height: 17px;
+				}
+			}
+
+			.tui-inputBox {
+				padding: 0px 30rpx;
+				border-radius: 12px;
+				caret-color: #a8a9ac;
+				background-color: #f6f7fb;
+				display: flex;
+				align-items: center;
+
+				.tui-input:placeholder {
+					color: #c9c9c9;
+					font-size: 24rpx;
+				}
+
+				.tui-input {
+					border-radius: 12px !important;
+					flex: 1;
+					padding: 26rpx 30rpx !important;
+					caret-color: #c9c9c9;
+					height: 100rpx;
+					font-size: 26rpx;
+				}
+
+				text {
+					font-size: 24rpx;
+					color: #a8a9ac;
+				}
+			}
+
+			.items {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-content: space-between;
+				padding: 20rpx 0 0 0;
+
+				.tui-activite {
+					border: 1px solid #0bb563 !important;
+					color: #0bb563 !important;
+				}
+
+				.tui-item {
+					margin-bottom: 20rpx;
+					width: 210rpx;
+					height: 116rpx;
+					color: #a8a9ac;
+					opacity: 1;
+					background-color: #f6f7fb;
+					border-radius: 12px !important;
+					font-size: 28rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+			}
+
+			.tui-title {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				.tui-cancleText {
+					color: #a8a9ac;
+					font-size: 28rpx;
+				}
+
+				.name {
+					font-size: 32rpx;
+					font-weight: 500;
+					display: flex;
+					position: relative;
+					color: #222;
+				}
+
+				.bade {
+					border-radius: 10px;
+					height: 46rpx;
+					padding: 4rpx 12rpx;
+					color: #fff;
+					background-color: #0bb563 !important;
+					font-weight: 800;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-left: 10rpx;
+					font-size: 20rpx;
+				}
+			}
+		}
+	}
+
+	.tui-btn {
+		width: 100%;
+		background-color: #f6f7fb;
+		padding: 30rpx 40rpx;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+
+		padding-bottom: 42rpx;
+		font-size: 24rpx;
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.btn {
+			width: 216rpx;
+			border: unset;
+			color: #fff;
+			text-align: center;
+			border-radius: 30rpx;
+		}
 	}
 
 	.tui-draw {
