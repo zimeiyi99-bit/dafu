@@ -116,7 +116,8 @@
 									{{item.codename}}
 								</view>
 							
-								<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
+								<image v-if="item.is_z == 1" class="tui-shitu" :src="require(`@/static/up_${index%5}.png`)" mode=""></image>
+								<image v-else class="tui-shitu" :src="require(`@/static/down_${index%5}.png`)" mode=""></image>
 								<view class="proportion">
 									{{item.price}}
 								</view>
