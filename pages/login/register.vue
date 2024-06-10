@@ -15,7 +15,7 @@
 				设置密码
 			</view>
 			<view class="tui-form">
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
+				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
 					<uni-forms-item label="密码">
 						<uni-easyinput v-model="formData.passwd" placeholder="请输入密码" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
@@ -44,7 +44,7 @@
 				<view class="">
 					注册即表示同意APP
 				</view>
-				<view class="policy">
+				<view class="policy" @click="onClickYinsi">
 					隐私政策
 				</view>
 			</view>
@@ -86,8 +86,13 @@
 			}
 		},
 		methods: {
+			onClickYinsi() {
+				uni.navigateTo({
+					url: '/pages/yinsi/yinsi'
+				})
+			},
 			onRegister() {
-				if(this.btnDisabled) return
+				if (this.btnDisabled) return
 				if (this.formData.passwd !== this.formData.o_passwd) {
 					return uni.showToast({
 						title: "两次密码不一致",
