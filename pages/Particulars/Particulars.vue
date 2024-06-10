@@ -2,16 +2,6 @@
 	<view>
 		<guo-headerTitle title="余额宝明细" backgroundColor="#fff"></guo-headerTitle>
 		<view class="tui-tabs">
-<<<<<<< HEAD
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="tabs" color="rgb(168, 169, 172)" activeColor="#222" bold
-				lineColor="#822151" :lineScale="0.1" @change="getList"></v-tabs>
-		</view>
-		<view class="tui-headerTitle">
-			<view class="tui-card" v-for="(item,index) in pageList" :key="index">
-				<view class="tui-left">
-					<view class="title">
-						{{tabs[item.type]}}
-=======
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="['全部', '存入', '转出', '收益']" color="rgb(168, 169, 172)"
 				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
@@ -20,7 +10,6 @@
 				<view class="tui-left">
 					<view class="title">
 						{{item.type == 1 ? '已确定' : item.type == 2 ? '待确定' : item.type == 3 ? '收益' : '转出'}}
->>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 					</view>
 					<view class="time">
 						{{item.create_time}}
@@ -45,24 +34,6 @@
 
 <script>
 	import {
-<<<<<<< HEAD
-		balanceLog
-	} from "@/api/money.js"
-	export default {
-		data() {
-			return {
-				tabs: ['全部', '已确定', '待确定', '收益', '转出'],
-				activeTab: 0,
-				pageList: [],
-			};
-		},
-		onLoad() {
-			this.getList()
-		},
-		methods: {
-			getList() {
-				balanceLog({
-=======
 		getMoneyLog
 	} from '@/api/money.js'
 	export default {
@@ -101,14 +72,10 @@
 			},
 			getMoneyLog() {
 				getMoneyLog({
->>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 					type: this.activeTab
 				}).then(({
 					data
 				}) => {
-<<<<<<< HEAD
-					this.pageList = data.lists
-=======
 					console.log(data)
 					if (data.lists.length !== 0) {
 						this.isData = false
@@ -124,7 +91,6 @@
 					} else {
 						this.List = this.List.concat(data.lists)
 					}
->>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 				})
 			}
 		}
