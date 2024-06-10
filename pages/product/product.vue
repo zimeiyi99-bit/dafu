@@ -25,7 +25,8 @@
 				<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index">
 					<view class="name">
 						<view class="flex flex-item">
-							<text class="piceName" v-for="(v,i) in item.title.split('')" :key="" :style="setColor(v)">{{ v }}</text>
+							<text class="piceName" v-for="(v,i) in item.title.split('')" :key=""
+								:style="setColor(v)">{{ v }}</text>
 						</view>
 						<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
 							<text>24H量</text>
@@ -36,8 +37,8 @@
 						{{item.price}}
 					</view>
 					<view style="justify-content: flex-end;" class="flex">
-						<view class="tui-end">
-							{{item.zf}}
+						<view class="tui-end" :class="item.zf>0?'up':'down'">
+							{{item.zf}}%
 						</view>
 					</view>
 				</view>
@@ -149,10 +150,17 @@
 					width: 80px;
 					color: #fff;
 					border-radius: 5px;
-					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
 					text-align: center;
+
+					&.up {
+						background-color: #f33b50;
+					}
+
+					&.down {
+						background-color: #0bb563;
+					}
 				}
 
 				.code {
@@ -165,7 +173,7 @@
 
 				.name {
 					display: flex;
-					
+
 					flex-direction: column;
 					flex: 1;
 
