@@ -115,7 +115,7 @@
 								<view class="desc">
 									{{item.codename}}
 								</view>
-							
+
 								<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
 								<view class="proportion">
 									{{item.price}}
@@ -152,7 +152,7 @@
 						</view>
 					</view>
 					<view class="tui-varietyContent">
-						<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
+						<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index" hover-class="tui-hover"
 							@click="onClickDetail(item)">
 							<view class="name">
 								<text class="piceName">{{item.title}}</text>
@@ -167,7 +167,7 @@
 							<view style="justify-content: flex-end;" class="flex">
 
 								<view class="tui-end" :class="item.is_z == 1?'up':'down'">
-									{{item.zf_d}}
+									{{item.zf}}
 								</view>
 							</view>
 						</view>
@@ -352,6 +352,11 @@
 		z-index: 999 !important;
 	}
 
+	.tui-hover {
+		background-color: #fffaf9 !important;
+		transform: seale(1.03);
+	}
+
 	.tui-popup {
 		width: 600rpx;
 		background-color: #fff;
@@ -367,6 +372,8 @@
 		.tui-varietyContent {
 			display: flex;
 			flex-direction: column;
+
+
 
 			.tui-varietyContentItem {
 				width: 100%;

@@ -9,14 +9,15 @@
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
-						{{item.type == 1 ? '已确定' : item.type == 2 ? '待确定' : item.type == 3 ? '收益' : '转出'}}
+						{{item.type == 2 ? '转入' : item.type == 3 ? '收益' : '转出'}}
 					</view>
 					<view class="time">
 						{{item.create_time}}
 					</view>
 				</view>
-				<view class="tui-right">
-					{{item.amount}}
+				<view class="tui-right"
+					:style="{color:item.type == 2 ? '#f33b50' : item.type == 3 ? '#f33b50' : '#0bb563'}">
+					{{item.type == 2 ? '+' : item.type == 3 ? '+' : '-'}}{{item.amount}}
 				</view>
 			</view>
 			<!--加载loadding-->
@@ -72,7 +73,7 @@
 			},
 			getMoneyLog() {
 				getMoneyLog({
-					type: this.activeTab
+					type: this.activeTab == 0 ? 1 : this.activeTab == 1 ? 2 : this.activeTab == 2 ? 4 : 3
 				}).then(({
 					data
 				}) => {
