@@ -21,7 +21,7 @@
 							<uni-forms-item label="" name="id_img_1" required>
 								<view class="item" @click="onUploadImg">
 									<image
-										:src="formData.id_img_1 == '' ?  require('@/static/front.png') : formData.id_img_1"
+										:src="img1 == '' ?  require('@/static/front.png') : img1"
 										mode=""></image>
 									<view class="first">
 										证件正面
@@ -34,7 +34,7 @@
 							<uni-forms-item label="" name="id_img_2" required>
 								<view class="item" @click="onUploadImgReverse">
 									<image
-										:src="formData.id_img_2 == '' ? require('@/static/back.png') : formData.id_img_1"
+										:src="img2 == '' ? require('@/static/back.png') : img2"
 										mode=""></image>
 									<view class="first">
 										证件反面
@@ -143,7 +143,9 @@
 							errorMessage: '请上传证件照片',
 						}, ],
 					}
-				}
+				},
+				img1: '',
+				img2: ''
 			};
 		},
 		onLoad() {
@@ -175,7 +177,8 @@
 
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
-						this.formData.id_img_2 = xhr.data.content
+						this.formData.id_img_2 = xhr.data.headimg
+						this.img2 = xhr.data.content_all
 						this.$refs.form.validate().then((res) => {
 							this.isBtn = true
 						})
@@ -196,7 +199,8 @@
 
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
-						this.formData.id_img_1 = xhr.data.content
+						this.formData.id_img_1 = xhr.data.headimg
+						this.img1 = xhr.data.content_all
 						this.$refs.form.validate().then((res) => {
 							this.isBtn = true
 						})

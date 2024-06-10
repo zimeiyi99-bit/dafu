@@ -22,7 +22,8 @@
 				</view>
 			</view>
 			<view class="tui-varietyContent">
-				<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index">
+				<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
+					hover-class="tui-hover" @click="onClickDetail(item)">
 					<view class="name">
 						<view class="flex flex-item">
 							<text class="piceName" v-for="(v,i) in item.title.split('')" :key=""
@@ -37,8 +38,8 @@
 						{{item.price}}
 					</view>
 					<view style="justify-content: flex-end;" class="flex">
-						<view class="tui-end" :class="item.zf>0?'up':'down'">
-							{{item.zf}}%
+						<view class="tui-end" :class="item.is_z == 1?'up':'down'">
+							{{item.zf}}
 						</view>
 					</view>
 				</view>
@@ -98,6 +99,15 @@
 
 		},
 		methods: {
+			onClickDetail({
+				id,
+				codename,
+				title
+			}) {
+				uni.navigateTo({
+					url: `/pages/Detail/Detail?id=${id}&codename=${codename}&title=${title}`
+				})
+			},
 			setColor(e) {
 				if (this.searchText.indexOf(e) != -1) {
 					return 'color:#822151' //自定义颜色
@@ -134,6 +144,11 @@
 		.tui-varietyContent {
 			display: flex;
 			flex-direction: column;
+
+			.tui-hover {
+				background-color: #fffaf9 !important;
+				transform: seale(1.03);
+			}
 
 			.tui-varietyContentItem {
 				width: 100%;

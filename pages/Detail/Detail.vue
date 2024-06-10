@@ -7,12 +7,12 @@
 				<view class="tui-left">
 					<view class="bar"></view>
 					<view class="static">
-						<view class="title"> 666.66 </view>
+						<view class="title"> {{pageDetail.price}} </view>
 						<view class="flex flex-between flex-item">
-							<text class="tui-size">-6.66</text>
+							<text class="tui-size">{{pageDetail.zf_d}}</text>
 							<view class="flex flex-item p-l">
 								<image src="../../static/green_down.png" mode=""></image>
-								<text class="tui-size" style="color: #0bb563">-6.66%</text>
+								<text class="tui-size" style="color: #0bb563">{{pageDetail.zf}}</text>
 							</view>
 						</view>
 					</view>
@@ -47,7 +47,7 @@
 						<view style="flex: 1"></view>
 						<view class="item flex flex-column flex-between">
 							<view class="right-size"> 24H额 </view>
-							<view class="right-max"> 66.66 </view>
+							<view class="right-max"> {{ pageDetail.zf }} </view>
 						</view>
 					</view>
 				</view>
@@ -83,7 +83,7 @@
 						</view>
 						<view class="tui-varietyContent">
 							<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
-								@click="onClickDetail(item)">
+								hover-class="tui-hover" @click="onClickDetail(item)">
 								<view class="name">
 									<view class="flex flex-item">
 										<text class="piceName" v-for="(v,i) in item.title.split('')" :key=""
@@ -98,8 +98,8 @@
 									{{item.price}}
 								</view>
 								<view style="justify-content: flex-end;width: 100rpx;" class="flex">
-									<view class="tui-end" :class="item.zf>0?'up':'down'">
-										{{item.zf}}%
+									<view class="tui-end" :class="item.is_z == 1?'up':'down'">
+										{{item.zf_d}}
 									</view>
 								</view>
 							</view>
@@ -244,6 +244,11 @@
 </script>
 
 <style lang="less">
+	.tui-hover {
+		background-color: #fffaf9 !important;
+		transform: seale(1.03);
+	}
+
 	.tui-draw {
 		padding: 46px 0px 27px;
 
@@ -274,10 +279,21 @@
 					align-items: center;
 
 					.tui-end {
-						color: #f33b50;
-
-						font-size: 28rpx;
+						padding: 10rpx;
+						width: 100%;
+						color: #fff;
+						border-radius: 5px;
+						font-size: 24rpx;
 						box-sizing: border-box;
+						text-align: center;
+
+						&.up {
+							background-color: #f33b50 !important;
+						}
+
+						&.down {
+							background-color: #0bb563 !important;
+						}
 					}
 
 					.code {
