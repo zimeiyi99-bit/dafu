@@ -148,6 +148,7 @@
 	.tui-cancle {
 		background-color: rgb(241, 243, 246) !important;
 		color: #a8a9ac !important;
+		opacity: .5;
 	}
 
 	.tui-submit {
