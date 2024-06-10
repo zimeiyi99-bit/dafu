@@ -1,0 +1,99 @@
+<template>
+	<view>
+		<uni-popup ref="popup" type="bottom" border-radius="10px 10px 0 0">
+			<view class="tui-popupContent">
+				<view class="flex flex-between flex-item p-26">
+					<view class="title">
+						选择出金方式
+					</view>
+					<view class="cancle" @click="onClickCancle">
+						取消
+					</view>
+				</view>
+				<view class="tui-content">
+					<view class="tui-contentItem" v-for="(item,index) in langList" :key="index" @click="seletLang(item)"
+						:class="[{'tui-activite':showLang==item.value}]">
+						{{item.name}}
+					</view>
+
+				</view>
+			</view>
+		</uni-popup>
+	</view>
+</template>
+
+<script>
+	export default {
+		name: "langChange",
+		data() {
+			return {
+				langList: [{
+						name: '简体中文',
+						value: 'zh-CN'
+					},
+					{
+						name: '繁體中文',
+						value: 'zh-TW'
+					}
+				]
+			};
+		},
+		computed: {
+			showLang() {
+				return uni.getStorageSync('i18nLang') || 'zh-CN'
+			}
+		},
+		methods: {
+			open() {
+				// 通过组件定义的ref调用uni-popup方法 ,如果传入参数 ，type 属性将失效 ，仅支持 ['top','left','bottom','right','center']
+				this.$refs.popup.open()
+			},
+			seletLang(item) {
+				uni.setStorageSync('i18nLang', item.value)
+				location.reload();
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.tui-popupContent {
+		border-radius: 24px 24px 0 0;
+		padding: 48rpx 0 0;
+		background-color: #fff;
+
+		.p-26 {
+			padding: 0 32rpx;
+		}
+
+		.tui-content {
+			margin-top: 40rpx;
+			padding-bottom: 100rpx;
+
+			.tui-contentItem {
+				height: 100rpx;
+				font-size: 28rpx;
+				color: #222;
+				display: flex;
+				align-items: center;
+				padding: 0 32rpx;
+			}
+
+			.tui-activite {
+				background-color: #f3f5f6 !important;
+				color: #822151 !important;
+			}
+		}
+
+		.title {
+			font-size: 32rpx;
+			font-weight: 800;
+			color: #222;
+		}
+
+		.cancle {
+			color: #a8a9ac;
+			font-size: 28rpx;
+		}
+	}
+</style>

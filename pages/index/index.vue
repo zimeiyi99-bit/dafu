@@ -2,11 +2,11 @@
 	<view class="tui-header">
 		<view class="tui-NavHeader" :style="stickyStyle">
 			<view class="tui-img">
-				<image src="../../static/logo.png" mode=""></image>
+				<image src="@/static/logo.png" mode=""></image>
 			</view>
-			<view class="tui-right">
-				<image src="../../static/diqiu.png" mode=""></image>
-				<text>简体中文</text>
+			<view class="tui-right" @click="$refs['langChange'].open()">
+				<image src="@/static/diqiu.png" mode=""></image>
+				<text>{{$t('app.yymc')}}</text>
 			</view>
 		</view>
 		<view class="tui-banner">
@@ -24,16 +24,16 @@
 		<view :class="['platformIntroduction', { show: isFold }]">
 			<view class="con-title">
 				<image src="/static/title.png"></image>
-				<text> 平台亮点 </text>
+				<text> {{$t('home.ptld')}} </text>
 				<image src="/static/title.png"></image>
 			</view>
 			<view class="lightspot">
-				帮助投资者轻松选出好股好基，排除风险大的，进行价值投资，长期指数持有，利用复利的力量掌握财富。
+				{{$t('home.ptld.jj')}}
 			</view>
 			<lightspotImg></lightspotImg>
 			<view class="con-title">
 				<image src="/static/title.png"></image>
-				<text> 隐私政策 </text>
+				<text> {{$t('home.yszc')}} </text>
 				<image src="/static/title.png"></image>
 			</view>
 			<view class="policy">
@@ -42,7 +42,7 @@
 			<view class="packUpBtn">
 				<image src="/static/lucky_fold.png"></image>
 				<view class="btnBox">
-					<view class="" @click="isFold = false"> 点击收起 </view>
+					<view class="" @click="isFold = false"> {{$t('home.dj.sq')}} </view>
 				</view>
 			</view>
 		</view>
@@ -54,7 +54,7 @@
 				</view>
 				<view class="tui-luckyHand"></view>
 				<view class="tui-dialog"></view>
-				<view class="tui-popupDia" @click="isFold = true"> 点击我~ </view>
+				<view class="tui-popupDia" @click="isFold = true"> {{$t('home.dj.w')}}~ </view>
 			</view>
 			<!-- 内容 -->
 			<view class="tui-card">
@@ -74,7 +74,7 @@
 								<view class="kefu">
 									{{ item.title }}
 								</view>
-								<view class="fuwu"> 优质竭诚为您服务 </view>
+								<view class="fuwu"> {{$t('home.zxkf.fw')}} </view>
 							</view>
 							<view class="tui-itemRight">
 								<image :src="item.icon" mode="aspectFill"></image>
@@ -93,7 +93,7 @@
 				</view>
 				<!-- 产品推荐 -->
 				<view class="tui-recommend">
-					<view class="title"> 产品推荐 </view>
+					<view class="title"> {{$t('home.cptj')}} </view>
 					<scroll-view class="prefer-scroll" scroll-x="true">
 						<block v-for="(item, index) in goodsList" :key="index">
 							<view class="image-box" @click="onClickDetail(item)">
@@ -114,10 +114,7 @@
 									<text>{{ item.zf_d }}</text>
 									<view class="tui-rightParities">
 										<image class="down" :src="
-                        item.is_z == 1
-                          ? require('../../static/red_up.png')
-                          : require('../../static/green_down.png')
-                      " mode=""></image>
+											  require(`@/static/${item.is_z == 1?'red_up':'green_down'}.png`)" mode=""></image>
 										<view class="rise" :style="{ color: item.is_z == 1 ? '#f33b50' : '#0bb563' }">
 											{{ item.zf }}
 										</view>
@@ -129,12 +126,12 @@
 				</view>
 				<!-- 货币种类 -->
 				<view class="tui-variety animate__animated animate__bounceInRight">
-					<view class="title"> 货币种类 </view>
+					<view class="title"> {{$t('home.hbzl')}} </view>
 					<view class="tui-classify">
-						<view class="" style="flex: 1"> 名称 </view>
+						<view class="" style="flex: 1"> {{$t('home.mc')}} </view>
 						<view class="tui-rightVariety" style="flex: 1">
-							<text>最新价格</text>
-							<text>24h涨幅</text>
+							<text>{{$t('home.zxjg')}}</text>
+							<text>{{$t('home.24zf')}}</text>
 						</view>
 					</view>
 					<view class="tui-varietyContent">
@@ -143,7 +140,7 @@
 							<view class="name">
 								<text class="piceName">{{ item.title }}</text>
 								<view class="flex-column" style="color: #a8a9ac; font-size: 20rpx">
-									<text>24H量</text>
+									<text>{{$t('home.24l')}}</text>
 									<text>{{ item.vol }}</text>
 								</view>
 							</view>
@@ -170,6 +167,7 @@
 				</view>
 			</view>
 		</uni-popup>
+		<langChange ref="langChange"></langChange>
 	</view>
 </template>
 
@@ -187,6 +185,7 @@
 	export default {
 		components: {
 			lightspotImg: () => import("@/components/lightspotImg.vue"),
+			langChange: () => import("@/components/langChange.vue"),
 		},
 
 		data() {
@@ -205,31 +204,31 @@
 					selectedBorder: "#fff",
 				},
 				menuList: [{
-						title: "快捷入金",
+						title: this.$t("home.kjrj"),
 						icon: require("@/static/kjrj.png"),
 					},
 					{
-						title: "产品交易",
+						title: this.$t("home.cpjy"),
 						icon: require("@/static/cpjy.png"),
 					},
 					{
-						title: "我的订单",
+						title: this.$t("home.wddd"),
 						icon: require("@/static/wddd.png"),
 					},
 					{
-						title: "出款方式",
+						title: this.$t("home.ckfs"),
 						icon: require("@/static/ckfs.png"),
 					},
 					{
-						title: "关于我们",
+						title: this.$t("home.gywm"),
 						icon: require("@/static/about.png"),
 					},
 					{
-						title: "系统消息",
+						title: this.$t("home.xtxx"),
 						icon: require("@/static/xtxx.png"),
 					},
 					{
-						title: "在线客服",
+						title: this.$t("home.zxkf"),
 						icon: require("@/static/kefu.png"),
 					},
 				],
@@ -237,16 +236,16 @@
 				timer: null,
 				stickyStyle: "", // 吸顶元素的样式
 				upImage: [
-					require("../../static/up_0.png"),
-					require("../../static/up_1.png"),
-					require("../../static/up_2.png"),
-					require("../../static/up_3.png"),
+					require("@/static/up_0.png"),
+					require("@/static/up_1.png"),
+					require("@/static/up_2.png"),
+					require("@/static/up_3.png"),
 				],
 				downImage: [
-					require("../../static/down_0.png"),
-					require("../../static/down_1.png"),
-					require("../../static/down_2.png"),
-					require("../../static/down_3.png"),
+					require("@/static/down_0.png"),
+					require("@/static/down_1.png"),
+					require("@/static/down_2.png"),
+					require("@/static/down_3.png"),
 				],
 				count: 0,
 				getUserItem: {}

@@ -16,12 +16,16 @@ import utils from './utils/util';
 Vue.prototype.$imgUrl = utils.imgUrl;
 Vue.prototype.$utils = utils;
 
+import i18n from './i18n';
+
 App.mpType = 'app'
 
 const app = new Vue({
-		store,
+	i18n,
+	store,
 	...App
 })
+
 app.$mount()
 
 // #endif
