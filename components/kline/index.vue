@@ -107,6 +107,7 @@
 						},
 						extraCssText: 'width: 170px'
 					},
+
 					axisPointer: {
 						link: {
 							xAxisIndex: 'all'
@@ -262,6 +263,21 @@
 									borderColor0: null
 								}
 							},
+							markLine: {
+								symbol: "none", //去掉警戒线最后面的箭头
+								label: {
+									position: "end", //将警示值放在哪个位置，三个值“start”,"middle","end"  开始  中点 结束
+								},
+								data: [{
+									silent: false, //鼠标悬停事件  true没有，false有
+									lineStyle: {
+										//警戒线的样式  ，虚实  颜色
+										type: "dashed",
+										color: "#FA3934",
+									},
+									yAxis: 99, // 警戒线的标注值，可以有多个yAxis,多条警示线   或者采用   {type : 'average', name: '平均值'}，type值有  max  min  average，分为最大，最小，平均值
+								}, ],
+							},
 						},
 						{
 							name: 'MA5',
@@ -336,6 +352,9 @@
 						}
 					]
 				};
+				option.series[0].markLine.data[0].yAxis = data.values[
+					data.values.length - 1
+				][3];
 				const kline = this.$echarts.init(document.getElementById("Kline"));
 				kline.setOption(option);
 			},

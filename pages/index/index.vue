@@ -117,8 +117,9 @@
 								</view>
 
 								<image v-if="item.is_z == 1" class="tui-shitu"
-									:src="require(`@/static/up_${index%5}.png`)" mode=""></image>
-								<image v-else class="tui-shitu" :src="require(`@/static/down_${index%5}.png`)" mode="">
+									:src="require(`@/static/down_${getImgBg(item.zf)}.png`)" mode=""></image>
+								<image v-else class="tui-shitu" :src="require(`@/static/up_${getImgBg(item.zf)}.png`)"
+									mode="">
 								</image>
 								<view class="proportion">
 									{{item.price}}
@@ -292,6 +293,9 @@
 
 		},
 		methods: {
+			getImgBg(num) {
+				return parseInt(Math.abs(Number(num.slice(0, -1) * 100 % 5)))
+			},
 			getGoods() {
 				goods({
 					hideLoading: true,
