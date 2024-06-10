@@ -17,20 +17,20 @@
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<uni-forms-item label="账号">
-						<uni-easyinput v-model="formData.account" placeholder="请输入账号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-model="formData.account" placeholder="请输入账号" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<uni-forms-item label="手机号">
-						<uni-easyinput v-model="formData.phone" placeholder="请输入手机号" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-model="formData.phone" placeholder="请输入手机号" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<uni-forms-item label="姓名">
-						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<uni-forms-item label="开户码">
-						<uni-easyinput v-model="formData.invitecode" placeholder="请输入开户码" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-model="formData.invitecode" placeholder="请输入开户码" :inputBorder="true"
+							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="checkInfo">
 						下一步
@@ -44,7 +44,7 @@
 				<view class="">
 					注册即表示同意APP
 				</view>
-				<view class="policy">
+				<view class="policy" @click="onClickYinsi">
 					隐私政策
 				</view>
 			</view>
@@ -53,15 +53,17 @@
 </template>
 
 <script>
-	import {userCheckRegister} from "@/api/user.js"
+	import {
+		userCheckRegister
+	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
 				formData: {
-					account:'user66',
-					phone:'18888888888',
-					real_name:'张三',
-					invitecode:'41'
+					account: 'user66',
+					phone: '18888888888',
+					real_name: '张三',
+					invitecode: '41'
 				},
 				styles: {
 					'borderColor': '#fff'
@@ -84,12 +86,20 @@
 			}
 		},
 		methods: {
-			checkInfo(){
-				if(this.btnDisabled) return
-				userCheckRegister({...this.formData,checkFree:true}).then(_=>{
-					this.$store.commit('setRegister',this.formData)
+			onClickYinsi() {
+				uni.navigateTo({
+					url: '/pages/yinsi/yinsi'
+				})
+			},
+			checkInfo() {
+				if (this.btnDisabled) return
+				userCheckRegister({
+					...this.formData,
+					checkFree: true
+				}).then(_ => {
+					this.$store.commit('setRegister', this.formData)
 					uni.navigateTo({
-						url:"/pages/login/register"
+						url: "/pages/login/register"
 					})
 				})
 			},

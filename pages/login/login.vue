@@ -43,7 +43,7 @@
 				</view>
 				<view class="symbol">
 				</view>
-				<view class="">
+				<view class="" @click="onClickMessage">
 					在线客服
 				</view>
 			</view>
@@ -62,7 +62,8 @@
 <script>
 	import {
 		userLogin,
-		userInfo
+		userInfo,
+		getUserIndex
 	} from "@/api/user.js"
 	export default {
 		data() {
@@ -92,6 +93,16 @@
 			}
 		},
 		methods: {
+			onClickMessage() {
+				getUserIndex({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					window.open(data.kefu_url, '_blank')
+				});
+			},
 			onClickYinsi() {
 				uni.navigateTo({
 					url: '/pages/yinsi/yinsi'
