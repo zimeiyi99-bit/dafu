@@ -220,7 +220,9 @@
 					data
 				}) => {
 					this.klineList = data || [];
-					this.$refs['kline'].init()
+					this.$nextTick(_ => {
+						this.$refs['kline'].init()
+					})
 				});
 			},
 			getGoods() {
