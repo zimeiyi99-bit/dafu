@@ -39,7 +39,7 @@
 					</view>
 					<view style="justify-content: flex-end;" class="flex">
 						<view class="tui-end" :class="item.is_z == 1?'up':'down'">
-							{{item.zf}}
+							{{item.is_z == 1?'+':''}}{{item.zf}}
 						</view>
 					</view>
 				</view>
