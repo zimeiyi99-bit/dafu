@@ -63,7 +63,7 @@
 						<template v-if="index < 6">
 							<image :src="item.icon" mode="aspectFill"></image>
 							<view class="tui-positionBadge" v-if="index == 5">
-								<uni-badge class="uni-badge-left-margin" :text="count" />
+								<uni-badge class="uni-badge-left-margin" v-if="count != 0" :text="count" />
 							</view>
 							<view class="title">
 								{{ item.title }}
@@ -316,7 +316,7 @@
 				});
 			},
 			getImgBg(num) {
-				return parseInt(Math.abs(Number((num.slice(0, -1) * 100) % 5)));
+				return Math.floor(Math.random() * (4 + 1));
 			},
 			getGoods() {
 				goods({
