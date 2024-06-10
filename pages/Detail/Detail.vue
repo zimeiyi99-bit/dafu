@@ -53,10 +53,11 @@
 				</view>
 			</view>
 			<view class="tui-tabs">
-				<v-tabs :isTime="true" v-model="activeTab" :scroll="false" :tabs="tabs" color="rgb(168, 169, 172)"
-					activeColor="#222" bold lineColor="#822151" :lineScale="0.2" bgColor="#f6f7fb" :zIndex="1"></v-tabs>
+				<v-tabs :isTime="true" v-model="timeActive" :scroll="false" :tabs="timeTabs.map(item=>item.text)"
+					color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#822151" :lineScale="0.2"
+					bgColor="#f6f7fb" :zIndex="1"></v-tabs>
 			</view>
-			<kline></kline>
+			<kline ref="kline" :data="klineList"></kline>
 		</view>
 		<uni-drawer ref="showLeft" mode="left" :width="300">
 			<scroll-view style="height: 100%" scroll-y="true">
@@ -126,8 +127,26 @@
 		data() {
 			return {
 
-				tabs: ["1m", "5m", "30m", "1h", "4h", "1d", "1w"],
-				activeTab: 0,
+				timeTabs: [{
+					text: "1m",
+					value: '1min'
+				}, {
+					text: "5m",
+					value: '5min'
+				}, {
+					text: "30m",
+					value: '30min'
+				}, {
+					text: "1h",
+					value: '1hour'
+				}, {
+					text: "1d",
+					value: '1day'
+				}, {
+					text: "1w",
+					value: '1week'
+				}],
+				timeActive: 0,
 				currentIndex: 0,
 				styles: {
 					borderColor: "#f6f8fa",
@@ -189,14 +208,19 @@
 				}) => {
 					this.pageDetail = data || {};
 				});
-
+				const {
+					timeTabs,
+					timeActive
+				} = this
 				goodKline({
-					codename,
+					symbol: codename,
+					resolution: timeTabs[timeActive].value,
 					hideLoading: true,
 				}).then(({
 					data
 				}) => {
 					this.klineList = data || [];
+					this.$refs['kline'].init()
 				});
 			},
 			getGoods() {
