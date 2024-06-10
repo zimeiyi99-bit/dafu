@@ -16,6 +16,10 @@ import utils from './utils/util';
 Vue.prototype.$imgUrl = utils.imgUrl;
 Vue.prototype.$utils = utils;
 
+if (!localStorage.getItem('i18nLang')) {
+	localStorage.setItem('zh-CN')
+}
+
 import i18n from './i18n';
 
 App.mpType = 'app'

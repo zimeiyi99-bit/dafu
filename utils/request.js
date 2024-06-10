@@ -18,6 +18,7 @@ fly.interceptors.request.use((request) => {
 	} else if (!request.body['checkFree'] || token) {
 		//不需要登录就能请求,已登录,自动携带token
 		request.headers.token = token;
+		request.headers.lang = uni.getStorageSync('i18nLang');
 	}
 	//最后删除标记
 	delete request.body['checkFree']
@@ -25,7 +26,7 @@ fly.interceptors.request.use((request) => {
 		uni.showLoading({
 			title: "加载中"
 		})
-	}else{
+	} else {
 		delete request.body['hideLoading']
 	}
 	return request

@@ -11,7 +11,7 @@ const messages = {
 };
 const locale = uni.getStorageSync('i18nLang');
 let i18nConfig = {
-	locale: locale ? locale : "zh-CN", // 获取已设置的语言
+	locale, // 获取已设置的语言
 	messages
 }
 

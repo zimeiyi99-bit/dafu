@@ -27,6 +27,7 @@
 		name: "langChange",
 		data() {
 			return {
+				showLang:uni.getStorageSync('i18nLang'),
 				langList: [{
 						name: '简体中文',
 						value: 'zh-CN'
@@ -37,11 +38,6 @@
 					}
 				]
 			};
-		},
-		computed: {
-			showLang() {
-				return uni.getStorageSync('i18nLang') || 'zh-CN'
-			}
 		},
 		methods: {
 			open() {
