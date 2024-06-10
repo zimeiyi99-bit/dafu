@@ -51,7 +51,7 @@
 				<view class="">
 					登录即表示同意APP
 				</view>
-				<view class="policy">
+				<view class="policy" @click="onClickYinsi">
 					隐私政策
 				</view>
 			</view>
@@ -92,6 +92,11 @@
 			}
 		},
 		methods: {
+			onClickYinsi() {
+				uni.navigateTo({
+					url: '/pages/yinsi/yinsi'
+				})
+			},
 			onClickLogin() {
 				if (this.btnDisabled) return
 				userLogin({

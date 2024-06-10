@@ -159,6 +159,22 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/yinsi/yinsi",
+			"style" : 
+			{
+				"navigationBarTitleText" : "隐私政策",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/yinsi/gy",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
+			}
 		}
 
 	],
