@@ -70,7 +70,7 @@
 						收益
 					</view>
 					<view class="desc">
-						666
+						{{pageData.sy}}
 					</view>
 				</view>
 				<view :class="['tui-gradItem',{'show':gradItem>2}]">

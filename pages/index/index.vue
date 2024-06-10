@@ -115,15 +115,19 @@
 								<view class="desc">
 									{{item.codename}}
 								</view>
+							
 								<image class="tui-shitu" src="/static/down_2.png" mode=""></image>
 								<view class="proportion">
 									{{item.price}}
 								</view>
 								<view class="parities">
-									<text>{{item.zf}}</text>
+									<text>{{item.zf_d}}</text>
 									<view class="tui-rightParities">
-										<image class="down" src="../../static/red_up.png" mode=""></image>
-										<view class="rise">
+
+										<image class="down"
+											:src="item.is_z == 1?require('../../static/red_up.png') : require('../../static/green_down.png')"
+											mode=""></image>
+										<view class="rise" :style="{color:item.is_z == 1 ? '#f33b50' : '#0bb563'}">
 											{{item.zf}}
 										</view>
 									</view>
@@ -161,14 +165,16 @@
 								{{item.price}}
 							</view>
 							<view style="justify-content: flex-end;" class="flex">
-								<view class="tui-end">
-									{{item.zf}}
+
+								<view class="tui-end" :class="item.is_z == 1?'up':'down'">
+									{{item.zf_d}}
 								</view>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
+
 		</view>
 		<!-- 公告 -->
 		<uni-popup ref="popup" type="center">
@@ -231,6 +237,10 @@
 				goodsList: [],
 				timer: null,
 				stickyStyle: '', // 吸顶元素的样式
+				upImage: [require('../../static/up_0.png'), require('../../static/up_1.png'), require(
+					'../../static/up_2.png'), require('../../static/up_3.png')],
+				downImage: [require('../../static/down_0.png'), require('../../static/down_1.png'), require(
+					'../../static/down_2.png'), require('../../static/down_3.png')],
 			}
 		},
 		onUnload() {
@@ -252,7 +262,8 @@
 			// 监听页面滚动事件
 			if (e.scrollTop > 100) {
 				// 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
-				this.stickyStyle = 'position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;background-color: #f6f7fb;'
+				this.stickyStyle =
+					'position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;background-color: #f6f7fb;'
 
 			} else {
 				// 滚动距离不足100时，取消吸顶效果
@@ -290,10 +301,11 @@
 			},
 			onClickDetail({
 				id,
-				codename
+				codename,
+				title
 			}) {
 				uni.navigateTo({
-					url: `/pages/Detail/Detail?id=${id}&codename=${codename}`
+					url: `/pages/Detail/Detail?id=${id}&codename=${codename}&title=${title}`
 				})
 			},
 			onClickNotice() {
@@ -371,10 +383,17 @@
 					width: 80px;
 					color: #fff;
 					border-radius: 5px;
-					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
 					text-align: center;
+
+					&.up {
+						background-color: #f33b50 !important;
+					}
+
+					&.down {
+						background-color: #0bb563 !important;
+					}
 				}
 
 				.code {

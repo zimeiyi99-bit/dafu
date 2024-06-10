@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<guo-headerTitle title="实名认证"></guo-headerTitle>
-		<view class="tui-register" v-if="userInfo.is_auth == 0">
+		<view class="tui-register" v-if="userInfo.is_auth == 0 || userInfo.is_auth == -1">
 			<view class="tui-form">
 				<uni-forms ref="form" :modelValue="formData" label-position="top" label-width="200px" :rules="rules">
 					<uni-forms-item label="姓名" name="real_name" required>
