@@ -8,13 +8,13 @@
 					<view class="bar"></view>
 					<view class="static">
 						<view class="title">
-							1.50265
+							{{goodsItem.price}}
 						</view>
 						<view class="flex flex-between flex-item">
-							<text class="tui-size">-0.00641</text>
+							<text class="tui-size">{{goodsItem.open_price}}</text>
 							<view class="flex flex-item p-l">
 								<image src="../../static/green_down.png" mode=""></image>
-								<text class="tui-size" style="color: #0bb563;">-0.42%</text>
+								<text class="tui-size" style="color: #0bb563;">{{goodsItem.zf}}</text>
 							</view>
 						</view>
 					</view>
@@ -29,7 +29,7 @@
 								24H最高
 							</view>
 							<view class="right-max">
-								1.50987
+								{{goodsItem.price_high}}
 							</view>
 						</view>
 						<view style="flex: 1;"></view>
@@ -38,7 +38,7 @@
 								24H最低
 							</view>
 							<view class="right-max">
-								1.50987
+								{{goodsItem.price_low}}
 							</view>
 						</view>
 					</view>
@@ -127,11 +127,14 @@
 </template>
 
 <script>
+	import {
+		goods_dec
+	} from '@/api/money.js'
 	export default {
 		components: {
 			kline: () => import("@/components/kline/index.vue"),
 		},
-		
+
 		data() {
 			return {
 				title: '',
@@ -141,12 +144,26 @@
 				styles: {
 					'borderColor': '#f6f8fa'
 				},
+				goodsId: 0,
+				goodsItem: {}
 			};
 		},
-		onLoad() {
-			this.title = '美元/澳元'
+		onLoad(e) {
+			this.title = e.title
+			this.goodsId = e.Id
+			this.goods_dec()
 		},
 		methods: {
+			goods_dec() {
+				goods_dec({
+					id: this.goodsId,
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+					this.goodsItem = data
+				})
+			},
 			onClickTitle() {
 				console.log(1)
 				this.$refs.showLeft.open();
@@ -180,7 +197,7 @@
 					width: 100%;
 					background-color: #fff;
 					border-radius: 13px;
-					
+
 					padding: 20rpx 30rpx;
 					box-sizing: border-box;
 					display: flex;

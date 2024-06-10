@@ -161,8 +161,8 @@
 								{{item.price}}
 							</view>
 							<view style="justify-content: flex-end;" class="flex">
-								<view class="tui-end" :class="item.zf>0?'up':'down'">
-									{{item.zf}}%
+								<view class="tui-end">
+									{{item.zf}}
 								</view>
 							</view>
 						</view>
@@ -288,9 +288,10 @@
 					this.goodsList = data
 				})
 			},
-			onClickDetail() {
+			onClickDetail(item) {
+				console.log(item)
 				uni.navigateTo({
-					url: '/pages/Detail/Detail'
+					url: '/pages/Detail/Detail?Id=' + item.id + '&title=' + item.title
 				})
 			},
 			onClickNotice() {
@@ -368,17 +369,10 @@
 					width: 80px;
 					color: #fff;
 					border-radius: 5px;
+					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
 					text-align: center;
-
-					&.up {
-						background-color: #f33b50;
-					}
-
-					&.down {
-						background-color: #0bb563;
-					}
 				}
 
 				.code {
