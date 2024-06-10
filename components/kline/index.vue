@@ -5,12 +5,9 @@
 	</div>
 </template>
 <script>
-	import {
-		quoteData,
-		quoteData1
-	} from './data'
 	import dayjs from 'dayjs'
 	export default {
+		props: ['data'],
 		data() {
 			return {}
 		},
@@ -21,14 +18,13 @@
 			this.$echarts.env.canvasSupported = false;
 			this.$echarts.env.svgSupported = true;
 			this.$echarts.env.domSupported = true;
-			this.init()
 		},
 		methods: {
 			init() {
 				var upColor = '#00da3c';
 				var downColor = '#ec0000'
 
-				var data = formatData(quoteData);
+				var data = formatData(this.data);
 
 				function formatData(rawData) {
 					var categoryData = [];
@@ -44,17 +40,6 @@
 						values: values,
 						volumes: volumes
 					}
-
-					// for (var i = 0; i < rawData.length; i++) {
-					// 	categoryData.push(rawData[i].splice(0, 1)[0]);
-					// 	values.push(rawData[i]);
-					// 	volumes.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
-					// }
-					// return {
-					// 	categoryData: categoryData,
-					// 	values: values,
-					// 	volumes: volumes
-					// };
 				}
 
 				function calculateMA(dayCount, data) {
