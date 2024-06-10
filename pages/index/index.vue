@@ -351,6 +351,11 @@ export default {
             url: "/pages/product/product",
           });
           break;
+        case "关于我们":
+          uni.navigateTo({
+            url: "/pages/yinsi/gy",
+          });
+          break;
       }
     },
   },
