@@ -53,7 +53,7 @@
 				</view>
 			</view>
 			<view class="tui-tabs">
-				<v-tabs :isTime="true" v-model="timeActive" :scroll="false" :tabs="timeTabs.map(item=>item.text)"
+				<v-tabs :isTime="true" v-model="timeActive" @change="getDetail()" :scroll="false" :tabs="timeTabs.map(item=>item.text)"
 					color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#822151" :lineScale="0.2"
 					bgColor="#f6f7fb" :zIndex="1"></v-tabs>
 			</view>
@@ -126,7 +126,6 @@
 
 		data() {
 			return {
-
 				timeTabs: [{
 					text: "1m",
 					value: '1min'
@@ -140,6 +139,9 @@
 					text: "1h",
 					value: '1hour'
 				}, {
+					text: "4h",
+					value: '4hour'
+				},  {
 					text: "1d",
 					value: '1day'
 				}, {
