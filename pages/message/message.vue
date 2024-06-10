@@ -2,16 +2,15 @@
 	<view>
 		<guo-headerTitle title="系统消息"></guo-headerTitle>
 		<view class="tui-header">
-			<view class="tui-card">
+			<view class="tui-card" :class="[{read:item.is_read==2}]" v-for="(item,index) in pageList" :key="index">
 				<view class="tui-leftIcon">
-					<image src="../../static/js-yd.png" mode=""></image>
 				</view>
 				<view class="tui-right">
 					<view class="desc">
-						尊敬的用户您好，您的秒合约订单BOSTT8WRPWXA3TR已结算成功，结算金额5250.00，请查阅
+						{{item.cont}}
 					</view>
 					<view class="time">
-						2024-06-04 20:54:20
+						{{item.title}}
 					</view>
 				</view>
 			</view>
@@ -20,11 +19,26 @@
 </template>
 
 <script>
+	import {
+		msgList
+	} from "@/api/app.js"
 	export default {
 		data() {
 			return {
-
+				pageList: []
 			};
+		},
+		onLoad() {
+			this.getList()
+		},
+		methods: {
+			getList() {
+				msgList().then(({
+					data
+				}) => {
+					this.pageList = data
+				})
+			}
 		}
 	}
 </script>
@@ -41,17 +55,20 @@
 			box-sizing: border-box;
 			display: flex;
 			justify-content: space-between;
+
 			.tui-right {
+				flex: 1;
 				display: flex;
 				flex-direction: column;
-				padding-left: 10rpx;
+				padding-left: 20rpx;
+
 				.desc {
-					color: #aeaeae !important;
+					color: #222222;
 					font-size: 28rpx;
 				}
 
 				.time {
-					color: #aeaeae !important;
+					color: #222222;
 					font-size: 24rpx;
 					padding-top: 16rpx;
 				}
@@ -63,9 +80,23 @@
 				border-radius: 50%;
 				display: flex;
 				flex-shrink: 0;
-				image {
-					width: 100%;
-					height: 100%;
+				background-size: 100% 100%;
+				background-image: url('~@/static/js-yd.png');
+			}
+
+			&.read {
+				.tui-right {
+					.desc {
+						color: #aeaeae;
+					}
+
+					.time {
+						color: #aeaeae;
+					}
+				}
+
+				.tui-leftIcon {
+					background-image: url('~@/static/js-yd.png');
 				}
 			}
 		}
