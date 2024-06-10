@@ -44,3 +44,7 @@ export const getMoneyLog = function(data = {}) {
 export const goods_dec = function(data = {}) {
 	return request.get('index/goods_dec', data)
 }
+//消息未读数量
+export const get_count = function(data = {}) {
+	return request.get('message/get_count', data)
+}

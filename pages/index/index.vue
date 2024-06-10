@@ -1,929 +1,968 @@
 <template>
-  <view class="tui-header">
-    <view class="tui-NavHeader" :style="stickyStyle">
-      <view class="tui-img">
-        <image src="../../static/logo.png" mode=""></image>
-      </view>
-      <view class="tui-right">
-        <image src="../../static/diqiu.png" mode=""></image>
-        <text>简体中文</text>
-      </view>
-    </view>
-    <view class="tui-banner">
-      <uni-swiper-dot
-        class="uni-swiper-dot-box"
-        :info="info"
-        :current="current"
-        :mode="mode"
-        :dots-styles="dotsStyles"
-        field="content"
-      >
-        <swiper class="swiper-box" @change="change">
-          <swiper-item v-for="(item, index) in info" :key="index">
-            <view class="swiper-item" :class="'swiper-item' + index">
-              <image :src="item" mode=""></image>
-            </view>
-          </swiper-item>
-        </swiper>
-      </uni-swiper-dot>
-    </view>
-    <view :class="['platformIntroduction', { show: isFold }]">
-      <view class="con-title">
-        <image src="/static/title.png"></image>
-        <text> 平台亮点 </text>
-        <image src="/static/title.png"></image>
-      </view>
-      <view class="lightspot">
-        帮助投资者轻松选出好股好基，排除风险大的，进行价值投资，长期指数持有，利用复利的力量掌握财富。
-      </view>
-      <lightspotImg></lightspotImg>
-      <view class="con-title">
-        <image src="/static/title.png"></image>
-        <text> 隐私政策 </text>
-        <image src="/static/title.png"></image>
-      </view>
-      <view class="policy">
-        {{ policyText }}
-      </view>
-      <view class="packUpBtn">
-        <image src="/static/lucky_fold.png"></image>
-        <view class="btnBox">
-          <view class="" @click="isFold = false"> 点击收起 </view>
-        </view>
-      </view>
-    </view>
-    <view :class="['conBox', { hide: isFold }]">
-      <view class="tui-decorate">
-        <view class="tui-line"></view>
-        <view class="tui-lucky">
-          <view class="tui-luckImge"></view>
-        </view>
-        <view class="tui-luckyHand"></view>
-        <view class="tui-dialog"></view>
-        <view class="tui-popupDia" @click="isFold = true"> 点击我~ </view>
-      </view>
-      <!-- 内容 -->
-      <view class="tui-card">
-        <view class="tui-content animate__animated animate__fadeInTopRight">
-          <view
-            class="item"
-            v-for="(item, index) in menuList"
-            :key="index"
-            @click="onClickOpen(item, index)"
-          >
-            <template v-if="index < 6">
-              <image :src="item.icon" mode="aspectFill"></image>
-              <view class="title">
-                {{ item.title }}
-              </view>
-            </template>
-            <template v-else>
-              <view class="tui-itemLeft">
-                <view class="kefu">
-                  {{ item.title }}
-                </view>
-                <view class="fuwu"> 优质竭诚为您服务 </view>
-              </view>
-              <view class="tui-itemRight">
-                <image :src="item.icon" mode="aspectFill"></image>
-              </view>
-            </template>
-          </view>
-        </view>
-        <!-- 公告 -->
-        <view class="tui-notice" @click="onClickNotice">
-          <image src="/static/laba.png" mode=""></image>
-          <view class="tui-desc">
-            <view class="title"> Financial Conduct Authority | FCA </view>
-            <view class="time"> 2023-11-03 02:55:24 </view>
-          </view>
-        </view>
-        <!-- 产品推荐 -->
-        <view class="tui-recommend">
-          <view class="title"> 产品推荐 </view>
-          <scroll-view class="prefer-scroll" scroll-x="true">
-            <block v-for="(item, index) in goodsList" :key="index">
-              <view class="image-box" @click="onClickDetail(item)">
-                <view class="name">{{ item.title }}</view>
-                <view class="desc">
-                  {{ item.codename }}
-                </view>
+	<view class="tui-header">
+		<view class="tui-NavHeader" :style="stickyStyle">
+			<view class="tui-img">
+				<image src="../../static/logo.png" mode=""></image>
+			</view>
+			<view class="tui-right">
+				<image src="../../static/diqiu.png" mode=""></image>
+				<text>简体中文</text>
+			</view>
+		</view>
+		<view class="tui-banner">
+			<uni-swiper-dot class="uni-swiper-dot-box" :info="info" :current="current" :mode="mode"
+				:dots-styles="dotsStyles" field="content">
+				<swiper class="swiper-box" @change="change">
+					<swiper-item v-for="(item, index) in info" :key="index">
+						<view class="swiper-item" :class="'swiper-item' + index">
+							<image :src="item" mode=""></image>
+						</view>
+					</swiper-item>
+				</swiper>
+			</uni-swiper-dot>
+		</view>
+		<view :class="['platformIntroduction', { show: isFold }]">
+			<view class="con-title">
+				<image src="/static/title.png"></image>
+				<text> 平台亮点 </text>
+				<image src="/static/title.png"></image>
+			</view>
+			<view class="lightspot">
+				帮助投资者轻松选出好股好基，排除风险大的，进行价值投资，长期指数持有，利用复利的力量掌握财富。
+			</view>
+			<lightspotImg></lightspotImg>
+			<view class="con-title">
+				<image src="/static/title.png"></image>
+				<text> 隐私政策 </text>
+				<image src="/static/title.png"></image>
+			</view>
+			<view class="policy">
+				{{ policyText }}
+			</view>
+			<view class="packUpBtn">
+				<image src="/static/lucky_fold.png"></image>
+				<view class="btnBox">
+					<view class="" @click="isFold = false"> 点击收起 </view>
+				</view>
+			</view>
+		</view>
+		<view :class="['conBox', { hide: isFold }]">
+			<view class="tui-decorate">
+				<view class="tui-line"></view>
+				<view class="tui-lucky">
+					<view class="tui-luckImge"></view>
+				</view>
+				<view class="tui-luckyHand"></view>
+				<view class="tui-dialog"></view>
+				<view class="tui-popupDia" @click="isFold = true"> 点击我~ </view>
+			</view>
+			<!-- 内容 -->
+			<view class="tui-card">
+				<view class="tui-content animate__animated animate__fadeInTopRight">
+					<view class="item" v-for="(item, index) in menuList" :key="index" @click="onClickOpen(item, index)">
+						<template v-if="index < 6">
+							<image :src="item.icon" mode="aspectFill"></image>
+							<view class="tui-positionBadge" v-if="index == 5">
+								<uni-badge class="uni-badge-left-margin" :text="count" />
+							</view>
+							<view class="title">
+								{{ item.title }}
+							</view>
+						</template>
+						<template v-else>
+							<view class="tui-itemLeft">
+								<view class="kefu">
+									{{ item.title }}
+								</view>
+								<view class="fuwu"> 优质竭诚为您服务 </view>
+							</view>
+							<view class="tui-itemRight">
+								<image :src="item.icon" mode="aspectFill"></image>
+							</view>
+						</template>
+					</view>
+				</view>
+				<!-- 公告 -->
+				<view class="tui-notice" @click="onClickNotice">
+					<image src="/static/laba.png" mode=""></image>
+					<view class="tui-desc">
+						<view class="title">{{getUserItem.gg_title}} </view>
 
-                <image
-                  v-if="item.is_z == 1"
-                  class="tui-shitu"
-                  :src="require(`@/static/down_${getImgBg(item.zf)}.png`)"
-                  mode=""
-                ></image>
-                <image
-                  v-else
-                  class="tui-shitu"
-                  :src="require(`@/static/up_${getImgBg(item.zf)}.png`)"
-                  mode=""
-                >
-                </image>
-                <view class="proportion">
-                  {{ item.price }}
-                </view>
-                <view class="parities">
-                  <text>{{ item.zf_d }}</text>
-                  <view class="tui-rightParities">
-                    <image
-                      class="down"
-                      :src="
+						<view class="time"> {{getUserItem.gg_time}}</view>
+					</view>
+				</view>
+				<!-- 产品推荐 -->
+				<view class="tui-recommend">
+					<view class="title"> 产品推荐 </view>
+					<scroll-view class="prefer-scroll" scroll-x="true">
+						<block v-for="(item, index) in goodsList" :key="index">
+							<view class="image-box" @click="onClickDetail(item)">
+								<view class="name">{{ item.title }}</view>
+								<view class="desc">
+									{{ item.codename }}
+								</view>
+
+								<image v-if="item.is_z == 1" class="tui-shitu"
+									:src="require(`@/static/down_${getImgBg(item.zf)}.png`)" mode=""></image>
+								<image v-else class="tui-shitu" :src="require(`@/static/up_${getImgBg(item.zf)}.png`)"
+									mode="">
+								</image>
+								<view class="proportion">
+									{{ item.price }}
+								</view>
+								<view class="parities">
+									<text>{{ item.zf_d }}</text>
+									<view class="tui-rightParities">
+										<image class="down" :src="
                         item.is_z == 1
                           ? require('../../static/red_up.png')
                           : require('../../static/green_down.png')
-                      "
-                      mode=""
-                    ></image>
-                    <view
-                      class="rise"
-                      :style="{ color: item.is_z == 1 ? '#f33b50' : '#0bb563' }"
-                    >
-                      {{ item.zf }}
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </block>
-          </scroll-view>
-        </view>
-        <!-- 货币种类 -->
-        <view class="tui-variety animate__animated animate__bounceInRight">
-          <view class="title"> 货币种类 </view>
-          <view class="tui-classify">
-            <view class="" style="flex: 1"> 名称 </view>
-            <view class="tui-rightVariety" style="flex: 1">
-              <text>最新价格</text>
-              <text>24h涨幅</text>
-            </view>
-          </view>
-          <view class="tui-varietyContent">
-            <view
-              class="tui-varietyContentItem"
-              v-for="(item, index) in goodsList"
-              :key="index"
-              hover-class="tui-hover"
-              @click="onClickDetail(item)"
-            >
-              <view class="name">
-                <text class="piceName">{{ item.title }}</text>
-                <view
-                  class="flex-column"
-                  style="color: #a8a9ac; font-size: 20rpx"
-                >
-                  <text>24H量</text>
-                  <text>{{ item.vol }}</text>
-                </view>
-              </view>
-              <view class="code">
-                {{ item.price }}
-              </view>
-              <view style="justify-content: flex-end" class="flex">
-                <view class="tui-end" :class="item.is_z == 1 ? 'up' : 'down'">
-                  {{ item.zf }}
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <!-- 公告 -->
-    <uni-popup ref="popup" type="center">
-      <view class="tui-popup">
-        <rich-text :nodes="'富文本'"></rich-text>
-      </view>
-    </uni-popup>
-  </view>
+                      " mode=""></image>
+										<view class="rise" :style="{ color: item.is_z == 1 ? '#f33b50' : '#0bb563' }">
+											{{ item.zf }}
+										</view>
+									</view>
+								</view>
+							</view>
+						</block>
+					</scroll-view>
+				</view>
+				<!-- 货币种类 -->
+				<view class="tui-variety animate__animated animate__bounceInRight">
+					<view class="title"> 货币种类 </view>
+					<view class="tui-classify">
+						<view class="" style="flex: 1"> 名称 </view>
+						<view class="tui-rightVariety" style="flex: 1">
+							<text>最新价格</text>
+							<text>24h涨幅</text>
+						</view>
+					</view>
+					<view class="tui-varietyContent">
+						<view class="tui-varietyContentItem" v-for="(item, index) in goodsList" :key="index"
+							hover-class="tui-hover" @click="onClickDetail(item)">
+							<view class="name">
+								<text class="piceName">{{ item.title }}</text>
+								<view class="flex-column" style="color: #a8a9ac; font-size: 20rpx">
+									<text>24H量</text>
+									<text>{{ item.vol }}</text>
+								</view>
+							</view>
+							<view class="code">
+								{{ item.price }}
+							</view>
+							<view style="justify-content: flex-end" class="flex">
+								<view class="tui-end" :class="item.is_z == 1 ? 'up' : 'down'">
+									{{ item.zf }}
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 公告 -->
+		<uni-popup ref="popup" type="center">
+			<view class="tui-popup">
+				<view class="tui-desc">
+					<view class="title">{{getUserItem.gg_title}} </view>
+					<view class="time" style="padding: 30rpx 0;"> {{getUserItem.gg_time}}</view>
+					<view class="desc">{{getUserItem.gg_con}} </view>
+				</view>
+			</view>
+		</uni-popup>
+	</view>
 </template>
 
 <script>
-import { goods } from "@/api/money.js";
-import { policyText } from "./data.js";
-export default {
-  components: {
-    lightspotImg: () => import("@/components/lightspotImg.vue"),
-  },
+	import {
+		goods,
+		get_count
+	} from "@/api/money.js";
+	import {
+		policyText
+	} from "./data.js";
+	import {
+		getUserIndex
+	} from '@/api/user.js'
+	export default {
+		components: {
+			lightspotImg: () => import("@/components/lightspotImg.vue"),
+		},
 
-  data() {
-    return {
-      policyText,
-      isFold: false,
-      current: 0,
-      mode: "dot",
-      info: [
-        "https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e2f2ec614550eb77a8fdc3b372bb0353.png",
-        "https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e13da9f07ba8ef6558ba628210ed8280.png",
-        "https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/51a57145d748f696d280b352b8df7420.png",
-      ],
-      dotsStyles: {
-        selectedBackgroundColor: "#fff",
-        selectedBorder: "#fff",
-      },
-      menuList: [
-        {
-          title: "快捷入金",
-          icon: require("@/static/kjrj.png"),
-        },
-        {
-          title: "产品交易",
-          icon: require("@/static/cpjy.png"),
-        },
-        {
-          title: "我的订单",
-          icon: require("@/static/wddd.png"),
-        },
-        {
-          title: "出款方式",
-          icon: require("@/static/ckfs.png"),
-        },
-        {
-          title: "关于我们",
-          icon: require("@/static/about.png"),
-        },
-        {
-          title: "系统消息",
-          icon: require("@/static/xtxx.png"),
-        },
-        {
-          title: "在线客服",
-          icon: require("@/static/kefu.png"),
-        },
-      ],
-      goodsList: [],
-      timer: null,
-      stickyStyle: "", // 吸顶元素的样式
-      upImage: [
-        require("../../static/up_0.png"),
-        require("../../static/up_1.png"),
-        require("../../static/up_2.png"),
-        require("../../static/up_3.png"),
-      ],
-      downImage: [
-        require("../../static/down_0.png"),
-        require("../../static/down_1.png"),
-        require("../../static/down_2.png"),
-        require("../../static/down_3.png"),
-      ],
-    };
-  },
-  onUnload() {
-    // 页面销毁时清除定时器
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-    this.stickyStyle = "";
-    console.log("页面销毁");
-  },
-  onHide() {
-    console.log("页面销毁");
-    this.stickyStyle = "";
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-  },
-  onPageScroll(e) {
-    // 监听页面滚动事件
-    if (e.scrollTop > 100) {
-      // 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
-      this.stickyStyle =
-        "position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;background-color: #f6f7fb;";
-    } else {
-      // 滚动距离不足100时，取消吸顶效果
-      this.stickyStyle = "";
-    }
-  },
-  onLoad() {
-    this.getGoods();
-  },
-  onShow() {
-    this.timer = setInterval(() => {
-      goods({
-        hideLoading: true,
-      }).then(({ data }) => {
-        this.goodsList = data;
-      });
-    }, 5000);
-  },
-  methods: {
-    getImgBg(num) {
-      return parseInt(Math.abs(Number((num.slice(0, -1) * 100) % 5)));
-    },
-    getGoods() {
-      goods({
-        hideLoading: true,
-      }).then(({ data }) => {
-        this.goodsList = data;
-      });
-    },
-    onClickDetail({ id, codename, title }) {
-      uni.navigateTo({
-        url: `/pages/Detail/Detail?id=${id}&codename=${codename}&title=${title}`,
-      });
-    },
-    onClickNotice() {
-      this.$refs.popup.open();
-    },
-    change(e) {
-      this.current = e.detail.current;
-    },
-    onClickOpen(item, index) {
-      switch (item.title) {
-        case "系统消息":
-          uni.navigateTo({
-            url: "/pages/message/message",
-          });
-          break;
-        case "出款方式":
-          uni.navigateTo({
-            url: "/pages/account/account",
-          });
-          break;
-        case "我的订单":
-          uni.navigateTo({
-            url: "/pages/order/order",
-          });
-          break;
-        case "产品交易":
-          uni.switchTab({
-            url: "/pages/product/product",
-          });
-          break;
-        case "关于我们":
-          uni.navigateTo({
-            url: "/pages/yinsi/gy",
-          });
-          break;
-      }
-    },
-  },
-};
+		data() {
+			return {
+				policyText,
+				isFold: false,
+				current: 0,
+				mode: "dot",
+				info: [
+					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e2f2ec614550eb77a8fdc3b372bb0353.png",
+					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e13da9f07ba8ef6558ba628210ed8280.png",
+					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/51a57145d748f696d280b352b8df7420.png",
+				],
+				dotsStyles: {
+					selectedBackgroundColor: "#fff",
+					selectedBorder: "#fff",
+				},
+				menuList: [{
+						title: "快捷入金",
+						icon: require("@/static/kjrj.png"),
+					},
+					{
+						title: "产品交易",
+						icon: require("@/static/cpjy.png"),
+					},
+					{
+						title: "我的订单",
+						icon: require("@/static/wddd.png"),
+					},
+					{
+						title: "出款方式",
+						icon: require("@/static/ckfs.png"),
+					},
+					{
+						title: "关于我们",
+						icon: require("@/static/about.png"),
+					},
+					{
+						title: "系统消息",
+						icon: require("@/static/xtxx.png"),
+					},
+					{
+						title: "在线客服",
+						icon: require("@/static/kefu.png"),
+					},
+				],
+				goodsList: [],
+				timer: null,
+				stickyStyle: "", // 吸顶元素的样式
+				upImage: [
+					require("../../static/up_0.png"),
+					require("../../static/up_1.png"),
+					require("../../static/up_2.png"),
+					require("../../static/up_3.png"),
+				],
+				downImage: [
+					require("../../static/down_0.png"),
+					require("../../static/down_1.png"),
+					require("../../static/down_2.png"),
+					require("../../static/down_3.png"),
+				],
+				count: 0,
+				getUserItem: {}
+			};
+		},
+		onUnload() {
+			// 页面销毁时清除定时器
+			if (this.timer) {
+				clearInterval(this.timer);
+			}
+			this.stickyStyle = "";
+			console.log("页面销毁");
+		},
+		onHide() {
+			console.log("页面销毁");
+			this.stickyStyle = "";
+			if (this.timer) {
+				clearInterval(this.timer);
+			}
+		},
+		onPageScroll(e) {
+			// 监听页面滚动事件
+			if (e.scrollTop > 100) {
+				// 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
+				this.stickyStyle =
+					"position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;background-color: #f6f7fb;";
+			} else {
+				// 滚动距离不足100时，取消吸顶效果
+				this.stickyStyle = "";
+			}
+		},
+		onLoad() {
+			this.getGoods();
+		},
+		onShow() {
+			this.getUserIndex()
+			this.get_count()
+			this.timer = setInterval(() => {
+				goods({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.goodsList = data;
+				});
+			}, 5000);
+		},
+		methods: {
+			getUserIndex() {
+				getUserIndex({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.getUserItem = data;
+				});
+			},
+			get_count() {
+				get_count({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+					this.count = data.count
+				});
+			},
+			getImgBg(num) {
+				return parseInt(Math.abs(Number((num.slice(0, -1) * 100) % 5)));
+			},
+			getGoods() {
+				goods({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+					this.goodsList = data;
+				});
+			},
+			onClickDetail({
+				id,
+				codename,
+				title
+			}) {
+				uni.navigateTo({
+					url: `/pages/Detail/Detail?id=${id}&codename=${codename}&title=${title}`,
+				});
+			},
+			onClickNotice() {
+				this.$refs.popup.open();
+			},
+			change(e) {
+				this.current = e.detail.current;
+			},
+			onClickOpen(item, index) {
+				switch (item.title) {
+					case "系统消息":
+						uni.navigateTo({
+							url: "/pages/message/message",
+						});
+						break;
+					case "出款方式":
+						uni.navigateTo({
+							url: "/pages/account/account",
+						});
+						break;
+					case "我的订单":
+						uni.navigateTo({
+							url: "/pages/order/order",
+						});
+						break;
+					case "产品交易":
+						uni.switchTab({
+							url: "/pages/product/product",
+						});
+						break;
+					case "关于我们":
+						uni.navigateTo({
+							url: "/pages/yinsi/gy",
+						});
+						break;
+					case "在线客服":
+						getUserIndex({
+							hideLoading: true,
+						}).then(({
+							data
+						}) => {
+
+							window.open(data.kefu_url, '_blank')
+						});
+						break;
+				}
+			},
+		},
+	};
 </script>
 
 <style lang="less">
-page {
-  height: 100%;
-  background-color: #f6f7fb;
-}
-
-/deep/.uni-popup {
-  z-index: 999 !important;
-}
-
-.tui-hover {
-  background-color: #fffaf9 !important;
-  transform: seale(1.03);
-}
-
-.tui-popup {
-  width: 600rpx;
-  background-color: #fff;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-sizing: border-box;
-}
-
-.tui-variety {
-  margin-top: 64rpx;
-  position: relative;
-
-  .tui-varietyContent {
-    display: flex;
-    flex-direction: column;
-
-    .tui-varietyContentItem {
-      width: 100%;
-      background-color: #fff;
-      border-radius: 13px;
-      margin-top: 26rpx;
-      padding: 30rpx;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-
-      .tui-end {
-        padding: 10rpx;
-        width: 80px;
-        color: #fff;
-        border-radius: 5px;
-        font-size: 28rpx;
-        box-sizing: border-box;
-        text-align: center;
-
-        &.up {
-          background-color: #f33b50 !important;
-        }
-
-        &.down {
-          background-color: #0bb563 !important;
-        }
-      }
-
-      .code {
-        flex: 1;
-        max-width: 170rpx;
-        overflow-wrap: break-word;
-        font-size: 26rpx;
-      }
-
-      .name {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-
-        .piceName {
-          font-size: 32rpx;
-          color: #222;
-          font-weight: 500;
-          padding-bottom: 15rpx;
-        }
-      }
-    }
-  }
-
-  .tui-classify {
-    color: #a8a9ac;
-    font-size: 24rpx;
-    display: flex;
-    align-items: center;
-    padding: 30rpx;
-
-    .tui-rightVariety {
-      width: 300rpx;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-
-  .title {
-    font-size: 32rpx;
-    color: #222;
-    padding-bottom: 20rpx;
-  }
-}
-
-.tui-recommend {
-  margin-top: 64rpx;
-  margin-bottom: 60rpx;
-  position: relative;
-
-  .prefer-scroll {
-    white-space: nowrap;
-    /* 防止换行 */
-    overflow-x: auto;
-    /* 开启横向滚动 */
-    overflow-y: hidden;
-    /* 隐藏纵向滚动条 */
-    -webkit-overflow-scrolling: touch;
-    /* 针对移动端使滚动更流畅 */
-    width: 100%;
-  }
-
-  .image-box {
-    display: inline-block;
-    width: 245upx;
-
-    background-color: #fff;
-    border-radius: 13px;
-    margin-left: 20rpx;
-    padding: 20rpx;
-    box-sizing: border-box;
-
-    .tui-shitu {
-      width: 90%;
-      height: 110rpx;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-top: 12rpx;
-    }
-
-    .parities {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 20rpx;
-      color: #222;
-
-      .tui-rightParities {
-        display: flex;
-        align-items: center;
-        padding-top: 10rpx;
-
-        .rise {
-          padding-left: 10rpx;
-          color: #f33b50;
-        }
-
-        .down {
-          width: 18rpx;
-          height: 18rpx;
-        }
-      }
-    }
-
-    .proportion {
-      font-size: 24rpx;
-      color: #222;
-      margin-top: 12rpx;
-    }
-
-    .name {
-      font-size: 32rpx;
-      font-weight: 500;
-      color: #222;
-    }
-
-    .desc {
-      color: #a8a9ac;
-      font-size: 20rpx;
-      padding-top: 6rpx;
-    }
-  }
-
-  .image-box:nth-of-type(1) {
-    margin-left: 0;
-  }
-
-  .title {
-    font-size: 32rpx;
-    color: #222;
-    padding-bottom: 20rpx;
-  }
-}
-
-@keyframes wave {
-  0% {
-    transform: translateY(-5px);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes responsiveAnimation {
-  0% {
-    transform: scale(0.8);
-    /* 动画开始时图片大小正常 */
-  }
-
-  50% {
-    transform: scale(1);
-    /* 动画中间时图片放大50% */
-  }
-
-  100% {
-    transform: scale(0.8);
-    /* 动画结束时图片恢复正常大小 */
-  }
-}
-
-.tui-notice {
-  margin-top: 44rpx;
-  background-color: #fff;
-  padding: 30rpx;
-  border-radius: 13px;
-  font-size: 32rpx;
-  display: flex;
-  align-items: center;
-
-  .tui-desc {
-    display: flex;
-    flex-direction: column;
-    padding-left: 20rpx;
-
-    .title {
-      color: #222;
-      font-size: 26rpx;
-    }
-
-    .time {
-      color: #a8a9ac;
-      font-size: 20rpx;
-      padding-top: 10rpx;
-    }
-  }
-
-  image {
-    width: 80rpx;
-    height: 80rpx;
-    animation: responsiveAnimation 2s infinite;
-    /* 应用动画 */
-  }
-}
-
-.tui-card {
-  z-index: 333;
-  width: 100%;
-  overflow: hidden;
-  padding: 0 36rpx;
-  padding-bottom: 110rpx;
-  background-color: #f6f7fb;
-  position: absolute;
-  margin-top: 70rpx;
-
-  .tui-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-
-    .item:nth-child(7) {
-      width: 335rpx;
-      padding: 30rpx;
-      background: url(/static/kf-bg.png) no-repeat;
-      background-size: 100% 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between !important;
-      flex-direction: row;
-    }
-
-    .item {
-      width: 160rpx;
-      height: 160rpx;
-      padding: 30rpx;
-      border-radius: 26rpx;
-      font-size: 32rpx;
-      background-color: #fff;
-      margin-top: 20rpx;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-
-      .tui-itemRight {
-        width: 120rpx;
-        height: 100rpx;
-
-        image {
-          width: 100%;
-          height: 100%;
-        }
-      }
-
-      .tui-itemLeft {
-        display: flex;
-        flex-direction: column;
-
-        .kefu {
-          font-size: 26rpx;
-        }
-
-        .fuwu {
-          font-size: 20rpx;
-          color: #a8a9ac;
-          padding-top: 5rpx;
-        }
-      }
-
-      .title {
-        max-width: 55px;
-        padding-top: 4rpx;
-        font-size: 24rpx;
-      }
-
-      image {
-        width: 70rpx;
-        height: 70rpx;
-      }
-    }
-  }
-}
-
-.platformIntroduction {
-  transition: all 0.3s ease;
-  height: 0;
-  padding: 50rpx 40rpx;
-  padding-bottom: 0;
-  overflow-y: auto;
-  position: relative;
-  z-index: 999;
-  overflow: hidden;
-
-  .con-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16rpx;
-
-    & > image {
-      width: 46rpx;
-      height: 22rpx;
-      position: relative;
-      top: 3rpx;
-    }
-
-    & > text {
-      color: #822151;
-      font-size: 32rpx;
-      margin: 0 18rpx;
-      font-weight: bold;
-    }
-  }
-
-  .lightspot {
-    color: #222;
-    font-size: 24rpx;
-    text-align: center;
-  }
-
-  .policy {
-    color: #222;
-    font-size: 24rpx;
-    line-height: 38rpx;
-  }
-
-  .packUpBtn {
-    transition: bottom 0.4s cubic-bezier(0, 0.5, 1, 2);
-    position: fixed;
-    bottom: 70vh;
-    left: 0;
-    // background-color: #f6f7fb;
-    visibility: hidden;
-    z-index: 999;
-
-    image {
-      width: 100vw;
-      height: 168rpx;
-    }
-
-    .btnBox {
-      background-color: #f6f7fb;
-      padding-bottom: 20rpx;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -34px;
-      position: relative;
-      z-index: 9;
-
-      & > view {
-        width: 99px;
-        height: 26px;
-        background-color: unset;
-        border: 1px solid #822151;
-        color: #822151;
-        text-align: center;
-        line-height: 24px;
-        font-size: 12px;
-      }
-    }
-  }
-
-  &.show {
-    height: auto;
-    padding-bottom: 260rpx;
-
-    .packUpBtn {
-      visibility: visible;
-      bottom: 0;
-    }
-  }
-}
-
-.conBox {
-  &.hide {
-    display: none;
-  }
-}
-
-.tui-decorate {
-  margin-top: 118rpx;
-  position: relative;
-
-  .tui-popupDia {
-    height: 75rpx;
-    width: 175rpx;
-    z-index: 300;
-    left: 50%;
-    border-radius: 50%;
-    transform: translateX(44%) translateY(-166%) rotateZ(-7deg);
-    border: 1px solid #822151;
-    color: #822151;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-  }
-
-  .tui-dialog {
-    height: 32rpx;
-    width: 40rpx;
-    z-index: 300;
-    left: 50%;
-    transform: translateX(100%) translateY(-100%);
-    background: url(/static/dialog.png) no-repeat;
-    background-size: 100% 100%;
-    position: absolute;
-  }
-
-  .tui-luckyHand {
-    width: 34rpx;
-    height: 28rpx;
-    left: 50%;
-    margin-left: 5px;
-    top: 26rpx;
-    z-index: 300;
-    position: absolute;
-    background: url(/static/hand.png) no-repeat;
-    background-size: 100% 100%;
-    -webkit-animation: wave 1s infinite; // shaking为动画名称，1s 动画执行时间，infinite 无限循环
-  }
-
-  .tui-lucky {
-    width: 140rpx;
-    top: -36rpx;
-    left: 50%;
-    transform: translateX(-66%);
-    position: relative;
-
-    .tui-luckImge {
-      background: url(/static/lucky.png) no-repeat;
-      background-size: 100% 100%;
-      position: absolute;
-      top: 4rpx;
-      left: 0px;
-      height: 96rpx;
-      width: 100%;
-    }
-  }
-
-  .tui-line {
-    height: 280rpx;
-    z-index: 222;
-    position: absolute;
-    width: 100%;
-    background: url(/static/line.png) no-repeat;
-    background-size: 100% 100%;
-  }
-}
-
-.tui-banner {
-  padding: 20rpx 36rpx;
-
-  .swiper-box {
-    height: 320rpx;
-
-    .swiper-item {
-      width: 100%;
-      height: 100%;
-
-      image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-}
-
-.tui-NavHeader {
-  padding: 20rpx 36rpx;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  height: 100rpx;
-  background: url(/static/bg.png) no-repeat;
-
-  .tui-img {
-    width: 188rpx;
-    height: 54rpx;
-
-    image {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .tui-right {
-    background-color: rgba(235, 239, 241, 0.43);
-    padding: 20rpx 20rpx;
-    border-radius: 21px;
-    display: flex;
-    align-items: center;
-
-    image {
-      width: 40rpx;
-      height: 40rpx;
-    }
-
-    text {
-      padding-left: 20rpx;
-      font-size: 32rpx;
-      font-weight: bold;
-      font-family: "myfont";
-    }
-  }
-}
-
-.tui-header {
-  height: 100%;
-  background: url(/static/bg.png) no-repeat;
-  background-size: 860rpx 1026rpx;
-  background-position-y: -106rpx;
-}
+	page {
+		height: 100%;
+		background-color: #f6f7fb;
+	}
+
+	.tui-desc {
+		display: flex;
+		flex-direction: column;
+		padding-left: 20rpx;
+
+		.desc {
+			color: #33a854;
+			font-size: 26rpx;
+		}
+
+		.title {
+			color: #222;
+			font-size: 26rpx;
+		}
+
+		.time {
+			color: #a8a9ac;
+			font-size: 20rpx;
+			padding-top: 10rpx;
+		}
+	}
+
+	/deep/.uni-popup {
+		z-index: 999 !important;
+	}
+
+	.tui-hover {
+		background-color: #fffaf9 !important;
+		transform: seale(1.03);
+	}
+
+	.tui-popup {
+		width: 600rpx;
+		background-color: #fff;
+		border-radius: 20rpx;
+		padding: 30rpx;
+		box-sizing: border-box;
+	}
+
+	.tui-variety {
+		margin-top: 64rpx;
+		position: relative;
+
+		.tui-varietyContent {
+			display: flex;
+			flex-direction: column;
+
+			.tui-varietyContentItem {
+				width: 100%;
+				background-color: #fff;
+				border-radius: 13px;
+				margin-top: 26rpx;
+				padding: 30rpx;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+
+				.tui-end {
+					padding: 10rpx;
+					width: 80px;
+					color: #fff;
+					border-radius: 5px;
+					font-size: 28rpx;
+					box-sizing: border-box;
+					text-align: center;
+
+					&.up {
+						background-color: #f33b50 !important;
+					}
+
+					&.down {
+						background-color: #0bb563 !important;
+					}
+				}
+
+				.code {
+					flex: 1;
+					max-width: 170rpx;
+					overflow-wrap: break-word;
+					font-size: 26rpx;
+				}
+
+				.name {
+					display: flex;
+					flex-direction: column;
+					flex: 1;
+
+					.piceName {
+						font-size: 32rpx;
+						color: #222;
+						font-weight: 500;
+						padding-bottom: 15rpx;
+					}
+				}
+			}
+		}
+
+		.tui-classify {
+			color: #a8a9ac;
+			font-size: 24rpx;
+			display: flex;
+			align-items: center;
+			padding: 30rpx;
+
+			.tui-rightVariety {
+				width: 300rpx;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+		}
+
+		.title {
+			font-size: 32rpx;
+			color: #222;
+			padding-bottom: 20rpx;
+		}
+	}
+
+	.tui-recommend {
+		margin-top: 64rpx;
+		margin-bottom: 60rpx;
+		position: relative;
+
+		.prefer-scroll {
+			white-space: nowrap;
+			/* 防止换行 */
+			overflow-x: auto;
+			/* 开启横向滚动 */
+			overflow-y: hidden;
+			/* 隐藏纵向滚动条 */
+			-webkit-overflow-scrolling: touch;
+			/* 针对移动端使滚动更流畅 */
+			width: 100%;
+		}
+
+		.image-box {
+			display: inline-block;
+			width: 245upx;
+
+			background-color: #fff;
+			border-radius: 13px;
+			margin-left: 20rpx;
+			padding: 20rpx;
+			box-sizing: border-box;
+
+			.tui-shitu {
+				width: 90%;
+				height: 110rpx;
+				left: 50%;
+				transform: translateX(-50%);
+				margin-top: 12rpx;
+			}
+
+			.parities {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				font-size: 20rpx;
+				color: #222;
+
+				.tui-rightParities {
+					display: flex;
+					align-items: center;
+					padding-top: 10rpx;
+
+					.rise {
+						padding-left: 10rpx;
+						color: #f33b50;
+					}
+
+					.down {
+						width: 18rpx;
+						height: 18rpx;
+					}
+				}
+			}
+
+			.proportion {
+				font-size: 24rpx;
+				color: #222;
+				margin-top: 12rpx;
+			}
+
+			.name {
+				font-size: 32rpx;
+				font-weight: 500;
+				color: #222;
+			}
+
+			.desc {
+				color: #a8a9ac;
+				font-size: 20rpx;
+				padding-top: 6rpx;
+			}
+		}
+
+		.image-box:nth-of-type(1) {
+			margin-left: 0;
+		}
+
+		.title {
+			font-size: 32rpx;
+			color: #222;
+			padding-bottom: 20rpx;
+		}
+	}
+
+	@keyframes wave {
+		0% {
+			transform: translateY(-5px);
+		}
+
+		50% {
+			transform: translateY(-20px);
+		}
+	}
+
+	@keyframes responsiveAnimation {
+		0% {
+			transform: scale(0.8);
+			/* 动画开始时图片大小正常 */
+		}
+
+		50% {
+			transform: scale(1);
+			/* 动画中间时图片放大50% */
+		}
+
+		100% {
+			transform: scale(0.8);
+			/* 动画结束时图片恢复正常大小 */
+		}
+	}
+
+	.tui-notice {
+		margin-top: 44rpx;
+		background-color: #fff;
+		padding: 30rpx;
+		border-radius: 13px;
+		font-size: 32rpx;
+		display: flex;
+		align-items: center;
+
+
+
+		image {
+			width: 80rpx;
+			height: 80rpx;
+			animation: responsiveAnimation 2s infinite;
+			/* 应用动画 */
+		}
+	}
+
+	.tui-card {
+		z-index: 333;
+		width: 100%;
+		overflow: hidden;
+		padding: 0 36rpx;
+		padding-bottom: 110rpx;
+		background-color: #f6f7fb;
+		position: absolute;
+		margin-top: 70rpx;
+
+		.tui-content {
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
+
+
+
+			.item:nth-child(7) {
+				width: 335rpx;
+				padding: 30rpx;
+				background: url(/static/kf-bg.png) no-repeat;
+				background-size: 100% 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between !important;
+				flex-direction: row;
+			}
+
+			.item {
+				width: 160rpx;
+				height: 160rpx;
+				padding: 30rpx;
+				border-radius: 26rpx;
+				font-size: 32rpx;
+				background-color: #fff;
+				margin-top: 20rpx;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				position: relative;
+
+				.tui-positionBadge {
+					position: absolute;
+					top: -20rpx;
+					right: -20rpx;
+				}
+
+				.tui-itemRight {
+					width: 120rpx;
+					height: 100rpx;
+
+					image {
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.tui-itemLeft {
+					display: flex;
+					flex-direction: column;
+
+					.kefu {
+						font-size: 26rpx;
+					}
+
+					.fuwu {
+						font-size: 20rpx;
+						color: #a8a9ac;
+						padding-top: 5rpx;
+					}
+				}
+
+				.title {
+					max-width: 55px;
+					padding-top: 4rpx;
+					font-size: 24rpx;
+				}
+
+				image {
+					width: 70rpx;
+					height: 70rpx;
+				}
+			}
+		}
+	}
+
+	.platformIntroduction {
+		transition: all 0.3s ease;
+		height: 0;
+		padding: 50rpx 40rpx;
+		padding-bottom: 0;
+		overflow-y: auto;
+		position: relative;
+		z-index: 999;
+		overflow: hidden;
+
+		.con-title {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 16rpx;
+
+			&>image {
+				width: 46rpx;
+				height: 22rpx;
+				position: relative;
+				top: 3rpx;
+			}
+
+			&>text {
+				color: #822151;
+				font-size: 32rpx;
+				margin: 0 18rpx;
+				font-weight: bold;
+			}
+		}
+
+		.lightspot {
+			color: #222;
+			font-size: 24rpx;
+			text-align: center;
+		}
+
+		.policy {
+			color: #222;
+			font-size: 24rpx;
+			line-height: 38rpx;
+		}
+
+		.packUpBtn {
+			transition: bottom 0.4s cubic-bezier(0, 0.5, 1, 2);
+			position: fixed;
+			bottom: 70vh;
+			left: 0;
+			// background-color: #f6f7fb;
+			visibility: hidden;
+			z-index: 999;
+
+			image {
+				width: 100vw;
+				height: 168rpx;
+			}
+
+			.btnBox {
+				background-color: #f6f7fb;
+				padding-bottom: 20rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-top: -34px;
+				position: relative;
+				z-index: 9;
+
+				&>view {
+					width: 99px;
+					height: 26px;
+					background-color: unset;
+					border: 1px solid #822151;
+					color: #822151;
+					text-align: center;
+					line-height: 24px;
+					font-size: 12px;
+				}
+			}
+		}
+
+		&.show {
+			height: auto;
+			padding-bottom: 260rpx;
+
+			.packUpBtn {
+				visibility: visible;
+				bottom: 0;
+			}
+		}
+	}
+
+	.conBox {
+		&.hide {
+			display: none;
+		}
+	}
+
+	.tui-decorate {
+		margin-top: 118rpx;
+		position: relative;
+
+		.tui-popupDia {
+			height: 75rpx;
+			width: 175rpx;
+			z-index: 300;
+			left: 50%;
+			border-radius: 50%;
+			transform: translateX(44%) translateY(-166%) rotateZ(-7deg);
+			border: 1px solid #822151;
+			color: #822151;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+		}
+
+		.tui-dialog {
+			height: 32rpx;
+			width: 40rpx;
+			z-index: 300;
+			left: 50%;
+			transform: translateX(100%) translateY(-100%);
+			background: url(/static/dialog.png) no-repeat;
+			background-size: 100% 100%;
+			position: absolute;
+		}
+
+		.tui-luckyHand {
+			width: 34rpx;
+			height: 28rpx;
+			left: 50%;
+			margin-left: 5px;
+			top: 26rpx;
+			z-index: 300;
+			position: absolute;
+			background: url(/static/hand.png) no-repeat;
+			background-size: 100% 100%;
+			-webkit-animation: wave 1s infinite; // shaking为动画名称，1s 动画执行时间，infinite 无限循环
+		}
+
+		.tui-lucky {
+			width: 140rpx;
+			top: -36rpx;
+			left: 50%;
+			transform: translateX(-66%);
+			position: relative;
+
+			.tui-luckImge {
+				background: url(/static/lucky.png) no-repeat;
+				background-size: 100% 100%;
+				position: absolute;
+				top: 4rpx;
+				left: 0px;
+				height: 96rpx;
+				width: 100%;
+			}
+		}
+
+		.tui-line {
+			height: 280rpx;
+			z-index: 222;
+			position: absolute;
+			width: 100%;
+			background: url(/static/line.png) no-repeat;
+			background-size: 100% 100%;
+		}
+	}
+
+	.tui-banner {
+		padding: 20rpx 36rpx;
+
+		.swiper-box {
+			height: 320rpx;
+
+			.swiper-item {
+				width: 100%;
+				height: 100%;
+
+				image {
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+	}
+
+	.tui-NavHeader {
+		padding: 20rpx 36rpx;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		position: relative;
+		height: 100rpx;
+		background: url(/static/bg.png) no-repeat;
+
+		.tui-img {
+			width: 188rpx;
+			height: 54rpx;
+
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.tui-right {
+			background-color: rgba(235, 239, 241, 0.43);
+			padding: 20rpx 20rpx;
+			border-radius: 21px;
+			display: flex;
+			align-items: center;
+
+			image {
+				width: 40rpx;
+				height: 40rpx;
+			}
+
+			text {
+				padding-left: 20rpx;
+				font-size: 32rpx;
+				font-weight: bold;
+				font-family: "myfont";
+			}
+		}
+	}
+
+	.tui-header {
+		height: 100%;
+		background: url(/static/bg.png) no-repeat;
+		background-size: 860rpx 1026rpx;
+		background-position-y: -106rpx;
+	}
 </style>
