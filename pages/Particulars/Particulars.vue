@@ -2,6 +2,7 @@
 	<view>
 		<guo-headerTitle title="余额宝明细" backgroundColor="#fff"></guo-headerTitle>
 		<view class="tui-tabs">
+<<<<<<< HEAD
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="tabs" color="rgb(168, 169, 172)" activeColor="#222" bold
 				lineColor="#822151" :lineScale="0.1" @change="getList"></v-tabs>
 		</view>
@@ -10,6 +11,16 @@
 				<view class="tui-left">
 					<view class="title">
 						{{tabs[item.type]}}
+=======
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="['全部', '存入', '转出', '收益']" color="rgb(168, 169, 172)"
+				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
+		</view>
+		<view class="tui-headerTitle" v-if="!isData">
+			<view class="tui-card" v-for="(item,index) in List" :key="index">
+				<view class="tui-left">
+					<view class="title">
+						{{item.type == 1 ? '已确定' : item.type == 2 ? '待确定' : item.type == 3 ? '收益' : '转出'}}
+>>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 					</view>
 					<view class="time">
 						{{item.create_time}}
@@ -19,12 +30,22 @@
 					{{item.amount}}
 				</view>
 			</view>
+			<!--加载loadding-->
+			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+			<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+			<!--加载loadding-->
 		</view>
+		<template v-if="isData">
+			<tui-noData title="暂无数据">
+				<image src="../../static/xjb.png" class="tui-allImage" mode=""></image>
+			</tui-noData>
+		</template>
 	</view>
 </template>
 
 <script>
 	import {
+<<<<<<< HEAD
 		balanceLog
 	} from "@/api/money.js"
 	export default {
@@ -41,11 +62,69 @@
 		methods: {
 			getList() {
 				balanceLog({
+=======
+		getMoneyLog
+	} from '@/api/money.js'
+	export default {
+		data() {
+			return {
+				activeTab: 0,
+				List: [],
+				PageIndex: 1,
+				PageSize: 10,
+				loadding: false,
+				pullUpOn: true,
+				isData: true,
+				pageCount: 0
+			};
+		},
+		onLoad() {
+			this.getMoneyLog()
+		},
+		// 上拉加载
+		async onReachBottom() {
+			if (!this.pullUpOn) return;
+			this.PageIndex = this.PageIndex + 1;
+			this.loadding = true;
+			if (this.PageIndex <= this.pageCount) {
+				await this.getMoneyLog()
+			} else {
+				this.loadding = false;
+				this.pullUpOn = false
+			}
+
+			console.log(this.FileInfoList.length)
+		},
+		methods: {
+			onChangeTab() {
+				this.getMoneyLog()
+			},
+			getMoneyLog() {
+				getMoneyLog({
+>>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 					type: this.activeTab
 				}).then(({
 					data
 				}) => {
+<<<<<<< HEAD
 					this.pageList = data.lists
+=======
+					console.log(data)
+					if (data.lists.length !== 0) {
+						this.isData = false
+					} else {
+						this.isData = true
+					}
+					if (!data.lists || data.lists.length < this.PageSize) {
+						this.pullUpOn = false;
+					}
+					this.loadding = false;
+					if (this.PageIndex == 1) {
+						this.List = data.lists
+					} else {
+						this.List = this.List.concat(data.lists)
+					}
+>>>>>>> e3113e6b0a0ce6e8a6721b2a9abc733686d04c47
 				})
 			}
 		}
