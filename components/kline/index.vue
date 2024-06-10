@@ -6,8 +6,10 @@
 </template>
 <script>
 	import {
-		quoteData
+		quoteData,
+		quoteData1
 	} from './data'
+	import dayjs from 'dayjs'
 	export default {
 		data() {
 			return {}
@@ -26,20 +28,33 @@
 				var upColor = '#00da3c';
 				var downColor = '#ec0000'
 
-				function splitData(rawData) {
+				var data = formatData(quoteData);
+
+				function formatData(rawData) {
 					var categoryData = [];
 					var values = [];
 					var volumes = [];
-					for (var i = 0; i < rawData.length; i++) {
-						categoryData.push(rawData[i].splice(0, 1)[0]);
-						values.push(rawData[i]);
-						volumes.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
-					}
+					rawData.forEach((item, index) => {
+						categoryData.push(dayjs(item.time).format('MM-DD HH:mm:ss'));
+						values.push([item.open, item.close, item.low, item.high])
+						volumes.push([index, item.volume, item.open > item.close ? 1 : -1]);
+					})
 					return {
 						categoryData: categoryData,
 						values: values,
 						volumes: volumes
-					};
+					}
+
+					// for (var i = 0; i < rawData.length; i++) {
+					// 	categoryData.push(rawData[i].splice(0, 1)[0]);
+					// 	values.push(rawData[i]);
+					// 	volumes.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
+					// }
+					// return {
+					// 	categoryData: categoryData,
+					// 	values: values,
+					// 	volumes: volumes
+					// };
 				}
 
 				function calculateMA(dayCount, data) {
@@ -57,7 +72,6 @@
 					}
 					return result;
 				}
-				var data = splitData(quoteData);
 
 				var option = {
 					animation: true,
@@ -66,19 +80,45 @@
 						axisPointer: {
 							type: 'cross'
 						},
-						backgroundColor: 'rgba(245, 245, 245, 0.8)',
-						borderWidth: 1,
-						borderColor: '#ccc',
-						padding: 10,
 						textStyle: {
-							color: '#000'
+							color: '#333'
 						},
+						className: 'klineTooltip',
 						position: function(pos, params, el, elRect, size) {
 							var obj = {
 								top: 10
 							};
 							obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
 							return obj;
+						},
+						formatter: function(params) {
+							const themeColor = params[5].value[3] > 0 ? upColor : downColor
+							const param = params[0];
+							console.log(params)
+							return `
+							<ul style="border-color:${themeColor}">
+								<li> 
+									<div class="dot" style="background-color:${themeColor}"></div>
+									 <span>${param.name}</span> 
+								</li>
+								<li>
+									 <div class="dot" style="background-color:${themeColor}"></div> 
+									 <span>open <span>${param.data[0]}</span></span>
+								</li>
+								<li> 
+									<div class="dot" style="background-color:${themeColor}"></div>
+									 <span>close <span>${param.data[1]}</span></span> 
+								</li>
+								<li> 
+									<div class="dot" style="background-color:${themeColor}"></div> 
+									<span>lowest <span>${param.data[2]}</span></span>
+								</li>
+								<li> 
+									<div class="dot" style="background-color:${themeColor}"></div>
+									 <span>highest <span>${param.data[3]}</span></span> 
+								</li>
+							</ul>
+							`
 						},
 						extraCssText: 'width: 170px'
 					},
@@ -109,13 +149,13 @@
 					},
 					grid: [{
 							left: '0%',
-							right: '12.5%',
+							right: '15%',
 							height: '50%',
 							top: '8%'
 						},
 						{
 							left: '0%',
-							right: '12%',
+							right: '15%',
 							top: '68%',
 							height: '10%'
 						}
@@ -183,9 +223,9 @@
 							// splitArea: {
 							// 	show: true
 							// }
-							axisTick: {
-								show: true
-							}
+							// axisTick: {
+							// 	show: true
+							// }
 						},
 						{
 							scale: true,
@@ -237,18 +277,6 @@
 									borderColor0: null
 								}
 							},
-							tooltip: {
-								formatter: function(param) {
-									param = param[0];
-									return [
-										param.name + '<hr size=1 style="margin: 3px 0">',
-										'Open: ' + param.data[0] + '<br/>',
-										'Close: ' + param.data[1] + '<br/>',
-										'Lowest: ' + param.data[2] + '<br/>',
-										'Highest: ' + param.data[3] + '<br/>'
-									].join('');
-								}
-							}
 						},
 						{
 							name: 'MA5',
@@ -334,5 +362,46 @@
 	.kline {
 		width: 100%;
 		height: 468px;
+	}
+
+	::v-deep .klineTooltip {
+		box-shadow: none !important;
+		background-color: transparent !important;
+		padding: 0 !important;
+
+		&>ul {
+			border-radius: 6px;
+			padding: 10px;
+			border: 1px solid transparent;
+			background-color: #fff;
+
+			&>li {
+				display: flex;
+				align-items: center;
+
+				.dot {
+					border-radius: 50%;
+					width: 5px;
+					height: 5px;
+					margin-right: 10px;
+				}
+
+				&:first-child {
+					.dot {
+						width: 10px;
+						height: 10px;
+					}
+				}
+
+				&>span {
+					display: flex;
+					flex: 1;
+
+					&>span {
+						margin-left: auto;
+					}
+				}
+			}
+		}
 	}
 </style>
