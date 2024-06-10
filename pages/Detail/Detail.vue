@@ -8,13 +8,13 @@
 					<view class="bar"></view>
 					<view class="static">
 						<view class="title">
-							1.50265
+							666.66
 						</view>
 						<view class="flex flex-between flex-item">
-							<text class="tui-size">-0.00641</text>
+							<text class="tui-size">-6.66</text>
 							<view class="flex flex-item p-l">
 								<image src="../../static/green_down.png" mode=""></image>
-								<text class="tui-size" style="color: #0bb563;">-0.42%</text>
+								<text class="tui-size" style="color: #0bb563;">-6.66%</text>
 							</view>
 						</view>
 					</view>
@@ -29,7 +29,7 @@
 								24H最高
 							</view>
 							<view class="right-max">
-								1.50987
+								{{pageDetail.price_high}}
 							</view>
 						</view>
 						<view style="flex: 1;"></view>
@@ -38,7 +38,7 @@
 								24H最低
 							</view>
 							<view class="right-max">
-								1.50987
+								{{pageDetail.price_low}}
 							</view>
 						</view>
 					</view>
@@ -49,7 +49,7 @@
 								24H量(MX)
 							</view>
 							<view class="right-max">
-								1.50987
+								{{pageDetail.vol}}
 							</view>
 						</view>
 						<view style="flex: 1;"></view>
@@ -58,7 +58,7 @@
 								24H额
 							</view>
 							<view class="right-max">
-								1.50987
+								66.66
 							</view>
 						</view>
 					</view>
@@ -127,11 +127,15 @@
 </template>
 
 <script>
+	import {
+		goodDetail,
+		goodKline
+	} from "@/api/detail.js"
 	export default {
 		components: {
 			kline: () => import("@/components/kline/index.vue"),
 		},
-		
+
 		data() {
 			return {
 				title: '',
@@ -141,12 +145,47 @@
 				styles: {
 					'borderColor': '#f6f8fa'
 				},
+
+				options: {},
+				timer: null,
+				pageDetail: {},
+				klineList: []
 			};
 		},
-		onLoad() {
+		onLoad(options) {
+			this.options = options
 			this.title = '美元/澳元'
+			this.getDetail()
+			this.timer = setInterval(_ => {
+				this.getDetail()
+			}, 5000)
+		},
+		onHide() {
+			clearInterval(this.timer)
 		},
 		methods: {
+			getDetail() {
+				const {
+					id,
+					codename
+				} = this.options
+				goodDetail({
+					id,
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.pageDetail = data || {}
+				})
+				goodKline({
+					codename,
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.klineList = data || []
+				})
+			},
 			onClickTitle() {
 				console.log(1)
 				this.$refs.showLeft.open();
@@ -180,7 +219,7 @@
 					width: 100%;
 					background-color: #fff;
 					border-radius: 13px;
-					
+
 					padding: 20rpx 30rpx;
 					box-sizing: border-box;
 					display: flex;

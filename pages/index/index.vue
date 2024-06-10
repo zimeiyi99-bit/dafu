@@ -288,9 +288,12 @@
 					this.goodsList = data
 				})
 			},
-			onClickDetail() {
+			onClickDetail({
+				id,
+				codename
+			}) {
 				uni.navigateTo({
-					url: '/pages/Detail/Detail'
+					url: `/pages/Detail/Detail?id=${id}&codename=${codename}`
 				})
 			},
 			onClickNotice() {
