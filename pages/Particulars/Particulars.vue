@@ -2,21 +2,21 @@
 	<view>
 		<guo-headerTitle title="余额宝明细" backgroundColor="#fff"></guo-headerTitle>
 		<view class="tui-tabs">
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="['全部', '存入', '转出', '收益']" color="rgb(168, 169, 172)"
-				activeColor="#222" bold lineColor="#822151" :lineScale="0.1"></v-tabs>
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="tabs" color="rgb(168, 169, 172)" activeColor="#222" bold
+				lineColor="#822151" :lineScale="0.1" @change="getList"></v-tabs>
 		</view>
 		<view class="tui-headerTitle">
-			<view class="tui-card">
+			<view class="tui-card" v-for="(item,index) in pageList" :key="index">
 				<view class="tui-left">
 					<view class="title">
-						存入
+						{{tabs[item.type]}}
 					</view>
 					<view class="time">
-						2024-06-04 16:37:31
+						{{item.create_time}}
 					</view>
 				</view>
 				<view class="tui-right">
-					-1258.00
+					{{item.amount}}
 				</view>
 			</view>
 		</view>
@@ -24,11 +24,30 @@
 </template>
 
 <script>
+	import {
+		balanceLog
+	} from "@/api/money.js"
 	export default {
 		data() {
 			return {
-				activeTab: 0
+				tabs: ['全部', '已确定', '待确定', '收益', '转出'],
+				activeTab: 0,
+				pageList: [],
 			};
+		},
+		onLoad() {
+			this.getList()
+		},
+		methods: {
+			getList() {
+				balanceLog({
+					type: this.activeTab
+				}).then(({
+					data
+				}) => {
+					this.pageList = data.lists
+				})
+			}
 		}
 	}
 </script>
@@ -37,6 +56,7 @@
 	.tui-headerTitle {
 		padding: 0 36rpx;
 		margin-top: 40rpx;
+
 		.tui-card {
 			background-color: #fff;
 			border-radius: 13px;

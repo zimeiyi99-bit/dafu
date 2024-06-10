@@ -161,8 +161,8 @@
 								{{item.price}}
 							</view>
 							<view style="justify-content: flex-end;" class="flex">
-								<view class="tui-end">
-									{{item.zf}}
+								<view class="tui-end" :class="item.zf>0?'up':'down'">
+									{{item.zf}}%
 								</view>
 							</view>
 						</view>
@@ -253,11 +253,11 @@
 			if (e.scrollTop > 100) {
 				// 当滚动距离超过100时，设置吸顶元素的样式，使其固定在页面顶部
 				this.stickyStyle = 'position: fixed; top: 0; left: 0; width: 100%; z-index: 999;background-color: #f6f7fb;'
-				
+
 			} else {
 				// 滚动距离不足100时，取消吸顶效果
 				this.stickyStyle = ''
-				
+
 			}
 		},
 		onLoad() {
@@ -368,10 +368,17 @@
 					width: 80px;
 					color: #fff;
 					border-radius: 5px;
-					background-color: #f33b50;
 					font-size: 28rpx;
 					box-sizing: border-box;
 					text-align: center;
+
+					&.up {
+						background-color: #f33b50;
+					}
+
+					&.down {
+						background-color: #0bb563;
+					}
 				}
 
 				.code {
@@ -850,7 +857,7 @@
 		position: relative;
 		height: 100rpx;
 		background: url(/static/bg.png) no-repeat;
-		
+
 
 		.tui-img {
 
