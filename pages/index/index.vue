@@ -343,32 +343,32 @@
 			},
 			onClickOpen(item, index) {
 				switch (item.title) {
-					case "系统消息":
+					case 5:
 						uni.navigateTo({
 							url: "/pages/message/message",
 						});
 						break;
-					case "出款方式":
+					case 3:
 						uni.navigateTo({
 							url: "/pages/account/account",
 						});
 						break;
-					case "我的订单":
+					case 2:
 						uni.navigateTo({
 							url: "/pages/order/order",
 						});
 						break;
-					case "产品交易":
+					case 1:
 						uni.switchTab({
 							url: "/pages/product/product",
 						});
 						break;
-					case "关于我们":
+					case 4:
 						uni.navigateTo({
 							url: "/pages/yinsi/gy",
 						});
 						break;
-					case "在线客服":
+					case 6:
 						getUserIndex({
 							hideLoading: true,
 						}).then(({
