@@ -48,3 +48,7 @@ export const goods_dec = function(data = {}) {
 export const get_count = function(data = {}) {
 	return request.get('message/get_count', data)
 }
+// 资金记录
+export const mark = function(data = {}) {
+	return request.get('/user/mark', data)
+}

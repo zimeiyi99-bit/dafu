@@ -180,5 +180,6 @@ export default {
 	'detail.hbzl': '货币种类',
 	'detail.czcg': '操作成功',
 	'money-record.zjjl': '资金记录',
-
+	'money-record.zwzjjl': '暂无资金记录',
+	
 }

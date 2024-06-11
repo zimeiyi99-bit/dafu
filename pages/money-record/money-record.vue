@@ -2,30 +2,91 @@
 	<view>
 		<guo-headerTitle :title="$t('money-record.zjjl')"></guo-headerTitle>
 		<view class="tui-headerTitle">
-			<view class="tui-card">
+			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
-						账户余额 -> 余额宝
+						{{item.content}}
 					</view>
 					<view class="time">
-						2024-06-04 16:37:31
+						{{item.addtime}}
 					</view>
 				</view>
-				<view class="tui-right">
-					-1258.00
+
+				<view class="tui-right" :style="{color:item.is_z == 1 ? '#0bb563' : '#f33b50'}">
+					{{item.is_z == 1 ? "+" : '-'}} {{item.money}}
 				</view>
 			</view>
+			<!--加载loadding-->
+			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
+			<tui-nomore :visible="!pullUpOn" :text="$t('app.mtgd')"></tui-nomore>
+			<!--加载loadding-->
 		</view>
+		<template v-if="isData">
+			<tui-noData :title="$t('money-record.zwzjjl')">
+				<image src="../../static/cw.png" class="tui-allImage" mode=""></image>
+			</tui-noData>
+		</template>
 	</view>
 </template>
 
 <script>
+	import {
+		mark
+	} from '@/api/money.js'
 	export default {
 
 		data() {
 			return {
-
+				List: [],
+				PageIndex: 1,
+				PageSize: 10,
+				loadding: false,
+				pullUpOn: true,
+				isData: true,
+				pageCount: 0
 			};
+		},
+		onLoad() {
+			this.mark()
+		},
+		// 上拉加载
+		async onReachBottom() {
+			if (!this.pullUpOn) return;
+			this.PageIndex = this.PageIndex + 1;
+			this.loadding = true;
+			if (this.PageIndex <= this.pageCount) {
+				await this.mark()
+			} else {
+				this.loadding = false;
+				this.pullUpOn = false
+			}
+
+			console.log(this.FileInfoList.length)
+		},
+		methods: {
+			mark() {
+				mark({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+					console.log(data)
+					if (data.lists.length !== 0) {
+						this.isData = false
+					} else {
+						this.isData = true
+					}
+					if (!data.lists || data.lists.length < this.PageSize) {
+						this.pullUpOn = false;
+					}
+					this.loadding = false;
+					if (this.PageIndex == 1) {
+						this.List = data.lists
+					} else {
+						this.List = this.List.concat(data.lists)
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -43,10 +104,12 @@
 			align-items: center;
 			justify-content: space-between;
 			margin-top: 20rpx;
-			.tui-right{
+
+			.tui-right {
 				color: #f33b50;
 				font-size: 28rpx;
 			}
+
 			.tui-left {
 				display: flex;
 				flex-direction: column;
