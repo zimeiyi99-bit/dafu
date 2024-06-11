@@ -15,6 +15,9 @@
 				</view>
 			</view>
 		</view>
+		<tui-noData v-if="!pageList.length" :title="$t('home.xtxx.zwsj')">
+			<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
+		</tui-noData>
 	</view>
 </template>
 
