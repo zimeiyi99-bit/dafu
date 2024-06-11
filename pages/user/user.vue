@@ -77,7 +77,7 @@
 						￥{{userInfo.money}}
 					</view>
 				</view>
-				<view class="tui-rightItem">
+				<view class="tui-rightItem" @click="getUserIndex">
 					<image src="/static/rujin.png" mode=""></image>
 					<view class="text">
 						入金
@@ -108,13 +108,14 @@
 
 <script>
 	import {
-		userInfo
+		userInfo,
+		getUserIndex
 	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
 				userInfo: {
-					real_name:'',
+					real_name: '',
 				},
 				settingList: [{
 					title: '实名认证',
@@ -147,6 +148,16 @@
 			this.getDetail()
 		},
 		methods: {
+			getUserIndex() {
+				getUserIndex({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					window.open(data.kefu_url, '_blank')
+				});
+			},
 			getDetail() {
 				userInfo({
 					hideLoading: true
