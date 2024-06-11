@@ -27,7 +27,7 @@
 		name: "langChange",
 		data() {
 			return {
-				showLang:uni.getStorageSync('i18nLang'),
+				showLang: uni.getStorageSync('i18nLang'),
 				langList: [{
 						name: '简体中文',
 						value: 'zh-CN'
@@ -35,6 +35,33 @@
 					{
 						name: '繁體中文',
 						value: 'zh-TW'
+					}, {
+						name: 'English',
+						value: 'en-US'
+					},
+					{
+						name: '日本語',
+						value: 'ja-JP'
+					},
+					{
+						name: 'ภาษาไทย',
+						value: 'th-TH'
+					},
+					{
+						name: 'Tiếng Việt',
+						value: 'vi-VN'
+					}, {
+						name: 'IndonesiaName',
+						value: 'id-ID'
+					}, {
+						name: '한국어',
+						value: 'ko-KR'
+					}, {
+						name: 'Français',
+						value: 'fr-FR'
+					}, {
+						name: 'Deutsch',
+						value: 'de-DE'
 					}
 				]
 			};

@@ -27,7 +27,7 @@
 					this.progressNum = 100;
 					clearInterval(timer)
 					if (this.$store.state.token) {
-						uni.redirectTo({
+						uni.switchTab({
 							url: '/pages/index/index'
 						})
 					} else {
