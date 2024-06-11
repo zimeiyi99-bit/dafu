@@ -143,7 +143,7 @@
 			},
 			onClickDeposit(type) {
 				uni.navigateTo({
-					url: '/pages/transfer/transfer?type=' + type
+					url: '/pages/transfer/transfer?type=' + type + '&pirce=' + this.pageData.all_money
 				})
 			},
 			onClickParticulars() {

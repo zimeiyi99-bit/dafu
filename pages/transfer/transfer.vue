@@ -14,7 +14,7 @@
 						<input v-model="amount" type="text" class="input" disabled />
 					</view>
 					<view class="bottom">
-						{{$t('product.k')}}{{typeList[type]}}{{$t('app.je')}}1007992.00CNY,
+						{{$t('product.k')}}{{typeList[type]}}{{$t('app.je')}}{{type == 'sell' ? pirce : userInfo.money}}CNY,
 						<text>{{$t('product.qb')}}{{typeList[type]}}</text>
 					</view>
 				</view>
@@ -43,16 +43,21 @@
 		balanceBuy,
 		balanceSell
 	} from "@/api/money.js"
+	import {
+		userInfo
+	} from "@/api/user.js"
 	export default {
 		data() {
 			return {
+				userInfo: {},
 				typeList: {
 					'buy': this.$t('product.cr'),
 					'sell': this.$t('product.zc'),
 				},
 				type: {},
 				keyList: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'],
-				amount: ''
+				amount: '',
+				pirce: 0
 			};
 		},
 		computed: {
@@ -64,9 +69,20 @@
 			},
 		},
 		onLoad(e) {
+			this.getDetail()
 			this.type = e.type
+			this.pirce = e.pirce
 		},
 		methods: {
+			getDetail() {
+				userInfo({
+					hideLoading: true
+				}).then(({
+					data
+				}) => {
+					this.userInfo = data
+				})
+			},
 			keyUp(val) {
 				const newAmout = this.amount + val
 				let value = this.$utils.validateAmount(newAmout);
