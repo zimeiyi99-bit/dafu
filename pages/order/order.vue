@@ -11,11 +11,11 @@
 				<view class="tui-box" v-for="(item,index) in List" :key="index">
 					<view class="tui-title">
 						<view class="flex flex-item">
-							<text class="name">欧元/美元</text>
-							<text class="desc">360S</text>
+							<text class="name">{{item.code}}</text>
+							<text class="desc">{{item.seconds}}S</text>
 						</view>
-						<view class="right tui-red">
-							收购
+						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">
+							{{item.type == 1 ? '收购' : '售出'}}
 						</view>
 					</view>
 					<view class="tui-orderTitle">
@@ -23,7 +23,7 @@
 							订单编号
 						</view>
 						<view class="code">
-							BOSTT8WRPWXA3TR
+							BOSTT8WRPWX{{item.id}}
 						</view>
 					</view>
 					<view class="flex flex-wrap">
@@ -32,7 +32,7 @@
 								金额
 							</view>
 							<view class="pice">
-								5000.00
+								{{item.number}}
 							</view>
 						</view>
 						<view class="tui-wrapItem" style="width: 46%;">
@@ -40,7 +40,7 @@
 								盈亏
 							</view>
 							<view class="pice tui-green">
-								250.00
+								{{item.end_profit}}
 							</view>
 						</view>
 						<view class="tui-wrapItem text-des-color">
@@ -48,7 +48,7 @@
 								购买价
 							</view>
 							<view class="pice">
-								1.08
+								{{item.open_price}}
 							</view>
 						</view>
 						<view class="tui-wrapItem text-des-color" style="width: 46%;">
@@ -65,7 +65,7 @@
 									持仓时间
 								</view>
 								<view class="pice">
-									2024-05-25 17:41:28
+									{{item.buy_time}}
 								</view>
 							</view>
 							<view class="right" style="width: 46%;">
@@ -73,7 +73,7 @@
 									平仓时间
 								</view>
 								<view class="pice">
-									2024-05-25 17:44:28
+									{{item.sell_time}}
 								</view>
 							</view>
 						</view>

@@ -342,6 +342,7 @@
 				this.deal = this.$options.data().deal
 			},
 			dealPopupOpen(type) {
+				this.getDetailUserInfo()
 				this.deal.isType = type
 				this.$refs.popup.open()
 			},
