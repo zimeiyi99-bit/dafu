@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<guo-headerTitle :title="typeList[type]+'金额'"></guo-headerTitle>
+		<guo-headerTitle :title="typeList[type]+$t('app.je')"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-form">
 				<view class="title">
-					{{typeList[type]}}'金额'
+					{{typeList[type]}}{{$t('app.je')}}
 				</view>
 				<view class="flex flex-column">
 					<view class="tui-inputBox">
@@ -14,7 +14,8 @@
 						<input v-model="amount" type="text" class="input" disabled />
 					</view>
 					<view class="bottom">
-						可{{typeList[type]}}金额1007992.00CNY, <text>全部{{typeList[type]}}</text>
+						{{$t('product.k')}}{{typeList[type]}}{{$t('app.je')}}1007992.00CNY,
+						<text>{{$t('product.qb')}}{{typeList[type]}}</text>
 					</view>
 				</view>
 			</view>
@@ -30,7 +31,7 @@
 				</view>
 			</view>
 			<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit">
-				确定
+				{{$t('app.qd')}}
 			</view>
 		</view>
 	</view>
@@ -46,8 +47,8 @@
 		data() {
 			return {
 				typeList: {
-					'buy': '存入',
-					'sell': '转出',
+					'buy': this.$t('product.cr'),
+					'sell': this.$t('product.zc'),
 				},
 				type: {},
 				keyList: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'],

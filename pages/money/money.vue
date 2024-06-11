@@ -10,15 +10,15 @@
 				<l-circularProgress :fontShow="false" :percent="pageData.zb" type="halfCircular" :lineWidth="20"
 					:boxWidth="330" progressColor="#822151" bgColor="#fff">
 					<view class="tui-progress">
-						<view class="title">余额宝总额</view>
+						<view class="title">{{$t('money.yebze')}}</view>
 						<view class="price">￥{{pageData.all_money}}</view>
 					</view>
 					<view class="tui-progressBottom">
 						<view class="">
-							确认份额
+							{{$t('product.qrfe')}}
 						</view>
 						<view class="">
-							总额
+							{{$t('product.ze')}}
 						</view>
 					</view>
 				</l-circularProgress>
@@ -27,21 +27,21 @@
 				<view class="tui-cardItem" @click="onClickDeposit('buy')">
 					<image src="../../static/cunru.png" mode=""></image>
 					<text class="">
-						存入
+						{{$t('product.cr')}}
 					</text>
 				</view>
 				<view class="tui-border"></view>
 				<view class="tui-cardItem" @click="onClickDeposit('sell')">
 					<image src="../../static/zhuanchu.png" mode=""></image>
 					<text class="">
-						转出
+						{{$t('product.zc')}}
 					</text>
 				</view>
 				<view class="tui-border"></view>
 				<view class="tui-cardItem" @click="onClickParticulars">
 					<image src="../../static/mingxi.png" mode=""></image>
 					<text class="">
-						明细
+						{{$t('product.mx')}}
 					</text>
 				</view>
 			</view>
@@ -49,7 +49,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>0}]">
 					<image src="../../static/yiqueren.png" mode=""></image>
 					<view class="title">
-						已确认份额
+						{{$t('product.yqrfe')}}
 					</view>
 					<view class="desc">
 						{{pageData.yue_start_money}}
@@ -58,7 +58,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>3}]">
 					<image src="../../static/daiqueren.png" mode=""></image>
 					<view class="title">
-						待确认份额
+						{{$t('product.dqrfe')}}
 					</view>
 					<view class="desc">
 						{{pageData.yue_stop_money}}
@@ -67,7 +67,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>2}]">
 					<image src="../../static/shouyi.png" mode=""></image>
 					<view class="title">
-						收益
+						{{$t('product.sy')}}
 					</view>
 					<view class="desc">
 						{{pageData.sy}}
@@ -76,7 +76,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>2}]">
 					<image src="../../static/shouyilu.png" mode=""></image>
 					<view class="title">
-						收益率
+						{{$t('product.syl')}}
 					</view>
 					<view class="desc">
 						{{pageData.yield}}
@@ -85,7 +85,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>4}]">
 					<image src="../../static/jrrujin.png" mode=""></image>
 					<view class="title">
-						今日剩余入金次数
+						{{$t('product.jrsyrjcs')}}
 					</view>
 					<view class="desc">
 						{{pageData.ru_count}}
@@ -94,7 +94,7 @@
 				<view :class="['tui-gradItem',{'show':gradItem>1}]">
 					<image src="../../static/jrchujin.png" mode=""></image>
 					<view class="title">
-						今日剩余出金次数
+						{{$t('product.jrsycjcs')}}
 					</view>
 					<view class="desc">
 						{{pageData.chu_count}}

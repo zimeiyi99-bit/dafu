@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<guo-headerTitle title="订单记录" :backgroundColor="backgroundColor"></guo-headerTitle>
+		<guo-headerTitle :title="$t('home.dd.jl')" :backgroundColor="backgroundColor"></guo-headerTitle>
 		<view class="tui-tabs">
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="['持仓列表', '平仓记录']" color="rgb(168, 169, 172)"
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]" color="rgb(168, 169, 172)"
 				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-card">
@@ -11,8 +11,8 @@
 				<view class="tui-box" v-for="(item,index) in List" :key="index">
 					<view class="tui-title">
 						<view class="flex flex-item">
-							<text class="name">欧元/美元</text>
-							<text class="desc">360S</text>
+							<text class="name">{{item.title}}</text>
+							<text class="desc">{{item.seconds}}S</text>
 						</view>
 						<view class="right tui-red">
 							收购
@@ -32,7 +32,7 @@
 								金额
 							</view>
 							<view class="pice">
-								5000.00
+								{{item.number}}
 							</view>
 						</view>
 						<view class="tui-wrapItem" style="width: 46%;">
@@ -48,7 +48,7 @@
 								购买价
 							</view>
 							<view class="pice">
-								1.08
+								{{item.open_price}}
 							</view>
 						</view>
 						<view class="tui-wrapItem text-des-color" style="width: 46%;">
@@ -65,7 +65,7 @@
 									持仓时间
 								</view>
 								<view class="pice">
-									2024-05-25 17:41:28
+									{{item.buy_time}}
 								</view>
 							</view>
 							<view class="right" style="width: 46%;">
@@ -73,7 +73,7 @@
 									平仓时间
 								</view>
 								<view class="pice">
-									2024-05-25 17:44:28
+									{{item.sell_time}}
 								</view>
 							</view>
 						</view>
@@ -81,12 +81,12 @@
 				</view>
 				<!--加载loadding-->
 				<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-				<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+				<tui-nomore :visible="!pullUpOn" :text="$t('app.mtgd')"></tui-nomore>
 				<!--加载loadding-->
 			</block>
 		</view>
 		<template v-if="isData">
-			<tui-noData title="暂无订单记录">
+			<tui-noData :title="$t('home.dd.zwsj')">
 				<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
 			</tui-noData>
 		</template>
