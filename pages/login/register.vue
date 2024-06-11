@@ -60,10 +60,14 @@
 		data() {
 			return {
 				formData: {
-					passwd: '666666',
-					o_passwd: '666666',
-					mpasswd: '888888',
-					o_mpasswd: '888888'
+					// passwd: '666666',
+					// o_passwd: '666666',
+					// mpasswd: '888888',
+					// o_mpasswd: '888888',
+					passwd: '',
+					o_passwd: '',
+					mpasswd: '',
+					o_mpasswd: ''
 				},
 				styles: {
 					'borderColor': '#fff'

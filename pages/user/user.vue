@@ -243,7 +243,7 @@
 
 
 	.tui-list {
-		padding-bottom: 160rpx;
+		padding-bottom: 30px;
 		margin-top: 20rpx;
 		display: flex;
 		flex-direction: column;

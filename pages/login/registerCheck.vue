@@ -60,10 +60,14 @@
 		data() {
 			return {
 				formData: {
-					account: 'user66',
-					phone: '18888888888',
-					real_name: '张三',
-					invitecode: '41'
+					// account: 'user66',
+					// phone: '18888888888',
+					// real_name: '张三',
+					// invitecode: '41',
+					account: '',
+					phone: '',
+					real_name: '',
+					invitecode: ''
 				},
 				styles: {
 					'borderColor': '#fff'

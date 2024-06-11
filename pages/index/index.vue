@@ -168,7 +168,7 @@
 			</view>
 		</uni-popup>
 		<langChange ref="langChange"></langChange>
-		<tabbar :actIndex="0"></tabbar>
+		<tabbar :actIndex="0" v-show="!isFold"></tabbar>
 	</view>
 </template>
 
@@ -192,7 +192,7 @@
 
 		data() {
 			return {
-				value:0,
+				value: 0,
 				policyText,
 				isFold: false,
 				current: 0,
@@ -449,7 +449,7 @@
 		.tui-varietyContent {
 			display: flex;
 			flex-direction: column;
-
+padding-bottom: 30px;
 			.tui-varietyContentItem {
 				width: 100%;
 				background-color: #fff;
@@ -795,7 +795,7 @@
 			left: 0;
 			// background-color: #f6f7fb;
 			visibility: hidden;
-			z-index: 999;
+			z-index: 9999;
 
 			image {
 				width: 100vw;
@@ -810,7 +810,6 @@
 				justify-content: center;
 				margin-top: -34px;
 				position: relative;
-				z-index: 9;
 
 				&>view {
 					width: 99px;

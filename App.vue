@@ -36,4 +36,13 @@
 		width: 183px;
 		height: 183px;
 	}
+	.uni-tabbar-bottom{
+		display: none;
+	}
+	/* .uni-navbar{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+	} */
 </style>

@@ -74,7 +74,7 @@
 		padding-bottom: calc(10rpx + constant(safe-area-inset-bottom));
 		padding-bottom: calc(10rpx + env(safe-area-inset-bottom));
 		background-color: #fff;
-		z-index: 99999;
+		z-index: 8888;
 
 		.content {
 			display: flex;

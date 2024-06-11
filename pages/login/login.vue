@@ -8,9 +8,9 @@
 				</view>
 			</template>
 			<template v-slot:right>
-				<view class="tui-right">
+				<view class="tui-right" @click="$refs['langChange'].open()">
 					<image src="../../static/diqiu.png" mode=""></image>
-					<text>简体中文</text>
+					<text>{{$t('app.yymc')}}</text>
 				</view>
 			</template>
 		</uni-nav-bar>
@@ -56,6 +56,7 @@
 				</view>
 			</view>
 		</view>
+		<langChange ref="langChange"></langChange>
 	</view>
 </template>
 
@@ -66,11 +67,16 @@
 		getUserIndex
 	} from "@/api/user.js"
 	export default {
+		components: {
+			langChange: () => import("@/components/langChange.vue"),
+		},
 		data() {
 			return {
 				formData: {
-					account: 'user66',
-					passwd: '666666'
+					// account: 'user66',
+					// passwd: '666666',
+					account: '',
+					passwd: ''
 				},
 				styles: {
 					'borderColor': '#fff'
