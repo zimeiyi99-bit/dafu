@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<guo-headerTitle title="资金记录"></guo-headerTitle>
+		<guo-headerTitle :title="$t('money-record.zjjl')"></guo-headerTitle>
 		<view class="tui-headerTitle">
 			<view class="tui-card">
 				<view class="tui-left">

@@ -179,5 +179,6 @@ export default {
 	'detail.srcpmc': '请输入产品名称',
 	'detail.hbzl': '货币种类',
 	'detail.czcg': '操作成功',
+	'money-record.zjjl': '资金记录',
 
 }
