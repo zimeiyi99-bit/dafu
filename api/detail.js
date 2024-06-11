@@ -9,3 +9,7 @@ export const goodDetail = function(data = {}) {
 export const goodKline = function(data = {}) {
 	return request.get('/index/goods_stock', data)
 }
+//商品下单
+export const goodMicrotrade = function(data = {}) {
+	return request.post('/goods/microtrade', data)
+}

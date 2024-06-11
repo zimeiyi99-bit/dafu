@@ -59,8 +59,8 @@
 			</view>
 			<kline ref="kline" :data="klineList"></kline>
 			<view class="tui-btn">
-				<button class="btn" style="background-color: #f33b50;" @click="onClickBuy('收购')">收购</button>
-				<button class="btn" style="background-color: #0bb563;" @click="onClickBuy('售出')">售出</button>
+				<button class="btn" style="background-color: #f33b50;" @click="dealPopupOpen(1)">收购</button>
+				<button class="btn" style="background-color: #0bb563;" @click="dealPopupOpen(2)">售出</button>
 			</view>
 		</view>
 		<uni-popup ref="popup" type="bottom">
@@ -70,9 +70,9 @@
 						<view class="flex">
 							<text class="name">{{pageDetail.title}}</text>
 							<text class="bade"
-								:style="{background:isType == '售出' ? '#0bb563' : '#f33b50'}">{{isType}}</text>
+								:style="{background:deal.isType == 1 ?  '#f33b50' :'#0bb563'}">{{deal.isType==1?'收购':'售出'}}</text>
 						</view>
-						<view class="tui-cancleText" @click="onClickPopupCancle">
+						<view class="tui-cancleText" @click="dealPopupClose">
 							取消
 						</view>
 					</view>
@@ -80,14 +80,13 @@
 						金额
 					</view>
 					<view class="items">
-						<view class="tui-item" v-for="(item,index) in isNumber" :key="index"
-							@click="onClickIsNumber(item,index)" :class="currentIndex == index ? 'tui-activite' : ''">
+						<view class="tui-item" v-for="(item,index) in deal.amountTab" :key="index"
+							@click="deal.actAmount =item" :class="deal.actAmount == item ? 'tui-activite' : ''">
 							{{item}}
 						</view>
 					</view>
 					<view class="tui-inputBox">
-						<input class="tui-input" v-model="isInputText" @focus="onClickBlur" placeholder="请输入其它金额"
-							type="text" />
+						<input class="tui-input" v-model="deal.actAmount" placeholder="请输入其它金额" type="text" />
 						<text>CNY</text>
 					</view>
 					<view class="flex flex-between flex-item" style="margin-top: 16rpx;">
@@ -96,7 +95,7 @@
 								余额：<text>{{userInfo.money}}</text> <text class="tui-cny">CNY</text>
 							</view>
 						</view>
-						<view class="tui-alling" @click="onClickAllPice">
+						<view class="tui-alling" @click="deal.actAmount = userInfo.money">
 							全部下单
 						</view>
 					</view>
@@ -104,9 +103,10 @@
 						时间
 					</view>
 					<view class="items">
-						<view class="tui-item" v-for="(item,index) in times" :key="index"
-							@click="onClickTimeIndex(item,index)" :class="current == index ? 'tui-activite' : ''">
-							{{item}}
+						<view class="tui-item" v-for="(item,index) in pageDetail.timeList" :key="index"
+							@click="deal.actTime=item.seconds"
+							:class="deal.actTime == item.seconds ? 'tui-activite' : ''">
+							{{item.seconds_desc}}
 						</view>
 					</view>
 					<view class="tui-detail">
@@ -117,13 +117,14 @@
 							<view class="pice">
 								{{pageDetail.price}}
 							</view>
+
 						</view>
 						<view class="flex flex-item flex-column">
 							<view class="text-ts">
 								金额
 							</view>
 							<view class="pice">
-								{{isInputText == '' ? 0 : isInputText}}
+								{{deal.actAmount|| 0 }}
 							</view>
 						</view>
 						<view class="flex flex-item flex-column">
@@ -131,7 +132,7 @@
 								收益率
 							</view>
 							<view class="pice">
-								1.07569
+								{{earnings.profit_ratio}}%
 							</view>
 						</view>
 						<view class="flex flex-item flex-column">
@@ -139,11 +140,11 @@
 								预估
 							</view>
 							<view class="pice">
-								1.07569
+								{{earnings.profit}}
 							</view>
 						</view>
 					</view>
-					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'">
+					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="confirmDeal">
 						确定
 					</view>
 				</view>
@@ -159,8 +160,8 @@
 							v-model="searchText"></uni-easyinput>
 					</view>
 					<view class="">
-						<v-tabs v-model="currentIndex" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222"
-							lineColor="#822151" bold bgColor=""></v-tabs>
+						<v-tabs :value="0" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222" lineColor="#822151" bold
+							bgColor=""></v-tabs>
 					</view>
 					<!-- 货币种类 -->
 					<view class="tui-variety">
@@ -173,7 +174,7 @@
 						</view>
 						<view class="tui-varietyContent">
 							<view class="tui-varietyContentItem" v-for="(item,index) in goodsList" :key="index"
-								hover-class="tui-hover" @click="onClickDetail(item)">
+								hover-class="tui-hover" @click="selectGoods(item)">
 								<view class="name">
 									<view class="flex flex-item">
 										<text class="piceName" v-for="(v,i) in item.title.split('')" :key=""
@@ -205,6 +206,7 @@
 	import {
 		goodDetail,
 		goodKline,
+		goodMicrotrade
 	} from "@/api/detail.js";
 	import {
 		goods
@@ -219,9 +221,15 @@
 
 		data() {
 			return {
+				timer: null,
+				options: {},
 				userInfo: {},
-				isNumber: ['5000', '10000', '50000', '10000', '20000', '500000'],
-				times: ['540S', '360S', '180S'],
+				goodsList: [],
+				pageDetail: {
+					timeList: []
+				},
+				klineList: [],
+				timeActive: 0,
 				timeTabs: [{
 					text: "1m",
 					value: '1min'
@@ -244,23 +252,45 @@
 					text: "1w",
 					value: '1week'
 				}],
-				timeActive: 0,
-				currentIndex: 0,
+				deal: {
+					amountTab: ['5000', '10000', '50000', '100000', '200000', '500000'],
+					actAmount: '',
+					actTime: '',
+					isType: '',
+				},
+
+				searchText: '',
+				current: -1,
 				styles: {
 					borderColor: "#f6f8fa",
 				},
-				isBtn: false,
-				options: {},
-				timer: null,
-				pageDetail: {},
-				klineList: [],
-				goodsList: [],
-				searchText: '',
-				currentIndex: -1,
-				isInputText: '',
-				current: -1,
-				isType: ''
 			};
+		},
+		computed: {
+			isBtn() {
+				return this.deal.actAmount && this.deal.actTime
+			},
+			earnings() {
+				if (!this.isBtn) {
+					return {
+						profit_ratio: 0,
+						profit: 0
+					}
+				} else {
+					const {
+						timeList
+					} = this.pageDetail
+					const {
+						actAmount,
+						actTime
+					} = this.deal
+					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio
+					return {
+						profit_ratio,
+						profit: profit_ratio * actAmount
+					}
+				}
+			}
 		},
 		onLoad(options) {
 			this.options = options;
@@ -282,18 +312,21 @@
 			}
 		},
 		methods: {
-			onClickTimeIndex(item, index) {
-				this.current = index
-			},
-			onClickAllPice() {
-				this.isInputText = this.userInfo.money
-			},
-			onClickBlur() {
-				this.currentIndex = -1
-			},
-			onClickIsNumber(item, index) {
-				this.isInputText = item
-				this.currentIndex = index
+			confirmDeal() {
+				if (!this.isBtn) return;
+				const paramData = {
+					currency_id: this.options.codename,
+					seconds: this.deal.actTime,
+					number: this.deal.actAmount,
+					type: this.deal.isType,
+				}
+				goodMicrotrade(paramData).then(_ => {
+					uni.showToast({
+						title: "操作成功",
+						icon: "none"
+					})
+					this.dealPopupClose()
+				})
 			},
 			getDetailUserInfo() {
 				userInfo({
@@ -304,14 +337,15 @@
 					this.userInfo = data
 				})
 			},
-			onClickPopupCancle() {
+			dealPopupClose() {
 				this.$refs.popup.close()
+				this.deal = this.$options.data().deal
 			},
-			onClickBuy(type) {
-				this.isType = type
+			dealPopupOpen(type) {
+				this.deal.isType = type
 				this.$refs.popup.open()
 			},
-			onClickDetail(item) {
+			selectGoods(item) {
 				console.log(this.options, 'options')
 				this.options = {
 					codename: item.codename,
@@ -541,7 +575,7 @@
 					height: 46rpx;
 					padding: 4rpx 12rpx;
 					color: #fff;
-					background-color: #0bb563 !important;
+					// background-color: #0bb563 !important;
 					font-weight: 800;
 					display: flex;
 					align-items: center;
