@@ -325,6 +325,7 @@
 						title: "操作成功",
 						icon: "none"
 					})
+					this.getDetailUserInfo()
 					this.dealPopupClose()
 				})
 			},
