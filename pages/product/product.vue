@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="tui-search">
-			<uni-easyinput class="uni-mt-5" suffixIcon="search" placeholder="请输入产品名称" :inputBorder="true"
+			<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('product.ss')" :inputBorder="true"
 				:styles="styles" primaryColor="#822151" placeholderStyle="color:#c9c9c9;font-size:28rpx"
 				v-model="searchText"></uni-easyinput>
 		</view>
@@ -14,11 +14,11 @@
 
 			<view class="tui-classify">
 				<view class="" style="flex: 1;">
-					名称
+					{{$t('home.mc')}}
 				</view>
 				<view class="tui-rightVariety" style="flex: 1;">
-					<text>最新价格</text>
-					<text>24h涨幅</text>
+					<text>{{$t('home.zxjg')}}</text>
+					<text>{{$t('home.24zf')}}</text>
 				</view>
 			</view>
 			<view class="tui-varietyContent">
@@ -30,7 +30,7 @@
 								:style="setColor(v)">{{ v }}</text>
 						</view>
 						<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
-							<text>24H量</text>
+							<text>{{$t('home.24l')}}</text>
 							<text>{{item.vol}}</text>
 						</view>
 					</view>
@@ -62,7 +62,7 @@
 					'borderColor': '#fff'
 				},
 				current: 0,
-				tabs: ['货币种类'],
+				tabs: [this.$t('product.hbzl')],
 				goodsList: [],
 				timer: null,
 				searchText: ''

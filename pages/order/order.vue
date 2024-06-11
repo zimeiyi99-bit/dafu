@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<guo-headerTitle title="订单记录" :backgroundColor="backgroundColor"></guo-headerTitle>
+		<guo-headerTitle :title="$t('home.dd.jl')" :backgroundColor="backgroundColor"></guo-headerTitle>
 		<view class="tui-tabs">
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="['持仓列表', '平仓记录']" color="rgb(168, 169, 172)"
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]" color="rgb(168, 169, 172)"
 				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-card">
@@ -81,12 +81,12 @@
 				</view>
 				<!--加载loadding-->
 				<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-				<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+				<tui-nomore :visible="!pullUpOn" :text="$t('app.mtgd')"></tui-nomore>
 				<!--加载loadding-->
 			</block>
 		</view>
 		<template v-if="isData">
-			<tui-noData title="暂无订单记录">
+			<tui-noData :title="$t('home.dd.zwsj')">
 				<image src="../../static/dd.png" class="tui-allImage" mode=""></image>
 			</tui-noData>
 		</template>

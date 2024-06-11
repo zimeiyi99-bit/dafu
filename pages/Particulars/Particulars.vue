@@ -1,15 +1,15 @@
 <template>
 	<view>
-		<guo-headerTitle title="余额宝明细" backgroundColor="#fff"></guo-headerTitle>
+		<guo-headerTitle :title="$t('product.yebmx')" backgroundColor="#fff"></guo-headerTitle>
 		<view class="tui-tabs">
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="['全部', '存入', '转出', '收益']" color="rgb(168, 169, 172)"
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('product.qb'), $t('product.cr'), $t('product.zc'), $t('product.sy')]" color="rgb(168, 169, 172)"
 				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
-						{{item.type == 2 ? '转入' : item.type == 3 ? '收益' : '转出'}}
+						{{item.type == 2 ? $t('product.cr') : item.type == 3 ? $t('product.sy') : $t('product.zc')}}
 					</view>
 					<view class="time">
 						{{item.create_time}}
@@ -22,12 +22,12 @@
 			</view>
 			<!--加载loadding-->
 			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-			<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+			<tui-nomore :visible="!pullUpOn" :text="$t('app.mtgd')"></tui-nomore>
 			<!--加载loadding-->
 		</view>
 		<template v-if="isData">
-			<tui-noData title="暂无数据">
-				<image src="../../static/xjb.png" class="tui-allImage" mode=""></image>
+			<tui-noData :title="$t('app.zwsj')">
+				<image src="@/static/xjb.png" class="tui-allImage" mode=""></image>
 			</tui-noData>
 		</template>
 	</view>
