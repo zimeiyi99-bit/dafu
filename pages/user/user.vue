@@ -103,6 +103,7 @@
 				<image class="tui-rightIcon" src="../../static/youjian.png" mode=""></image>
 			</view>
 		</view>
+		<tabbar :actIndex="3"></tabbar>
 	</view>
 </template>
 
@@ -112,6 +113,9 @@
 		getUserIndex
 	} from "@/api/user.js"
 	export default {
+		components: {
+			tabbar: () => import("@/components/tabbar.vue"),
+		},
 		data() {
 			return {
 				userInfo: {

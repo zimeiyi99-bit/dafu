@@ -189,6 +189,7 @@
 		"selectedColor": "rgb(130, 33, 81)",
 		"backgroundColor": "#fff",
 		"borderStyle": "white",
+		"custom":true,
 		"list": [{
 				"pagePath": "pages/index/index",
 				"text": "首页",
