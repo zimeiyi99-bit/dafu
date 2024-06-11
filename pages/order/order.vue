@@ -11,11 +11,11 @@
 				<view class="tui-box" v-for="(item,index) in List" :key="index">
 					<view class="tui-title">
 						<view class="flex flex-item">
-							<text class="name">{{item.title}}</text>
+							<text class="name">{{item.code}}</text>
 							<text class="desc">{{item.seconds}}S</text>
 						</view>
-						<view class="right tui-red">
-							收购
+						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">
+							{{item.type == 1 ? '收购' : '售出'}}
 						</view>
 					</view>
 					<view class="tui-orderTitle">
@@ -23,7 +23,7 @@
 							订单编号
 						</view>
 						<view class="code">
-							BOSTT8WRPWXA3TR
+							BOSTT8WRPWX{{item.id}}
 						</view>
 					</view>
 					<view class="flex flex-wrap">
@@ -40,7 +40,7 @@
 								盈亏
 							</view>
 							<view class="pice tui-green">
-								250.00
+								{{item.end_profit}}
 							</view>
 						</view>
 						<view class="tui-wrapItem text-des-color">
