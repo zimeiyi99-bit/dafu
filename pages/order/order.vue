@@ -56,7 +56,7 @@
 								成交价
 							</view>
 							<view class="pice">
-								1.140000
+								{{item.end_price}}
 							</view>
 						</view>
 						<view class="flex flex-item flex-between w-100 text-des-color p-2">
