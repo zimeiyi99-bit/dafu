@@ -6,37 +6,37 @@
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<template v-if="formData.pay_type == 'bank_card'">
-						<uni-forms-item label="开户姓名">
-							<uni-easyinput :disabled="binded" v-model="formData.user_name" placeholder="请输入开户姓名"
+						<uni-forms-item :label="$t('account.khxm')">
+							<uni-easyinput :disabled="binded" v-model="formData.user_name" :placeholder="$t('account.srkhxm')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
-						<uni-forms-item label="国籍">
-							<uni-easyinput :disabled="binded" v-model="formData.gj" placeholder="请输入国籍"
+						<uni-forms-item :label="$t('account.gj')">
+							<uni-easyinput :disabled="binded" v-model="formData.gj" :placeholder="$t('account.srgj')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
-						<uni-forms-item label="开户银行">
-							<uni-easyinput :disabled="binded" v-model="formData.bank_name" placeholder="请输入开户银行"
+						<uni-forms-item :label="$t('account.khyh')">
+							<uni-easyinput :disabled="binded" v-model="formData.bank_name" :placeholder="$t('account.srkhyh')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
-						<uni-forms-item label="银行卡账号">
-							<uni-easyinput :disabled="binded" v-model="formData.account" placeholder="请输入银行卡账号"
+						<uni-forms-item :label="$t('account.yhkzh')">
+							<uni-easyinput :disabled="binded" v-model="formData.account" :placeholder="$t('account.sryhkzh')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
-						<uni-forms-item label="开户地址">
-							<uni-easyinput :disabled="binded" v-model="formData.bank_branch" placeholder="请输入开户地址"
+						<uni-forms-item :label="$t('account.khdz')">
+							<uni-easyinput :disabled="binded" v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
 					</template>
-					<uni-forms-item label="币种地址" v-else>
-						<uni-easyinput :disabled="binded" v-model="formData.usdt_url" placeholder="请输入币种地址"
+					<uni-forms-item :label="$t('account.bzdz')" v-else>
+						<uni-easyinput :disabled="binded" v-model="formData.usdt_url" :placeholder="$t('account.srbzdz')"
 							:inputBorder="true" :styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit" v-if="!binded">
-						保存
+						{{$t('account.bc')}}
 					</view>
 				</uni-forms>
 				<view class="bindTip">
-					如需更改，请联系客服
+					{{$t('account.lx')}}
 					<uni-icons type="right" size="12"></uni-icons>
 				</view>
 			</view>
@@ -54,7 +54,7 @@
 			return {
 				binded: false,
 				typeList: {
-					'bank_card': '银行卡',
+					'bank_card': this.$t('account.yhk'),
 					'usdt-trc20': 'USDT-TRC20',
 					'usdt-erc20': 'USDT-ERC20',
 				},
@@ -81,7 +81,7 @@
 					try {
 						Object.entries(formData).forEach(([key, val]) => {
 							if (!val && key !== 'usdt_url') {
-								throw ('有空值')
+								throw this.$t('account.ykz')
 							}
 						})
 					} catch (e) {
@@ -111,7 +111,7 @@
 						try {
 							Object.entries(data[pay_type]).forEach(([key, val]) => {
 								if (!val) {
-									throw ('有空值')
+									throw this.$t('account.ykz')
 								}
 							})
 						} catch (e) {
@@ -130,7 +130,7 @@
 					data
 				}) => {
 					uni.showToast({
-						title: '设置成功',
+						title: this.$t('account.szcg'),
 						icon: 'none',
 						success() {
 							setTimeout(_ => {

@@ -1,18 +1,18 @@
 <template>
 	<view class="">
-		<guo-headerTitle title="出款账户"></guo-headerTitle>
+		<guo-headerTitle :title="$t('account.ckzh')"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-cardImage">
 				<image class="img" src="/static/account-bg.png" mode=""></image>
 				<view class="tui-list">
 					<view class="title">
-						选择账户类型
+						{{$t('account.zhlx')}}
 					</view>
 					<view class="tui-listItem" @click="onClickDetail('bank_card')">
 						<view class="flex flex-column" style="padding: 0 30rpx;">
 							<image src="@/static/yinhangka.png" class="tui-bank" mode=""></image>
 							<view class="bank">
-								银行卡
+								{{$t('account.yhk')}}
 							</view>
 						</view>
 						<view class="">

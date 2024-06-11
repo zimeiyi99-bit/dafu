@@ -1,13 +1,13 @@
 <template>
 	<view>
-		<guo-headerTitle title="出金"></guo-headerTitle>
+		<guo-headerTitle :title="$t('withdraw-money.cj')"></guo-headerTitle>
 		<view class="tui-pd">
 			<view class="tui-card">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
 					<uni-forms-item>
 						<view class="tui-form">
 							<view class="title">
-								出金金额(CNY)
+								{{$t('withdraw-money.cjje')}}(CNY)
 							</view>
 							<view class="flex flex-column">
 								<view class="tui-inputBox">
@@ -17,12 +17,12 @@
 									<input v-model="formData.money" @input="validateInput" type="text" class="input" />
 								</view>
 								<view class="bottom">
-									可用余额: <text>￥{{userInfo.money}}</text>
+									{{$t('withdraw-money.kyye')}}: <text>￥{{userInfo.money}}</text>
 								</view>
 							</view>
 						</view>
 					</uni-forms-item>
-					<uni-forms-item label="选择出金方式">
+					<uni-forms-item :label="$t('withdraw-money.xzcjfs')">
 						<view class="tui-list">
 							<view class="tui-listItem" @click="onClickOpen">
 								<view class="flex-item flex">
@@ -40,7 +40,7 @@
 								@click="onClickDetail(formData.pay_type)">
 								<view class="flex-item flex">
 									<view class="title" style="color: #fc6d22;">
-										您还未绑定{{typeList[formData.pay_type]}}
+										{{$t('withdraw-money.nhwbd')}}{{typeList[formData.pay_type]}}
 									</view>
 								</view>
 								<view class="flex flex-item">
@@ -53,7 +53,7 @@
 					</uni-forms-item>
 					<!-- 绑定过银行卡展示的-->
 					<template v-if="formData.pay_type == 'bank_card'">
-						<uni-forms-item label="姓名">
+						<uni-forms-item :label="$t('withdraw-money.xm')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -64,7 +64,7 @@
 								</view>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item label="国籍">
+						<uni-forms-item :label="$t('withdraw-money.gj')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -75,7 +75,7 @@
 								</view>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item label="开户地址">
+						<uni-forms-item :label="$t('withdraw-money.khdz')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -86,7 +86,7 @@
 								</view>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item label="开户行">
+						<uni-forms-item :label="$t('withdraw-money.khh')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -97,7 +97,7 @@
 								</view>
 							</view>
 						</uni-forms-item>
-						<uni-forms-item label="卡号">
+						<uni-forms-item :label="$t('withdraw-money.kh')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -111,7 +111,7 @@
 					</template>
 					<!-- trc和erc的 -->
 					<template v-else>
-						<uni-forms-item label="地址">
+						<uni-forms-item :label="$t('withdraw-money.dz')">
 							<view class="tui-list">
 								<view class="tui-listItem">
 									<view class="flex-item flex">
@@ -123,16 +123,16 @@
 							</view>
 						</uni-forms-item>
 						<view class="tui-submit tui-cancle">
-							确定出金
+							{{$t('withdraw-money.qdcj')}}
 						</view>
 					</template>
-					<uni-forms-item label="交易密码">
+					<uni-forms-item :label="$t('withdraw-money.jymm')">
 
 						<uni-easyinput v-model="formData.mpwd" type="password" passwordIcon :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit">
-						确定出金
+						{{$t('withdraw-money.qdcj')}}
 					</view>
 
 				</uni-forms>
@@ -142,10 +142,10 @@
 			<view class="tui-popupContent">
 				<view class="flex flex-between flex-item p-26">
 					<view class="title">
-						选择出金方式
+						{{$t('withdraw-money.cjfs')}}
 					</view>
 					<view class="cancle" @click="onClickCancle">
-						取消
+						{{$t('withdraw-money.qx')}}
 					</view>
 				</view>
 				<view class="tui-content">
@@ -176,7 +176,7 @@
 					mpwd: ''
 				},
 				typeList: {
-					'bank_card': '银行卡',
+					'bank_card': this.$t('withdraw-money.yhk'),
 					'usdt-trc20': 'USDT-TRC20',
 					'usdt-erc20': 'USDT-ERC20',
 				},
@@ -203,7 +203,7 @@
 				try {
 					Object.entries(formData).forEach(([key, val]) => {
 						if (!val && key !== 'usdt_url') {
-							throw ('有空值')
+							throw this.$t('withdraw-money.ykz')
 						}
 					})
 				} catch (e) {
@@ -223,7 +223,7 @@
 					try {
 						Object.entries(cashInfo[pay_type]).forEach(([key, val]) => {
 							if (!val) {
-								throw ('有空值')
+								throw this.$t('withdraw-money.ykz')
 							}
 						})
 					} catch (e) {
@@ -262,8 +262,8 @@
 					data
 				}) => {
 					uni.showModal({
-						title: '操作成功',
-						content: "请耐心等待到账",
+						title: this.$t('withdraw-money.czcg'),
+						content: this.$t('withdraw-money.nxdd'),
 						showCancel: false,
 					}).then(_ => {
 						uni.navigateBack()

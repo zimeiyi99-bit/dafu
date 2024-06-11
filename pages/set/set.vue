@@ -1,17 +1,17 @@
 <template>
 	<view class="">
-		<guo-headerTitle title="设置"></guo-headerTitle>
+		<guo-headerTitle :title="$t('set.sz')"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-list">
-				<view class="tui-listItem">
-					<view class="flex-item flex">
+				<view class="tui-listItem" @click="$refs['langChange'].open()">
+					<view class="flex-item flex" >
 						<view class="title">
-							语言设置
+							{{$t('set.yysz')}}
 						</view>
 					</view>
 					<view class="flex flex-item">
 						<view class="language">
-							简体中文
+							{{$t('set.yy')}}
 						</view>
 						<image class="tui-rightIcon" src="/static/youjian.png" mode=""></image>
 					</view>
@@ -19,7 +19,7 @@
 				<view class="tui-listItem" @click="beforeClearAllCache">
 					<view class="flex-item flex">
 						<view class="title">
-							清除缓存
+							{{$t('set.qchc')}}
 						</view>
 					</view>
 
@@ -27,7 +27,7 @@
 				<view class="tui-listItem" style="background-color: #f4eadd;padding: 30rpx;margin-top: 40rpx;">
 					<view class="flex-item flex">
 						<view class="title" style="color: #fc6d22;">
-							如需更改密码，请联系客服
+							{{$t('set.gm')}}
 						</view>
 					</view>
 					<view class="flex flex-item">
@@ -37,12 +37,16 @@
 				</view>
 			</view>
 		</view>
+		<langChange ref="langChange"></langChange>
 	</view>
 </template>
 
 <script>
 	export default {
-
+		components: {
+			
+			langChange: () => import("@/components/langChange.vue"),
+		},
 		data() {
 			return {
 
@@ -54,8 +58,8 @@
 			},
 			beforeClearAllCache() {
 				uni.showModal({
-					title: '提示',
-					content: "清除缓存后需要重新登录,是否继续?",
+					title: this.$t('set.ts'),
+					content: this.$t('set.qchcdl'),
 				}).then(res => {
 					if (res.confirm) {
 						this.clearAllCache()

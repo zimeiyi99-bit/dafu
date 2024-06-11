@@ -23,14 +23,14 @@
 				<view class="tui-right">
 					<view class="flex flex-column">
 						<view class="item flex flex-column flex-between">
-							<view class="right-size"> 24H最高 </view>
+							<view class="right-size"> {{$t('detail.24g')}} </view>
 							<view class="right-max">
 								{{ pageDetail.price_high }}
 							</view>
 						</view>
 						<view style="flex: 1"></view>
 						<view class="item flex flex-column flex-between">
-							<view class="right-size"> 24H最低 </view>
+							<view class="right-size">{{$t('detail.24d')}} </view>
 							<view class="right-max">
 								{{ pageDetail.price_low }}
 							</view>
@@ -39,14 +39,14 @@
 					<view style="flex: 1"></view>
 					<view class="flex flex-column">
 						<view class="item flex flex-column flex-between">
-							<view class="right-size"> 24H量(MX) </view>
+							<view class="right-size"> {{$t('detail.24l')}}(MX) </view>
 							<view class="right-max">
 								{{ pageDetail.vol }}
 							</view>
 						</view>
 						<view style="flex: 1"></view>
 						<view class="item flex flex-column flex-between">
-							<view class="right-size"> 24H额 </view>
+							<view class="right-size"> {{$t('detail.24e')}}</view>
 							<view class="right-max"> {{ pageDetail.zf }} </view>
 						</view>
 					</view>
@@ -59,8 +59,10 @@
 			</view>
 			<kline ref="kline" :data="klineList"></kline>
 			<view class="tui-btn">
-				<button class="btn" style="background-color: #f33b50;" @click="dealPopupOpen(1)">收购</button>
-				<button class="btn" style="background-color: #0bb563;" @click="dealPopupOpen(2)">售出</button>
+				<button class="btn" style="background-color: #f33b50;"
+					@click="dealPopupOpen(1)">{{$t('detail.sg')}}</button>
+				<button class="btn" style="background-color: #0bb563;"
+					@click="dealPopupOpen(2)">{{$t('detail.sc')}}</button>
 			</view>
 		</view>
 		<uni-popup ref="popup" type="bottom">
@@ -70,14 +72,14 @@
 						<view class="flex">
 							<text class="name">{{pageDetail.title}}</text>
 							<text class="bade"
-								:style="{background:deal.isType == 1 ?  '#f33b50' :'#0bb563'}">{{deal.isType==1?'收购':'售出'}}</text>
+								:style="{background:deal.isType == 1 ?  '#f33b50' :'#0bb563'}">{{deal.isType==1?$t('detail.sg'):$t('detail.sc')}}</text>
 						</view>
 						<view class="tui-cancleText" @click="dealPopupClose">
-							取消
+							{{$t('detail.qx')}}
 						</view>
 					</view>
 					<view class="tui-firstTitle">
-						金额
+						{{$t('detail.je')}}
 					</view>
 					<view class="items">
 						<view class="tui-item" v-for="(item,index) in deal.amountTab" :key="index"
@@ -86,21 +88,21 @@
 						</view>
 					</view>
 					<view class="tui-inputBox">
-						<input class="tui-input" v-model="deal.actAmount" placeholder="请输入其它金额" type="text" />
+						<input class="tui-input" v-model="deal.actAmount" :placeholder="$t('detail.srje')" type="text" />
 						<text>CNY</text>
 					</view>
 					<view class="flex flex-between flex-item" style="margin-top: 16rpx;">
 						<view class="flex flex-item">
 							<view class="tui-money">
-								余额：<text>{{userInfo.money}}</text> <text class="tui-cny">CNY</text>
+								{{$t('detail.ye')}}：<text>{{userInfo.money}}</text> <text class="tui-cny">CNY</text>
 							</view>
 						</view>
 						<view class="tui-alling" @click="deal.actAmount = userInfo.money">
-							全部下单
+							{{$t('detail.qbxd')}}
 						</view>
 					</view>
 					<view class="tui-firstTitle">
-						时间
+						{{$t('detail.sj')}}
 					</view>
 					<view class="items">
 						<view class="tui-item" v-for="(item,index) in pageDetail.timeList" :key="index"
@@ -112,7 +114,7 @@
 					<view class="tui-detail">
 						<view class="flex flex-item flex-column">
 							<view class="text-ts">
-								当前价
+								{{$t('detail.dqj')}}
 							</view>
 							<view class="pice">
 								{{pageDetail.price}}
@@ -121,7 +123,7 @@
 						</view>
 						<view class="flex flex-item flex-column">
 							<view class="text-ts">
-								金额
+								{{$t('detail.je')}}
 							</view>
 							<view class="pice">
 								{{deal.actAmount|| 0 }}
@@ -129,7 +131,7 @@
 						</view>
 						<view class="flex flex-item flex-column">
 							<view class="text-ts">
-								收益率
+								{{$t('detail.syl')}}
 							</view>
 							<view class="pice">
 								{{earnings.profit_ratio}}%
@@ -137,7 +139,7 @@
 						</view>
 						<view class="flex flex-item flex-column">
 							<view class="text-ts">
-								预估
+								{{$t('detail.yg')}}
 							</view>
 							<view class="pice">
 								{{earnings.profit}}
@@ -145,7 +147,7 @@
 						</view>
 					</view>
 					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="confirmDeal">
-						确定
+						{{$t('detail.qd')}}
 					</view>
 				</view>
 			</view>
@@ -153,23 +155,23 @@
 		<uni-drawer ref="showLeft" mode="left" :width="300">
 			<scroll-view style="height: 100%" scroll-y="true">
 				<view class="tui-draw">
-					<view class="title"> 产品交易 </view>
+					<view class="title"> {{$t('detail.cpjy')}} </view>
 					<view class="tui-search">
-						<uni-easyinput class="uni-mt-5" suffixIcon="search" placeholder="请输入产品名称" :inputBorder="true"
+						<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('detail.srcpmc')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" placeholderStyle="color:#c9c9c9;font-size:28rpx"
 							v-model="searchText"></uni-easyinput>
 					</view>
-					<view class="">
+					<!-- <view class="">
 						<v-tabs :value="0" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222" lineColor="#822151" bold
 							bgColor=""></v-tabs>
-					</view>
+					</view> -->
 					<!-- 货币种类 -->
 					<view class="tui-variety">
 						<view class="tui-classify">
-							<view class="" style="flex: 1"> 名称 </view>
+							<view class="" style="flex: 1"> {{$t('home.mc')}} </view>
 							<view class="tui-rightVariety" style="flex: 1">
-								<text>最新价格</text>
-								<text>24h涨幅</text>
+								<text>{{$t('home.zxjg')}}</text>
+								<text>{{$t('home.24zf')}}</text>
 							</view>
 						</view>
 						<view class="tui-varietyContent">
@@ -181,7 +183,7 @@
 											:style="setColor(v)">{{ v }}</text>
 									</view>
 									<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
-										<text>24H量</text>
+										<text>{{$t('home.24l')}}</text>
 										<text>{{item.vol}}</text>
 									</view>
 								</view>
@@ -322,7 +324,7 @@
 				}
 				goodMicrotrade(paramData).then(_ => {
 					uni.showToast({
-						title: "操作成功",
+						title:this.$t('detail.czcg'),
 						icon: "none"
 					})
 					this.getDetailUserInfo()

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<guo-headerTitle title="出金明细"></guo-headerTitle>
+		<guo-headerTitle :title="$t('withdraw-list.cjmx')"></guo-headerTitle>
 
 		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
@@ -9,13 +9,13 @@
 						{{item.money}}
 					</view>
 					<view class="time">
-						订单编号 <text>WCDMRFWES{{item.id}}</text>
+						{{$t('withdraw-list.ddbh')}} <text>WCDMRFWES{{item.id}}</text>
 					</view>
 				</view>
 				<view class="tui-right">
 					<view class="message"
 						:style="{color:item.status == 1 ? '#25BC73' : item.status == 2 ? '#222' : '#f33b50'}">
-						{{item.status == 1 ? '成功' : item.status == 2 ? '审核中' : '失败'}}
+						{{item.status == 1 ? $t('withdraw-list.cg') : item.status == 2 ? $t('withdraw-list.shz') : $t('withdraw-list.sb')}}
 					</view>
 					<view class="time">
 						{{item.time}}
@@ -24,12 +24,12 @@
 			</view>
 			<!--加载loadding-->
 			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
-			<tui-nomore :visible="!pullUpOn" text="没有更多了~"></tui-nomore>
+			<tui-nomore :visible="!pullUpOn" :text="$t('app.mtgd')"></tui-nomore>
 			<!--加载loadding-->
 		</view>
 
 		<template v-else>
-			<tui-noData title="暂无出金记录">
+			<tui-noData :title="$t('withdraw-list.zwcjjl')">
 				<image src="../../static/cj.png" class="tui-allImage" mode=""></image>
 			</tui-noData>
 		</template>

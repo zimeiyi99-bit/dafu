@@ -1,46 +1,42 @@
 <template>
 	<view>
-		<guo-headerTitle title="实名认证"></guo-headerTitle>
+		<guo-headerTitle :title="$t('verify.smrz')"></guo-headerTitle>
 		<view class="tui-register" v-if="userInfo.is_auth == 0 || userInfo.is_auth == -1">
 			<view class="tui-form">
 				<uni-forms ref="form" :modelValue="formData" label-position="top" label-width="200px" :rules="rules">
-					<uni-forms-item label="姓名" name="real_name" required>
-						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true"
+					<uni-forms-item :label="$t('verify.xm')" name="real_name" required>
+						<uni-easyinput v-model="formData.real_name" :placeholder="$t('verify.srxm')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" @blur="SetValue('real_name')" />
 					</uni-forms-item>
-					<uni-forms-item label="证件号" name="id_card" required>
-						<uni-easyinput type="number" v-model="formData.id_card" placeholder="请输入证件号" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" @blur="SetValue('id_card')" />
+					<uni-forms-item :label="$t('verify.zjh')" name="id_card" required>
+						<uni-easyinput type="number" v-model="formData.id_card" :placeholder="$t('verify.srzjh')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" @blur="SetValue('id_card')" />
 					</uni-forms-item>
-					<uni-forms-item label="国籍" name="gj" required>
-						<uni-easyinput v-model="formData.gj" placeholder="请输入国籍" :inputBorder="true" :styles="styles"
+					<uni-forms-item :label="$t('verify.gj')" name="gj" required>
+						<uni-easyinput v-model="formData.gj" :placeholder="$t('verify.srgj')" :inputBorder="true" :styles="styles"
 							primaryColor="#822151" @blur="SetValue('gj')" />
 					</uni-forms-item>
-					<uni-forms-item label="请上传证件照片">
+					<uni-forms-item :label="$t('verify.sczjz')">
 						<view class="tui-certificate">
 							<uni-forms-item label="" name="id_img_1" required>
 								<view class="item" @click="onUploadImg">
-									<image
-										:src="img1 == '' ?  require('@/static/front.png') : img1"
-										mode=""></image>
+									<image :src="img1 == '' ?  require('@/static/front.png') : img1" mode=""></image>
 									<view class="first">
-										证件正面
+										{{$t('verify.zjzm')}}
 									</view>
 									<view class="two">
-										点击上传证件人面像
+										{{$t('verify.sqzjrmx')}}
 									</view>
 								</view>
 							</uni-forms-item>
 							<uni-forms-item label="" name="id_img_2" required>
 								<view class="item" @click="onUploadImgReverse">
-									<image
-										:src="img2 == '' ? require('@/static/back.png') : img2"
-										mode=""></image>
+									<image :src="img2 == '' ? require('@/static/back.png') : img2" mode=""></image>
 									<view class="first">
-										证件反面
+										{{$t('verify.zjfm')}}
 									</view>
 									<view class="two">
-										点击上传证件反面
+										{{$t('verify.sczjfm')}}
 									</view>
 								</view>
 							</uni-forms-item>
@@ -49,7 +45,7 @@
 					</uni-forms-item>
 
 					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="onClickBtn">
-						提交
+						{{$t('verify.tj')}}
 					</view>
 				</uni-forms>
 			</view>
@@ -58,17 +54,17 @@
 		<view class="tui-audit" v-if="userInfo.is_auth == 1">
 			<image class="circle" src="/static/rzz.png" mode=""></image>
 			<view class="mt-lg">
-				认证中
+				{{$t('verify.rzz')}}
 			</view>
 			<view class="desc-lg">
-				认证资料已提交，请等待审核
+				{{$t('verify.ytj')}}
 			</view>
 		</view>
 		<!-- 认证成功 -->
 		<view class="tui-audit" v-if="userInfo.is_auth == 2">
 			<image class="circle" src="/static/rzcg.png" mode=""></image>
 			<view class="mt-lg">
-				认证成功
+				{{$t('verify.rzcg')}}
 			</view>
 		</view>
 		<!-- 弹出框 -->
@@ -77,11 +73,11 @@
 				<view class="main">
 					<image class="icon-lg" src="/static/success-lg.png" mode=""></image>
 					<view class="title">
-						认证资料已提交，请等待审核
+						{{$t('verify.ytj')}}
 					</view>
 				</view>
 				<view class="btn_box" @click="onClickCancle">
-					我知道了
+					{{$t('verify.wzdl')}}
 				</view>
 			</view>
 		</uni-popup>
@@ -116,31 +112,31 @@
 					real_name: {
 						rules: [{
 							required: true,
-							errorMessage: '请输入姓名',
+							errorMessage: this.$t('verify.srxm'),
 						}, ],
 					},
 					id_card: {
 						rules: [{
 							required: true,
-							errorMessage: '请输入证件号',
+							errorMessage: this.$t('verify.srzjh'),
 						}, ],
 					},
 					gj: {
 						rules: [{
 							required: true,
-							errorMessage: '请输入国籍',
+							errorMessage: this.$t('verify.srgj'),
 						}, ],
 					},
 					id_img_1: {
 						rules: [{
 							required: true,
-							errorMessage: '请上传证件照片',
+							errorMessage: this.$t('verify.sczjz'),
 						}, ],
 					},
 					id_img_2: {
 						rules: [{
 							required: true,
-							errorMessage: '请上传证件照片',
+							errorMessage: this.$t('verify.sczjz'),
 						}, ],
 					}
 				},
@@ -172,7 +168,7 @@
 					success: async (res) => {
 						const tempFilePaths = res.tempFilePaths; //拿到选择的图片，是一个数组\
 						uni.showLoading({
-							title: '上传中'
+							title: this.$t('verify.scz')
 						})
 
 						let xhr = await updateFile(tempFilePaths[0])
@@ -194,7 +190,7 @@
 					success: async (res) => {
 						const tempFilePaths = res.tempFilePaths; //拿到选择的图片，是一个数组\
 						uni.showLoading({
-							title: '上传中'
+							title: this.$t('verify.scz')
 						})
 
 						let xhr = await updateFile(tempFilePaths[0])

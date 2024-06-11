@@ -168,6 +168,7 @@
 			</view>
 		</uni-popup>
 		<langChange ref="langChange"></langChange>
+		
 	</view>
 </template>
 
@@ -190,6 +191,7 @@
 
 		data() {
 			return {
+				value:0,
 				policyText,
 				isFold: false,
 				current: 0,
@@ -342,7 +344,7 @@
 				this.current = e.detail.current;
 			},
 			onClickOpen(item, index) {
-				switch (item.title) {
+				switch (index) {
 					case 5:
 						uni.navigateTo({
 							url: "/pages/message/message",
@@ -369,6 +371,16 @@
 						});
 						break;
 					case 6:
+						getUserIndex({
+							hideLoading: true,
+						}).then(({
+							data
+						}) => {
+
+							window.open(data.kefu_url, '_blank')
+						});
+						break;
+					case 0:
 						getUserIndex({
 							hideLoading: true,
 						}).then(({

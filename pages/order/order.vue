@@ -15,12 +15,12 @@
 							<text class="desc">{{item.seconds}}S</text>
 						</view>
 						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">
-							{{item.type == 1 ? '收购' : '售出'}}
+							{{item.type == 1 ? $t('order.sg') : $t('order.sc')}}
 						</view>
 					</view>
 					<view class="tui-orderTitle">
 						<view class="">
-							订单编号
+							{{$t('order.ddbh')}}
 						</view>
 						<view class="code">
 							BOSTT8WRPWX{{item.id}}
@@ -29,7 +29,7 @@
 					<view class="flex flex-wrap">
 						<view class="tui-wrapItem">
 							<view class="">
-								金额
+								{{$t('order.je')}}
 							</view>
 							<view class="pice">
 								{{item.number}}
@@ -37,7 +37,7 @@
 						</view>
 						<view class="tui-wrapItem" style="width: 46%;">
 							<view class="">
-								盈亏
+								{{$t('order.yk')}}
 							</view>
 							<view class="pice tui-green">
 								{{item.end_profit}}
@@ -45,7 +45,7 @@
 						</view>
 						<view class="tui-wrapItem text-des-color">
 							<view class="">
-								购买价
+								{{$t('order.gmj')}}
 							</view>
 							<view class="pice">
 								{{item.open_price}}
@@ -53,7 +53,7 @@
 						</view>
 						<view class="tui-wrapItem text-des-color" style="width: 46%;">
 							<view class="">
-								成交价
+								{{$t('order.cjj')}}
 							</view>
 							<view class="pice">
 								{{item.end_price}}
@@ -62,7 +62,7 @@
 						<view class="flex flex-item flex-between w-100 text-des-color p-2">
 							<view class="left">
 								<view class="">
-									持仓时间
+									{{$t('order.ccsj')}}
 								</view>
 								<view class="pice">
 									{{item.buy_time}}
@@ -70,7 +70,7 @@
 							</view>
 							<view class="right" style="width: 46%;">
 								<view class="">
-									平仓时间
+									{{$t('order.pcsj')}}
 								</view>
 								<view class="pice">
 									{{item.sell_time}}

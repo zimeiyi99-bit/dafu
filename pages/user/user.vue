@@ -11,19 +11,19 @@
 				<view class="tui-vip">
 					<image src="/static/vip.png" mode=""></image>
 					<view class="">
-						普通用户
+						{{$t('user.ptyh')}}
 					</view>
 				</view>
 				<view class="tui-credit">
 					<image src="/static/xinyong.png" mode=""></image>
 					<view class="">
-						信用分:{{userInfo.credit_score}}
+						{{$t('user.xyf')}}:{{userInfo.credit_score}}
 					</view>
 				</view>
 				<view class="tui-credit" style="color: #4B7CFE;" v-if="userInfo.is_auth==2">
 					<image src="/static/renzheng.png" mode=""></image>
 					<view class="">
-						已认证
+						{{$t('user.yrz')}}
 					</view>
 				</view>
 			</view>
@@ -32,7 +32,7 @@
 			<view class="normal">
 				<view class="flex flex-column">
 					<view class="text-xs">
-						总资产(CNY)
+						{{$t('user.zzc')}}(CNY)
 					</view>
 					<view class="pice">
 						<text class="unit">￥</text>
@@ -49,7 +49,7 @@
 				<view class="flex flex-between flex-content" style="margin-top: 60rpx;">
 					<view class="flex flex-column flex-item">
 						<view class="all-size">
-							账户盈亏
+							{{$t('user.zhyk')}}
 						</view>
 						<view class="big-size">
 							{{userInfo.yk}}
@@ -57,7 +57,7 @@
 					</view>
 					<view class="flex flex-column flex-item" style="margin-left: 84rpx;">
 						<view class="all-size">
-							今日盈亏
+							{{$t('user.jryk')}}
 						</view>
 						<view class="big-size">
 							{{userInfo.yk_today}}
@@ -71,7 +71,7 @@
 			<view class="tui-spendMoney">
 				<view class="tui-spendMoneyItem">
 					<view class="cny">
-						可用余额(CNY)
+						{{$t('user.kyye')}}(CNY)
 					</view>
 					<view class="pice">
 						￥{{userInfo.money}}
@@ -80,13 +80,13 @@
 				<view class="tui-rightItem" @click="getUserIndex">
 					<image src="/static/rujin.png" mode=""></image>
 					<view class="text">
-						入金
+						{{$t('user.rj')}}
 					</view>
 				</view>
 				<view class="tui-rightItem" @click="onClickMoney">
 					<image src="/static/chujin.png" mode=""></image>
 					<view class="text">
-						出金
+						{{$t('user.cj')}}
 					</view>
 				</view>
 			</view>
@@ -118,28 +118,28 @@
 					real_name: '',
 				},
 				settingList: [{
-					title: '实名认证',
+					title: this.$t("user.smrz"),
 					icon: require("@/static/smrz.png")
 				}, {
-					title: '订单记录',
+					title: this.$t("user.ddjl"),
 					icon: require("@/static/wddd.png")
 				}, {
-					title: '入金明细',
+					title: this.$t("user.rjmx"),
 					icon: require("@/static/kjrj.png")
 				}, {
-					title: '出金明细',
+					title: this.$t("user.cjmx"),
 					icon: require("@/static/chujin.png")
 				}, {
-					title: '资金记录',
+					title: this.$t("user.zjjl"),
 					icon: require("@/static/cwjl.png")
 				}, {
-					title: '出款账户',
+					title: this.$t("user.ckzh"),
 					icon: require("@/static/ck.png")
 				}, {
-					title: '设置',
+					title: this.$t("user.sz"),
 					icon: require("@/static/sz.png")
 				}, {
-					title: '退出登录',
+					title: this.$t("user.tcdl"),
 					icon: require("@/static/tcdl.png")
 				}, ]
 			};
@@ -173,16 +173,16 @@
 				})
 			},
 			onClickPath(item, index) {
-				switch (item.title) {
-					case '设置':
+				switch (index) {
+					case 6:
 						uni.navigateTo({
 							url: '/pages/set/set'
 						})
 						break;
-					case '退出登录':
+					case 7:
 						uni.showModal({
-							title: '退出登录',
-							content: '您确定要退出登录吗?',
+							title: this.$t("user.tcdl"),
+							content: this.$t("user.qdtc"),
 							confirmColor: '#222',
 							cancelColor: '#222',
 							success: function(res) {
@@ -194,32 +194,32 @@
 							}
 						});
 						break;
-					case '出款账户':
+					case 5:
 						uni.navigateTo({
 							url: '/pages/account/account'
 						})
 						break;
-					case '资金记录':
+					case 4:
 						uni.navigateTo({
 							url: '/pages/money-record/money-record'
 						})
 						break;
-					case '订单记录':
+					case 1:
 						uni.navigateTo({
 							url: '/pages/order/order'
 						})
 						break;
-					case '出金明细':
+					case 3:
 						uni.navigateTo({
 							url: '/pages/withdraw-list/withdraw-list'
 						})
 						break;
-					case '入金明细':
+					case 2:
 						uni.navigateTo({
 							url: '/pages/withdraw-list/withdraw-open'
 						})
 						break;
-					case '实名认证':
+					case 0:
 						uni.navigateTo({
 							url: '/pages/verify/verify'
 						})
