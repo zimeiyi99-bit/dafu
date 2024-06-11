@@ -168,7 +168,7 @@
 			</view>
 		</uni-popup>
 		<langChange ref="langChange"></langChange>
-		
+		<tabbar :actIndex="0"></tabbar>
 	</view>
 </template>
 
@@ -187,6 +187,7 @@
 		components: {
 			lightspotImg: () => import("@/components/lightspotImg.vue"),
 			langChange: () => import("@/components/langChange.vue"),
+			tabbar: () => import("@/components/tabbar.vue"),
 		},
 
 		data() {

@@ -102,6 +102,7 @@
 				</view>
 			</view>
 		</view>
+		<tabbar :actIndex="2"></tabbar>
 	</view>
 </template>
 
@@ -110,6 +111,9 @@
 		balanceInfo
 	} from "@/api/money.js"
 	export default {
+		components: {
+			tabbar: () => import("@/components/tabbar.vue"),
+		},
 		data() {
 			return {
 				pageData: {},

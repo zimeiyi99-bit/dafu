@@ -45,6 +45,7 @@
 				</view>
 			</view>
 		</view>
+		<tabbar :actIndex="1"></tabbar>
 	</view>
 </template>
 
@@ -56,6 +57,9 @@
 		goods
 	} from '@/api/money.js'
 	export default {
+		components: {
+			tabbar: () => import("@/components/tabbar.vue"),
+		},
 		data() {
 			return {
 				styles: {
