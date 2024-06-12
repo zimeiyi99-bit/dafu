@@ -2,8 +2,9 @@
 	<view>
 		<guo-headerTitle :title="$t('home.dd.jl')" :backgroundColor="backgroundColor"></guo-headerTitle>
 		<view class="tui-tabs">
-			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]" color="rgb(168, 169, 172)"
-				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
+			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]"
+				color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#822151" :lineScale="0.1"
+				@change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-card">
 
@@ -12,7 +13,7 @@
 					<view class="tui-title">
 						<view class="flex flex-item">
 							<text class="name">{{item.code}}</text>
-							<text class="desc">{{item.seconds}}S</text>
+							<text class="desc">{{item.remain_milli_seconds/1000}}S</text>
 						</view>
 						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">
 							{{item.type == 1 ? $t('order.sg') : $t('order.sc')}}
@@ -35,7 +36,7 @@
 								{{item.number}}
 							</view>
 						</view>
-						<view class="tui-wrapItem" style="width: 46%;">
+						<view class="tui-wrapItem" :style="{width:'46%',visibility:item.end_profit?'visible':'hidden'}">
 							<view class="">
 								{{$t('order.yk')}}
 							</view>
@@ -109,11 +110,17 @@
 				loadding: false,
 				pullUpOn: true,
 				isData: true,
-				pageCount: 0
+				pageCount: 0,
+				timer: null
 			};
 		},
 		onLoad() {
-			this.orderlist()
+			this.timer = setInterval(_ => {
+				this.orderlist()
+			}, 1000)
+		},
+		onHide() {
+			clearInterval(this.timer)
 		},
 		// 上拉加载
 		async onReachBottom() {
@@ -137,7 +144,8 @@
 			},
 			orderlist() {
 				orderlist({
-					status: this.activeTab == 0 ? 1 : 3
+					status: this.activeTab == 0 ? 1 : 3,
+					hideLoading: true
 				}).then(({
 					data
 				}) => {

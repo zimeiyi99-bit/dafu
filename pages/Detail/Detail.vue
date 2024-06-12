@@ -286,7 +286,7 @@
 						actAmount,
 						actTime
 					} = this.deal
-					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio
+					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio/100
 					return {
 						profit_ratio,
 						profit: profit_ratio * actAmount

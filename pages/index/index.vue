@@ -377,8 +377,7 @@
 						}).then(({
 							data
 						}) => {
-
-							window.open(data.kefu_url, '_blank')
+							window.location.href = data.kefu_url
 						});
 						break;
 					case 0:
@@ -388,7 +387,7 @@
 							data
 						}) => {
 
-							window.open(data.kefu_url, '_blank')
+							window.location.href = data.kefu_url
 						});
 						break;
 				}
@@ -449,7 +448,8 @@
 		.tui-varietyContent {
 			display: flex;
 			flex-direction: column;
-padding-bottom: 30px;
+			padding-bottom: 30px;
+
 			.tui-varietyContentItem {
 				width: 100%;
 				background-color: #fff;

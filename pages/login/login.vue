@@ -73,8 +73,8 @@
 		data() {
 			return {
 				formData: {
-					// account: 'user66',
-					// passwd: '666666',
+					// account: 'user66', 'mumu'
+					// passwd: '666666', '123456'
 					account: '',
 					passwd: ''
 				},
@@ -106,7 +106,7 @@
 					data
 				}) => {
 
-					window.open(data.kefu_url, '_blank')
+					window.location.href = data.kefu_url
 				});
 			},
 			onClickYinsi() {

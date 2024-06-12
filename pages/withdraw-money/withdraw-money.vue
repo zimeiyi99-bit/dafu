@@ -285,7 +285,7 @@
 				userGetCash().then(({
 					data
 				}) => {
-					this.cashInfo = data
+					this.cashInfo = data||{}
 				})
 			},
 			maskClick() {

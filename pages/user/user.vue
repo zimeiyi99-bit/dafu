@@ -159,7 +159,7 @@
 					data
 				}) => {
 
-					window.open(data.kefu_url, '_blank')
+					window.location.href = data.kefu_url
 				});
 			},
 			getDetail() {

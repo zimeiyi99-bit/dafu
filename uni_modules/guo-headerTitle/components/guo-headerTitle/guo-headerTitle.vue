@@ -13,7 +13,7 @@
 				</view>
 			</template>
 			<template v-slot:right v-if="isRight">
-				<view class="tui-leftIcon" @click="onClickLeft">
+				<view class="tui-leftIcon" @click="onClickRight">
 					<image src="/static/righticon.png" class="tui-rightIconImg" mode=""></image>
 				</view>
 			</template>
@@ -61,7 +61,12 @@
 		},
 		methods: {
 			onClickLeft() {
-				uni.navigateBack(-1)
+				uni.navigateBack()
+			},
+			onClickRight() {
+				uni.navigateTo({
+					url: '/pages/order/order'
+				})
 			},
 			onClickTitle() {
 				this.$emit('onClickTitle')
@@ -76,10 +81,12 @@
 		height: 32rpx;
 		margin-right: 10rpx;
 	}
-	.tui-rightIconImg{
+
+	.tui-rightIconImg {
 		width: 48rpx;
 		height: 48rpx;
 	}
+
 	.tui-set {
 		flex: 1;
 		display: flex;
