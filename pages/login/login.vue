@@ -23,8 +23,8 @@
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<uni-forms-item :label="$t('login.zh')">
 						<uni-easyinput :adjust-position="false" v-model="formData.account"
-							:placeholder="$t('login.qsrzh')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
+							:placeholder="$t('login.qsrzh')" :inputBorder="true" :styles="styles" primaryColor="#822151"
+							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.mm')">
 						<uni-easyinput :adjust-position="false" type="password" v-model="formData.passwd"
@@ -87,6 +87,7 @@
 				windowHeight: ''
 			};
 		},
+		
 		onLoad() {
 			uni.getSystemInfo({
 				success: (res) => {
@@ -116,7 +117,9 @@
 				return false
 			}
 		},
+		
 		methods: {
+			
 			showTabbar() {
 				this.tabbar = true;
 			},
