@@ -179,7 +179,12 @@ export default {
 	'detail.srcpmc': '请输入产品名称',
 	'detail.hbzl': '货币种类',
 	'detail.czcg': '操作成功',
+	'detail.jg': '价格',
+	'detail.ckcc': '查看持仓',
+	'detail.hd': '好的',
+	'detail.gmfx': '购买方向',
+	'detail.gmcg': '购买成功',
 	'money-record.zjjl': '资金记录',
 	'money-record.zwzjjl': '暂无资金记录',
-	
+	'order.djs': '倒计时',
 }

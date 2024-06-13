@@ -62,10 +62,10 @@ fly.interceptors.response.use((res) => {
 		}
 		store.commit('setUser', storeuser)
 	} else {
-		uni.showToast({
-			title: '加载数据失败',
-			icon: 'error'
-		});
+		// uni.showToast({
+		// 	title: '加载数据失败',
+		// 	icon: 'error'
+		// });
 	}
 	return Promise.reject(error)
 })

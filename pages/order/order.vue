@@ -13,7 +13,7 @@
 					<view class="tui-title">
 						<view class="flex flex-item">
 							<text class="name">{{item.code}}</text>
-							<text class="desc">{{item.remain_milli_seconds/1000}}S</text>
+							<text class="desc">{{item.seconds}}S</text>
 						</view>
 						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">
 							{{item.type == 1 ? $t('order.sg') : $t('order.sc')}}
@@ -54,10 +54,10 @@
 						</view>
 						<view class="tui-wrapItem text-des-color" style="width: 46%;">
 							<view class="">
-								{{$t('order.cjj')}}
+								{{activeTab == 1 ? $t('order.cjj') : $t('order.djs')}}
 							</view>
-							<view class="pice">
-								{{item.end_price}}
+							<view class="pice" :style="{color: activeTab == 0 ? '#fc6d22' : ''}">
+								{{activeTab == 1 ? item.end_price : item.remain_milli_seconds/1000 + 'S'}}
 							</view>
 						</view>
 						<view class="flex flex-item flex-between w-100 text-des-color p-2">

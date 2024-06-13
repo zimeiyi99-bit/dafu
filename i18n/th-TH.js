@@ -1,5 +1,5 @@
 export default {
-    'app.yymc': 'ภาษาไทย',
+    'app.yymc': 'ภาษาจีนตัวย่อ',
     'app.yysz': 'การตั้งค่าภาษา',
     'app.qr': 'ยืนยัน',
     'app.qd': 'ตกลง',
@@ -20,8 +20,8 @@ export default {
     'home.ckfs': 'วิธีการถอนเงิน',
     'home.gywm': 'เกี่ยวกับเรา',
     'home.xtxx': 'ข้อความระบบ',
+    'home.xtxx.zwsj': 'ไม่มีบันทึกข้อความ',
     'home.zxkf': 'บริการออนไลน์',
-	'home.xtxx.zwsj': 'ไม่มีประวัติข้อความ',
     'home.zxkf.fw': 'บริการคุณภาพสำหรับคุณ',
     'home.cptj': 'คำแนะนำผลิตภัณฑ์',
     'home.hbzl': 'ประเภทสกุลเงิน',
@@ -56,7 +56,7 @@ export default {
     'product.sy': 'รายได้',
     'product.syl': 'อัตรารายได้',
     'product.jrsyrjcs': 'จำนวนครั้งที่ฝากเงินวันนี้ที่เหลืออยู่',
-	'product.jrsycjcs': 'จำนวนการถอนเงินที่เหลือในวันนี้',
+    'product.jrsycjcs': 'จำนวนครั้งที่ถอนเงินวันนี้ที่เหลืออยู่',
     'product.k': 'พร้อมใช้งาน',
     'product.qb': 'ทั้งหมด',
     'product.yebmx': 'รายละเอียด Yu’ebao',
@@ -179,4 +179,10 @@ export default {
     'detail.hbzl': 'ประเภทสกุลเงิน',
     'detail.czcg': 'ดำเนินการสำเร็จ',
     'money-record.zjjl': 'บันทึกเงินทุน',
+    'set.dlmm': 'รหัสผ่านเข้าสู่ระบบ',
+    'set.jymm': 'รหัสผ่านการทำธุรกรรม',
+    'set.xg': 'แก้ไข',
+    'set.xgdlmm': 'แก้ไขรหัสผ่านเข้าสู่ระบบ',
+    'set.xgzfmm': 'แก้ไขรหัสผ่านการชำระเงิน',
+    'user.khm': 'รหัสเปิดบัญชี'
 }

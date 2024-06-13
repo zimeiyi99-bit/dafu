@@ -65,6 +65,75 @@
 					@click="dealPopupOpen(2)">{{$t('detail.sc')}}</button>
 			</view>
 		</view>
+		<!-- 弹出框 -->
+		<uni-popup ref="popupSuccess" type="center" :mask-click="false">
+			<view class="tui-Model">
+				<view class="main">
+					<image class="icon-lg" src="/static/success-lg.png" mode=""></image>
+					<view class="title">
+						{{$t('detail.gmcg')}}
+					</view>
+				</view>
+				<view class="flex flex-column" style="padding: 0 64rpx;font-size: 24rpx;color: #a8a9ac;">
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('app.je')}}
+						</view>
+						<view class="">
+							{{deal.actAmount}}
+						</view>
+					</view>
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('detail.sj')}}
+						</view>
+						<view class="">
+							{{deal.actTime}}S
+						</view>
+					</view>
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('detail.gmfx')}}
+						</view>
+						<view class="" :style="{color:deal.isType == 1 ? '#f33b50' : '#0bb563'}">
+							{{deal.isType == 1 ? $t('detail.sg') : $t('detail.sc')}}
+						</view>
+					</view>
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('detail.ye')}}
+						</view>
+						<view class="">
+							{{userInfo.money}}
+						</view>
+					</view>
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('detail.jg')}}
+						</view>
+						<view class="">
+							{{pageDetail.price}}
+						</view>
+					</view>
+					<view class="flex flex-item flex-between p-b">
+						<view class="">
+							{{$t('product.syl')}}
+						</view>
+						<view class="" style="color: #0bb563;">
+							{{earnings.profit_ratio}}%
+						</view>
+					</view>
+				</view>
+				<view class="btn_box">
+					<view class="look" @click="onClickOrder">
+						{{$t('detail.ckcc')}}
+					</view>
+					<view class="ok" @click="onClickOk">
+						{{$t('detail.hd')}}
+					</view>
+				</view>
+			</view>
+		</uni-popup>
 		<uni-popup ref="popup" type="bottom">
 			<view class="tui-bottomPopup">
 				<view class="tui-purchase">
@@ -88,7 +157,8 @@
 						</view>
 					</view>
 					<view class="tui-inputBox">
-						<input class="tui-input" v-model="deal.actAmount" :placeholder="$t('detail.srje')" type="text" />
+						<input class="tui-input" v-model="deal.actAmount" :placeholder="$t('detail.srje')"
+							type="text" />
 						<text>CNY</text>
 					</view>
 					<view class="flex flex-between flex-item" style="margin-top: 16rpx;">
@@ -157,9 +227,9 @@
 				<view class="tui-draw">
 					<view class="title"> {{$t('detail.cpjy')}} </view>
 					<view class="tui-search">
-						<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('detail.srcpmc')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" placeholderStyle="color:#c9c9c9;font-size:28rpx"
-							v-model="searchText"></uni-easyinput>
+						<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('detail.srcpmc')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151"
+							placeholderStyle="color:#c9c9c9;font-size:28rpx" v-model="searchText"></uni-easyinput>
 					</view>
 					<!-- <view class="">
 						<v-tabs :value="0" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222" lineColor="#822151" bold
@@ -286,7 +356,7 @@
 						actAmount,
 						actTime
 					} = this.deal
-					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio/100
+					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio / 100
 					return {
 						profit_ratio,
 						profit: profit_ratio * actAmount
@@ -314,6 +384,18 @@
 			}
 		},
 		methods: {
+			onClickOrder() {
+				uni.navigateTo({
+					url: '/pages/order/order'
+				})
+				this.getDetailUserInfo()
+				this.dealPopupClose()
+				this.$refs.popupSuccess.close()
+			},
+			onClickOk() {
+				this.getDetailUserInfo()
+				this.dealPopupClose()
+			},
 			confirmDeal() {
 				if (!this.isBtn) return;
 				const paramData = {
@@ -323,12 +405,13 @@
 					type: this.deal.isType,
 				}
 				goodMicrotrade(paramData).then(_ => {
-					uni.showToast({
-						title:this.$t('detail.czcg'),
-						icon: "none"
-					})
-					this.getDetailUserInfo()
-					this.dealPopupClose()
+					this.$refs.popupSuccess.open()
+					this.$refs.popup.close()
+					// uni.showToast({
+					// 	title: this.$t('detail.czcg'),
+					// 	icon: "none"
+					// })
+
 				})
 			},
 			getDetailUserInfo() {
@@ -417,6 +500,63 @@
 	.tui-hover {
 		background-color: #fffaf9 !important;
 		transform: seale(1.03);
+	}
+
+	.p-b {
+		padding-bottom: 20rpx;
+	}
+
+	.tui-Model {
+		width: 536rpx;
+		background-color: #fff;
+		border-radius: 13px;
+
+		.btn_box {
+			border-top: 1px solid #eee;
+			height: 88rpx;
+			overflow: hidden;
+			border-radius: 0 0 24rpx 24rpx;
+			font-size: 24rpx;
+			color: #222;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.look {
+				border-right: 1px solid #eee;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex: 1;
+			}
+
+			.ok {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex: 1;
+			}
+		}
+
+		.main {
+			padding: 30rpx;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+
+			.icon-lg {
+				width: 66rpx;
+				height: 66rpx;
+			}
+
+			.title {
+				padding-top: 28rpx;
+				font-size: 28rpx;
+				color: #222;
+				font-weight: 500;
+			}
+		}
 	}
 
 	.tui-cancle {

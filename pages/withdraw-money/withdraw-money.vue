@@ -16,6 +16,13 @@
 									</view>
 									<input v-model="formData.money" @input="validateInput" type="text" class="input" />
 								</view>
+
+								<block v-if="formData.num != ''">
+									<view class="" style="margin-top: 8rpx;font-size: 20rpx;"
+										v-if="typeList[formData.pay_type] != '银行卡'">
+										≈ {{formData.num}}USDT
+									</view>
+								</block>
 								<view class="bottom">
 									{{$t('withdraw-money.kyye')}}: <text>￥{{userInfo.money}}</text>
 								</view>
@@ -122,9 +129,9 @@
 								</view>
 							</view>
 						</uni-forms-item>
-						<view class="tui-submit tui-cancle">
+						<!-- <view class="tui-submit tui-cancle">
 							{{$t('withdraw-money.qdcj')}}
-						</view>
+						</view> -->
 					</template>
 					<uni-forms-item :label="$t('withdraw-money.jymm')">
 
@@ -164,7 +171,8 @@
 	import {
 		userInfo,
 		userGetCash,
-		userWithdraw
+		userWithdraw,
+		getUserIndex
 	} from "@/api/user.js"
 
 	export default {
@@ -173,7 +181,8 @@
 				formData: {
 					money: '',
 					pay_type: 'bank_card',
-					mpwd: ''
+					mpwd: '',
+					num: ''
 				},
 				typeList: {
 					'bank_card': this.$t('withdraw-money.yhk'),
@@ -186,7 +195,8 @@
 					'borderColor': '#fff'
 				},
 				userInfo: {},
-				cashInfo: {}
+				cashInfo: {},
+				getUserItem: {}
 			};
 		},
 		onShow() {
@@ -247,7 +257,19 @@
 			}
 		},
 		methods: {
+			getUserIndex() {
+				getUserIndex({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.getUserItem = data;
+				});
+			},
 			validateInput() {
+
+				this.formData.num = (this.formData.money / (this.getUserItem.hui_lv || 7.24)).toFixed(2);
 				let value = this.$utils.validateAmount(this.formData.money, this.userInfo.money);
 				this.$nextTick(_ => {
 					// 更新 v-model
@@ -285,7 +307,7 @@
 				userGetCash().then(({
 					data
 				}) => {
-					this.cashInfo = data||{}
+					this.cashInfo = data || {}
 				})
 			},
 			maskClick() {
@@ -300,6 +322,7 @@
 				this.typeShow = true
 			},
 			onClickCurrentIndex(item, index) {
+				this.getUserIndex()
 				this.formData.pay_type = item;
 				this.$refs.popup.close()
 				this.typeShow = true

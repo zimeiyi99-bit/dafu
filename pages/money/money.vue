@@ -7,21 +7,11 @@
 				</view>
 			</view>
 			<view class="">
-				<l-circularProgress :fontShow="false" :percent="pageData.zb" type="halfCircular" :lineWidth="20"
-					:boxWidth="330" progressColor="#822151" bgColor="#fff">
-					<view class="tui-progress">
-						<view class="title">{{$t('money.yebze')}}</view>
-						<view class="price">￥{{pageData.all_money}}</view>
-					</view>
-					<view class="tui-progressBottom">
-						<view class="">
-							{{$t('product.qrfe')}}
-						</view>
-						<view class="">
-							{{$t('product.ze')}}
-						</view>
-					</view>
-				</l-circularProgress>
+				<view class="container">
+					<canvas id="progressCanvas" canvas-id="progressCanvas"
+						style="width: 630rpx; height: 350rpx;"></canvas>
+				</view>
+				
 			</view>
 			<view class="tui-card">
 				<view class="tui-cardItem" @click="onClickDeposit('buy')">
@@ -117,8 +107,13 @@
 		data() {
 			return {
 				pageData: {},
-				gradItem: 0
+				gradItem: 0,
+				currentProgress: 0,
+				currentAmount: 0
 			};
+		},
+		onReady() {
+			
 		},
 		mounted() {
 			const timer = setInterval(_ => {
@@ -130,8 +125,84 @@
 		},
 		onShow() {
 			this.getDetail()
+			
 		},
 		methods: {
+			animateProgress() {
+				const duration = 2000;
+				const frameRate = 60;
+				const totalFrames = (duration / 1000) * frameRate;
+				let currentFrame = 0;
+				const progressIncrement = this.pageData.zb / totalFrames;
+				const amountIncrement = this.pageData.all_money / totalFrames;
+				const animate = () => {
+					if (currentFrame <= totalFrames) {
+						this.currentProgress += progressIncrement;
+						if (this.currentAmount < this.pageData.all_money) {
+							this.currentAmount += amountIncrement;
+						}
+						if (this.currentAmount > this.pageData.all_money) {
+							this.currentAmount = this.pageData.all_money
+						}
+						this.drawProgress(this.currentProgress, this.currentAmount);
+						currentFrame++;
+						requestAnimationFrame(animate);
+					}
+				};
+				animate();
+			},
+			rpxToPx(rpx) {
+				const windowWidth = uni.getSystemInfoSync().windowWidth;
+				const px = (rpx / 750) * windowWidth;
+				return px;
+			},
+			drawProgress(progress, amount) {
+				const systemInfo = uni.getSystemInfoSync();
+				const pixelRatio = systemInfo.pixelRatio;
+				const canvasWidth = this.rpxToPx(630);
+				const canvasHeight = this.rpxToPx(290);
+				const ctx = uni.createCanvasContext('progressCanvas', this);
+				ctx.width = canvasWidth * pixelRatio;
+				ctx.height = canvasHeight * pixelRatio;
+
+				const centerX = canvasWidth / 2;
+				const centerY = canvasHeight;
+				const radius = canvasWidth / 2 - this.rpxToPx(50);
+				const startAngle = Math.PI;
+				const endAngle = Math.PI * (1 + progress / 100);
+				const lineWidth = this.rpxToPx(35);
+				ctx.clearRect(0, 0, ctx.width, ctx.height);
+				ctx.setLineCap('round');
+
+				ctx.beginPath();
+				ctx.arc(centerX, centerY, radius, Math.PI, 2 * Math.PI);
+				ctx.setStrokeStyle('#ffffff');
+				ctx.setLineWidth(lineWidth);
+				ctx.stroke();
+
+				ctx.beginPath();
+				ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+				ctx.setStrokeStyle('#792950');
+				ctx.setLineWidth(lineWidth);
+				ctx.stroke();
+
+				ctx.setFillStyle('#8f8f8f');
+				ctx.setTextAlign('center');
+				ctx.setTextBaseline('middle');
+				ctx.font = "12px 'Microsoft YaHei', sansserif"
+				ctx.fillText('余额宝总余额', centerX, centerY - this.rpxToPx(120));
+
+				ctx.setFontSize(this.rpxToPx(60));
+				ctx.setFillStyle('#000000');
+				ctx.fillText(`￥${amount.toFixed(2)}`, centerX, centerY - this.rpxToPx(50));
+
+				ctx.setFillStyle('#8f8f8f');
+				ctx.font = "12px 'Microsoft YaHei', sansserif"
+				ctx.fillText('确认份额', centerX - radius + 10, centerY + this.rpxToPx(45));
+				ctx.fillText('总额', centerX + radius, centerY + this.rpxToPx(45));
+
+				ctx.draw();
+			},
 			getDetail() {
 				balanceInfo({
 					hideLoading: true
@@ -139,6 +210,7 @@
 					data
 				}) => {
 					this.pageData = data
+					this.animateProgress();
 				})
 			},
 			onClickDeposit(type) {
@@ -223,7 +295,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-top: 50rpx;
+		margin-top: 30rpx;
 
 		.tui-border {
 			width: 1px;
