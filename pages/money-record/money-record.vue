@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<guo-headerTitle :title="$t('money-record.zjjl')"></guo-headerTitle>
-		<view class="tui-headerTitle">
+		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">

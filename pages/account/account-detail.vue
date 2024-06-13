@@ -15,7 +15,8 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.user_name" :placeholder="$t('account.srkhxm')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" />
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.gj')">
 							<view class="tui-listItem" v-if="binded">
@@ -26,7 +27,8 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.gj" :placeholder="$t('account.srgj')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" />
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khyh')">
 							<view class="tui-listItem" v-if="binded">
@@ -36,9 +38,9 @@
 									</view>
 								</view>
 							</view>
-							<uni-easyinput v-else v-model="formData.bank_name"
-								:placeholder="$t('account.srkhyx')" :inputBorder="true" :styles="styles"
-								primaryColor="#822151" />
+							<uni-easyinput v-else v-model="formData.bank_name" :placeholder="$t('account.srkhyx')"
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.yhkzh')">
 							<view class="tui-listItem" v-if="binded">
@@ -48,9 +50,9 @@
 									</view>
 								</view>
 							</view>
-							<uni-easyinput v-else v-model="formData.account"
-								:placeholder="$t('account.sryhkzh')" :inputBorder="true" :styles="styles"
-								primaryColor="#822151" />
+							<uni-easyinput v-else v-model="formData.account" :placeholder="$t('account.sryhkzh')"
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khdz')">
 							<view class="tui-listItem" v-if="binded">
@@ -60,9 +62,9 @@
 									</view>
 								</view>
 							</view>
-							<uni-easyinput v-else v-model="formData.bank_branch"
-								:placeholder="$t('account.srkhdz')" :inputBorder="true" :styles="styles"
-								primaryColor="#822151" />
+							<uni-easyinput v-else v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 					</template>
 					<uni-forms-item :label="$t('account.bzdz')" v-else>
@@ -73,9 +75,9 @@
 								</view>
 							</view>
 						</view>
-						<uni-easyinput v-else v-model="formData.usdt_url"
-							:placeholder="$t('account.srbzdz')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" />
+						<uni-easyinput v-else v-model="formData.usdt_url" :placeholder="$t('account.srbzdz')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit" v-if="!binded">
 						{{$t('account.bc')}}
@@ -115,7 +117,9 @@
 				},
 				styles: {
 					'borderColor': '#fff'
-				}
+				},
+				tabbar: true,
+				windowHeight: ''
 			};
 		},
 		computed: {
@@ -144,8 +148,26 @@
 		onLoad(e) {
 			this.formData.pay_type = e.pay_type
 			this.getDetail()
+			uni.getSystemInfo({
+				success: (res) => {
+					this.windowHeight = res.windowHeight;
+				}
+			});
+			uni.onWindowResize((res) => {
+				if (res.size.windowHeight < this.windowHeight) {
+					this.tabbar = false
+				} else {
+					this.tabbar = true
+				}
+			})
 		},
 		methods: {
+			showTabbar() {
+				this.tabbar = true;
+			},
+			hideTabbar() {
+				this.tabbar = false;
+			},
 			getDetail() {
 				userGetCash().then(({
 					data
@@ -237,10 +259,10 @@
 
 	.tui-submit {
 		width: calc(100% - 66rpx);
-		position: fixed;
-		bottom: 57px;
-		left: 0;
-		right: 0;
+		// position: fixed;
+		// bottom: 57px;
+		// left: 0;
+		// right: 0;
 		background: #822151;
 		color: #fff;
 
@@ -257,6 +279,7 @@
 		width: 100%;
 		padding: 0 36rpx;
 		margin-top: 60rpx;
+		padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
 
 		.tui-form {
 			margin-top: 60rpx;
@@ -300,6 +323,7 @@
 		font-size: 14px;
 		display: flex;
 		align-items: center;
+		margin-bottom: calc(30rpx + env(safe-area-inset-bottom));
 
 		text {
 			margin-left: auto;
