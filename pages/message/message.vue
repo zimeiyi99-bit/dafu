@@ -9,9 +9,15 @@
 					<view class="desc">
 						{{item.cont}}
 					</view>
-					<view class="time">
-						{{item.title}}
+					<view class="flex flex-between">
+						<view class="time">
+							{{item.time}}
+						</view>
+						<view class="time" v-if="item.seconds">
+							【{{item.seconds}}S】
+						</view>
 					</view>
+					
 				</view>
 			</view>
 		</view>

@@ -17,20 +17,24 @@
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
 					<uni-forms-item :label="$t('login.mm')">
-						<uni-easyinput v-model="formData.passwd" :placeholder="$t('login.qsrmm')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+						<uni-easyinput :adjust-position="false" v-model="formData.passwd"
+							:placeholder="$t('login.qsrmm')" :inputBorder="true" :styles="styles" primaryColor="#822151"
+							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.qrmm')">
-						<uni-easyinput v-model="formData.o_passwd" :placeholder="$t('login.qsrqrmm')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151" />
+						<uni-easyinput :adjust-position="false" v-model="formData.o_passwd"
+							:placeholder="$t('login.qsrqrmm')" :inputBorder="true" :styles="styles"
+							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.jymm')">
-						<uni-easyinput v-model="formData.mpasswd" :placeholder="$t('login.qsrjymm')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+						<uni-easyinput :adjust-position="false" v-model="formData.mpasswd"
+							:placeholder="$t('login.qsrjymm')" :inputBorder="true" :styles="styles"
+							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.qrjymm')">
-						<uni-easyinput v-model="formData.o_mpasswd" :placeholder="$t('login.qsrqrjymm')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151" />
+						<uni-easyinput :adjust-position="false" v-model="formData.o_mpasswd"
+							:placeholder="$t('login.qsrqrjymm')" :inputBorder="true" :styles="styles"
+							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onRegister">
 						{{$t('login.wczc')}}
@@ -39,7 +43,7 @@
 			</view>
 		</view>
 		<!-- 底部 -->
-		<view class="bottom">
+		<view class="bottom" v-if="tabbar">
 			<view class="tui-Two">
 				<view class="">
 					{{$t('login.bsty')}}
@@ -71,7 +75,9 @@
 				},
 				styles: {
 					'borderColor': '#fff'
-				}
+				},
+				tabbar: true,
+				windowHeight: ''
 			};
 		},
 		computed: {
@@ -89,7 +95,27 @@
 				return false
 			}
 		},
+		onLoad() {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.windowHeight = res.windowHeight;
+				}
+			});
+			uni.onWindowResize((res) => {
+				if (res.size.windowHeight < this.windowHeight) {
+					this.tabbar = false
+				} else {
+					this.tabbar = true
+				}
+			})
+		},
 		methods: {
+			showTabbar() {
+				this.tabbar = true;
+			},
+			hideTabbar() {
+				this.tabbar = false;
+			},
 			onClickYinsi() {
 				uni.navigateTo({
 					url: '/pages/yinsi/yinsi'
