@@ -166,7 +166,7 @@
 
 	.bottom {
 		position: fixed;
-		bottom: 114rpx;
+		bottom: calc(env(safe-area-inset-bottom) + 30rpx);
 		width: 100%;
 		display: flex;
 		align-items: center;

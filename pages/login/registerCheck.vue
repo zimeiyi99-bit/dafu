@@ -142,8 +142,9 @@
 	}
 
 	.bottom {
-		position: fixed;
-		bottom: calc(env(safe-area-inset-bottom) + 30rpx);
+		// position: fixed;
+		// bottom: calc(env(safe-area-inset-bottom) + 30rpx);
+		padding-bottom: calc(env(safe-area-inset-bottom) + 30rpx);
 		width: 100%;
 		display: flex;
 		align-items: center;
