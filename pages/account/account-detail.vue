@@ -7,29 +7,75 @@
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<template v-if="formData.pay_type == 'bank_card'">
 						<uni-forms-item :label="$t('account.khxm')">
-							<uni-easyinput :disabled="binded" v-model="formData.user_name" :placeholder="$t('account.srkhxm')"
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{formData.user_name.substring(0, 1) + '**' + formData.user_name.substring(2)}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.user_name" :placeholder="$t('account.srkhxm')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.gj')">
-							<uni-easyinput :disabled="binded" v-model="formData.gj" :placeholder="$t('account.srgj')"
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{formData.gj}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.gj" :placeholder="$t('account.srgj')"
 								:inputBorder="true" :styles="styles" primaryColor="#822151" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khyh')">
-							<uni-easyinput :disabled="binded" v-model="formData.bank_name" :placeholder="$t('account.srkhyh')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" />
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{formData.bank_name}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.bank_name"
+								:placeholder="$t('account.srkhyx')" :inputBorder="true" :styles="styles"
+								primaryColor="#822151" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.yhkzh')">
-							<uni-easyinput :disabled="binded" v-model="formData.account" :placeholder="$t('account.sryhkzh')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" />
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{formData.account.substring(0, 6) + '****' + formData.account.substring(10)}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.account"
+								:placeholder="$t('account.sryhkzh')" :inputBorder="true" :styles="styles"
+								primaryColor="#822151" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khdz')">
-							<uni-easyinput :disabled="binded" v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" />
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{formData.bank_branch}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.bank_branch"
+								:placeholder="$t('account.srkhdz')" :inputBorder="true" :styles="styles"
+								primaryColor="#822151" />
 						</uni-forms-item>
 					</template>
 					<uni-forms-item :label="$t('account.bzdz')" v-else>
-						<uni-easyinput :disabled="binded" v-model="formData.usdt_url" :placeholder="$t('account.srbzdz')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151" />
+						<view class="tui-listItem" v-if="binded">
+							<view class="flex-item flex">
+								<view class="title">
+									{{formData.usdt_url.substring(0, 6) + '****' + formData.usdt_url.substring(10)}}
+								</view>
+							</view>
+						</view>
+						<uni-easyinput v-else v-model="formData.usdt_url"
+							:placeholder="$t('account.srbzdz')" :inputBorder="true" :styles="styles"
+							primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit" v-if="!binded">
 						{{$t('account.bc')}}
@@ -149,6 +195,44 @@
 		background-color: rgb(241, 243, 246) !important;
 		color: #a8a9ac !important;
 		opacity: .5;
+	}
+
+	.tui-listItem {
+		width: 100%;
+		font-size: 30rpx;
+		background-color: #fff;
+		border-radius: 13px;
+		padding: 20rpx;
+		box-sizing: border-box;
+		display: flex;
+		margin-top: 20rpx;
+		display: flex;
+
+		align-items: center;
+		justify-content: space-between;
+
+		.language {
+			color: #a8a9ac;
+			font-size: 30rpx;
+			padding-right: 20rpx;
+		}
+
+		.tui-rightIcon {
+			width: 6px;
+			height: 11px;
+		}
+
+		.title {
+			font-size: 24rpx;
+			color: #222;
+		}
+
+		.logo {
+			width: 60rpx;
+			height: 60rpx;
+			border-radius: 50%;
+			margin-right: 20rpx;
+		}
 	}
 
 	.tui-submit {

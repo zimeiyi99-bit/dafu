@@ -356,17 +356,20 @@
 						actAmount,
 						actTime
 					} = this.deal
-					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio / 100
+					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio 
+					console.log(actAmount,profit_ratio,'actAmount')
 					return {
 						profit_ratio,
-						profit: profit_ratio * actAmount
+						profit: profit_ratio * actAmount / 100
 					}
 				}
 			}
 		},
 		onLoad(options) {
 			this.options = options;
-			this.getDetail();
+			this.$nextTick(() => {
+				this.getDetail();
+			})
 			this.getDetailUserInfo()
 			this.timer = setInterval((_) => {
 				this.getDetail();
@@ -395,6 +398,7 @@
 			onClickOk() {
 				this.getDetailUserInfo()
 				this.dealPopupClose()
+				this.$refs.popupSuccess.close()
 			},
 			confirmDeal() {
 				if (!this.isBtn) return;
