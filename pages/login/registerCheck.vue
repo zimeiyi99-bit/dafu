@@ -15,7 +15,7 @@
 				{{$t('login.zhzc')}}
 			</view>
 			<view class="tui-form">
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
+				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200rpx">
 					<uni-forms-item :label="$t('login.zh')">
 						<uni-easyinput :adjust-position="false" v-model="formData.account" :placeholder="$t('login.qsrzh')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151"  @focus="hideTabbar" @blur="showTabbar" />
