@@ -19,7 +19,7 @@
 
 								<block v-if="formData.num != ''">
 									<view class="" style="margin-top: 8rpx;font-size: 20rpx;"
-										v-if="typeList[formData.pay_type] != '银行卡'">
+										v-if="formData.pay_type != 'bank_card'">
 										≈ {{formData.num}}USDT
 									</view>
 								</block>

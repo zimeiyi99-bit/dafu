@@ -12,28 +12,28 @@
 		<!-- 注册 -->
 		<view class="tui-register">
 			<view class="tui-title">
-				设置密码
+				{{$t('login.szmm')}}
 			</view>
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
-					<uni-forms-item label="密码">
-						<uni-easyinput v-model="formData.passwd" placeholder="请输入密码" :inputBorder="true"
+					<uni-forms-item :label="$t('login.mm')">
+						<uni-easyinput v-model="formData.passwd" :placeholder="$t('login.qsrmm')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="确认密码">
-						<uni-easyinput v-model="formData.o_passwd" placeholder="请输入确认密码" :inputBorder="true"
+					<uni-forms-item :label="$t('login.qrmm')">
+						<uni-easyinput v-model="formData.o_passwd" :placeholder="$t('login.qsrqrmm')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" />
+					</uni-forms-item>
+					<uni-forms-item :label="$t('login.jymm')">
+						<uni-easyinput v-model="formData.mpasswd" :placeholder="$t('login.qsrjymm')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="交易密码">
-						<uni-easyinput v-model="formData.mpasswd" placeholder="请输入交易密码" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
-					</uni-forms-item>
-					<uni-forms-item label="确认交易密码">
-						<uni-easyinput v-model="formData.o_mpasswd" placeholder="请输入确认交易密码" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+					<uni-forms-item :label="$t('login.qrjymm')">
+						<uni-easyinput v-model="formData.o_mpasswd" :placeholder="$t('login.qsrqrjymm')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onRegister">
-						完成注册
+						{{$t('login.wczc')}}
 					</view>
 				</uni-forms>
 			</view>
@@ -42,10 +42,10 @@
 		<view class="bottom">
 			<view class="tui-Two">
 				<view class="">
-					注册即表示同意APP
+					{{$t('login.bsty')}}
 				</view>
 				<view class="policy" @click="onClickYinsi">
-					隐私政策
+					{{$t('login.yszc')}}
 				</view>
 			</view>
 		</view>
@@ -99,13 +99,13 @@
 				if (this.btnDisabled) return
 				if (this.formData.passwd !== this.formData.o_passwd) {
 					return uni.showToast({
-						title: "两次密码不一致",
+						title: this.$t('login.mmbyz'),
 						icon: 'none'
 					})
 				}
 				if (this.formData.mpasswd !== this.formData.o_mpasswd) {
 					return uni.showToast({
-						title: "两次交易密码不一致",
+						title: this.$t('login.jymmbyz'),
 						icon: 'none'
 					})
 				}
@@ -115,8 +115,8 @@
 					checkFree: true
 				}).then(_ => {
 					uni.showModal({
-						title: '注册成功',
-						content: "即将前往登录页",
+						title: this.$t('login.zccg'),
+						content: this.$t('login.zccgts'),
 						showCancel: false,
 
 					}).then(_ => {

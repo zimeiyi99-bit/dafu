@@ -17,20 +17,20 @@
 		<!-- 登录 -->
 		<view class="tui-login">
 			<view class="tui-title">
-				账号登录
+				{{$t('login.zhdl')}}
 			</view>
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
-					<uni-forms-item label="账号">
-						<uni-easyinput v-model="formData.account" placeholder="请输入账号" :inputBorder="true"
+					<uni-forms-item :label="$t('login.zh')">
+						<uni-easyinput v-model="formData.account" :placeholder="$t('login.qsrzh')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="密码">
-						<uni-easyinput type="password" v-model="formData.passwd" placeholder="请输入密码" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+					<uni-forms-item :label="$t('login.mm')">
+						<uni-easyinput type="password" v-model="formData.passwd" :placeholder="$t('login.qsrmm')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onClickLogin">
-						登录
+						{{$t('login.dl')}}
 					</view>
 				</uni-forms>
 			</view>
@@ -39,20 +39,20 @@
 		<view class="bottom">
 			<view class="tui-first">
 				<view class="register" @click="onClickRegister">
-					立即注册
+					{{$t('login.ljzc')}}
 				</view>
 				<view class="symbol">
 				</view>
 				<view class="" @click="onClickMessage">
-					在线客服
+					{{$t('home.zxkf')}}
 				</view>
 			</view>
 			<view class="tui-Two">
 				<view class="">
-					登录即表示同意APP
+					{{$t('login.bsty')}}
 				</view>
 				<view class="policy" @click="onClickYinsi">
-					隐私政策
+					{{$t('login.yszc')}}
 				</view>
 			</view>
 		</view>

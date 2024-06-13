@@ -12,28 +12,28 @@
 		<!-- 注册 -->
 		<view class="tui-register">
 			<view class="tui-title">
-				账号注册
+				{{$t('login.zhzc')}}
 			</view>
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
-					<uni-forms-item label="账号">
-						<uni-easyinput v-model="formData.account" placeholder="请输入账号" :inputBorder="true"
+					<uni-forms-item :label="$t('login.zh')">
+						<uni-easyinput v-model="formData.account" :placeholder="$t('login.qsrzh')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="手机号">
-						<uni-easyinput v-model="formData.phone" placeholder="请输入手机号" :inputBorder="true"
+					<uni-forms-item :label="$t('login.sjh')">
+						<uni-easyinput v-model="formData.phone" :placeholder="$t('login.qsrsjh')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="姓名">
-						<uni-easyinput v-model="formData.real_name" placeholder="请输入姓名" :inputBorder="true"
+					<uni-forms-item :label="$t('verify.xm')">
+						<uni-easyinput v-model="formData.real_name" :placeholder="$t('verify.srxm')" :inputBorder="true"
 							:styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
-					<uni-forms-item label="开户码">
-						<uni-easyinput v-model="formData.invitecode" placeholder="请输入开户码" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+					<uni-forms-item :label="$t('login.khm')">
+						<uni-easyinput v-model="formData.invitecode" :placeholder="$t('login.qsrkhm')"
+							:inputBorder="true" :styles="styles" primaryColor="#822151" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="checkInfo">
-						下一步
+						{{$t('login.xyb')}}
 					</view>
 				</uni-forms>
 			</view>
@@ -42,10 +42,10 @@
 		<view class="bottom">
 			<view class="tui-Two">
 				<view class="">
-					注册即表示同意APP
+					{{$t('login.bsty')}}
 				</view>
 				<view class="policy" @click="onClickYinsi">
-					隐私政策
+					{{$t('login.yszc')}}
 				</view>
 			</view>
 		</view>

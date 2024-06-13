@@ -260,10 +260,8 @@
 				clearInterval(this.timer);
 			}
 			this.stickyStyle = "";
-			console.log("页面销毁");
 		},
 		onHide() {
-			console.log("页面销毁");
 			this.stickyStyle = "";
 			if (this.timer) {
 				clearInterval(this.timer);

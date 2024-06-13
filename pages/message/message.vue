@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<guo-headerTitle title="系统消息"></guo-headerTitle>
+		<guo-headerTitle :title="$t('home.xtxx')"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-card" :class="[{read:item.is_read==2}]" v-for="(item,index) in pageList" :key="index">
 				<view class="tui-leftIcon">
