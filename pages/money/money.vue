@@ -11,7 +11,7 @@
 					<canvas id="progressCanvas" canvas-id="progressCanvas"
 						style="width: 630rpx; height: 350rpx;"></canvas>
 				</view>
-				
+
 			</view>
 			<view class="tui-card">
 				<view class="tui-cardItem" @click="onClickDeposit('buy')">
@@ -113,7 +113,7 @@
 			};
 		},
 		onReady() {
-			
+
 		},
 		mounted() {
 			const timer = setInterval(_ => {
@@ -124,8 +124,8 @@
 			}, 500)
 		},
 		onShow() {
+			this.currentProgress = 0
 			this.getDetail()
-			
 		},
 		methods: {
 			animateProgress() {
