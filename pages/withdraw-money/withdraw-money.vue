@@ -109,7 +109,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.account}}
+											{{selectCashInfo.account.substring(0, 6) + '****' + selectCashInfo.account.substring(10)}}
 										</view>
 									</view>
 								</view>
