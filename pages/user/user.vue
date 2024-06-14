@@ -1,17 +1,19 @@
 <template>
 	<view class="tui-header">
 		<view class="tui-userInfo">
-			<view class="name">
-				{{userInfo.username}}
-			</view>
-			<view class="desc">
-				<view class="rellname">
-					{{userInfo.real_name.substr(0,1)+new Array(userInfo.real_name.length).join('*')}}
+			<view class="flex flex-column">
+				<view class="name">
+					{{userInfo.username}}
 				</view>
-				<view class="tui-vip">
-					<image src="/static/vip.png" mode=""></image>
-					<view class="">
-						{{$t('user.ptyh')}}
+				<view class="desc">
+					<view class="rellname">
+						{{userInfo.real_name.substr(0,1)+new Array(userInfo.real_name.length).join('*')}}
+					</view>
+					<view class="tui-vip">
+						<image src="/static/vip.png" mode=""></image>
+						<view class="">
+							{{$t('user.ptyh')}}
+						</view>
 					</view>
 				</view>
 				<view class="tui-credit">
@@ -20,12 +22,11 @@
 						{{$t('user.xyf')}}:{{userInfo.credit_score}}
 					</view>
 				</view>
-				<view class="tui-credit" style="color: #4B7CFE;" v-if="userInfo.is_auth==2">
-					<image src="/static/renzheng.png" mode=""></image>
-					<view class="">
-						{{$t('user.yrz')}}
-					</view>
-				</view>
+			</view>
+			<view class="tui-kaihu" hover-class="tui-kaihuHover" @click="onClickFuzhi(userInfo.code)">
+				<text>{{$t('user.khm')}}</text>
+				<text style="padding-left: 10rpx;">{{userInfo.code}}</text>
+				<image src="../../static/fuzhi.png" mode=""></image>
 			</view>
 		</view>
 		<view class="tui-money">
@@ -121,37 +122,54 @@
 				userInfo: {
 					real_name: '',
 				},
-				settingList: [{
-					title: this.$t("user.smrz"),
-					icon: require("@/static/smrz.png")
-				}, {
-					title: this.$t("user.ddjl"),
-					icon: require("@/static/wddd.png")
-				}, {
-					title: this.$t("user.rjmx"),
-					icon: require("@/static/kjrj.png")
-				}, {
-					title: this.$t("user.cjmx"),
-					icon: require("@/static/chujin.png")
-				}, {
-					title: this.$t("user.zjjl"),
-					icon: require("@/static/cwjl.png")
-				}, {
-					title: this.$t("user.ckzh"),
-					icon: require("@/static/ck.png")
-				}, {
-					title: this.$t("user.sz"),
-					icon: require("@/static/sz.png")
-				}, {
-					title: this.$t("user.tcdl"),
-					icon: require("@/static/tcdl.png")
-				}, ]
+				settingList: [
+					// 	{
+					// 	title: this.$t("user.smrz"),
+					// 	icon: require("@/static/smrz.png")
+					// },
+					{
+						title: this.$t("user.ddjl"),
+						icon: require("@/static/wddd.png")
+					}, {
+						title: this.$t("user.rjmx"),
+						icon: require("@/static/kjrj.png")
+					}, {
+						title: this.$t("user.cjmx"),
+						icon: require("@/static/chujin.png")
+					}, {
+						title: this.$t("user.zjjl"),
+						icon: require("@/static/cwjl.png")
+					}, {
+						title: this.$t("user.ckzh"),
+						icon: require("@/static/ck.png")
+					}, {
+						title: this.$t("user.sz"),
+						icon: require("@/static/sz.png")
+					}, {
+						title: this.$t("user.tcdl"),
+						icon: require("@/static/tcdl.png")
+					},
+				]
 			};
 		},
 		onShow() {
 			this.getDetail()
 		},
 		methods: {
+			onClickFuzhi(text) {
+				uni.setClipboardData({
+					data: text,
+					success: ()=> {
+						console.log('复制成功');
+						// 可以添加用户友好的提示，例如使用uni.showToast提示复制成功
+						uni.showToast({
+							title: this.$t('user.fzcg'),
+							icon: 'none',
+							duration: 2000
+						});
+					}
+				});
+			},
 			getUserIndex() {
 				getUserIndex({
 					hideLoading: true,
@@ -159,7 +177,7 @@
 					data
 				}) => {
 
-					window.location.href = data.kefu_url
+					window.open(data.kefu_url, '_blank')
 				});
 			},
 			getDetail() {
@@ -178,12 +196,12 @@
 			},
 			onClickPath(item, index) {
 				switch (index) {
-					case 6:
+					case 5:
 						uni.navigateTo({
 							url: '/pages/set/set'
 						})
 						break;
-					case 7:
+					case 6:
 						uni.showModal({
 							title: this.$t("user.tcdl"),
 							content: this.$t("user.qdtc"),
@@ -198,36 +216,36 @@
 							}
 						});
 						break;
-					case 5:
+					case 4:
 						uni.navigateTo({
 							url: '/pages/account/account'
 						})
 						break;
-					case 4:
+					case 3:
 						uni.navigateTo({
 							url: '/pages/money-record/money-record'
 						})
 						break;
-					case 1:
+					case 0:
 						uni.navigateTo({
 							url: '/pages/order/order'
 						})
 						break;
-					case 3:
+					case 2:
 						uni.navigateTo({
 							url: '/pages/withdraw-list/withdraw-list'
 						})
 						break;
-					case 2:
+					case 1:
 						uni.navigateTo({
 							url: '/pages/withdraw-list/withdraw-open'
 						})
 						break;
-					case 0:
-						uni.navigateTo({
-							url: '/pages/verify/verify'
-						})
-						break;
+						// case 0:
+						// 	uni.navigateTo({
+						// 		url: '/pages/verify/verify'
+						// 	})
+						// 	break;
 				}
 
 			}
@@ -240,7 +258,27 @@
 		background-color: #f6f7fb;
 	}
 
+	.tui-kaihuHover {
+		background-color: #f1f3fb !important;
+		transform: scale(1.03);
+	}
 
+	.tui-kaihu {
+		color: #98999d;
+		background-color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-radius: 16px;
+		padding: 16rpx;
+		font-size: 24rpx;
+
+		image {
+			width: 28rpx;
+			height: 28rpx;
+			margin-left: 14rpx;
+		}
+	}
 
 	.tui-list {
 		padding-bottom: 30px;
@@ -398,33 +436,36 @@
 
 		.tui-userInfo {
 			display: flex;
-
+			align-items: center;
 			justify-content: space-between;
-			flex-direction: column;
+
 			padding-top: 64rpx;
+
+			.tui-credit {
+				background-color: #fff;
+				color: rgb(37, 188, 115);
+				font-size: 21rpx;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-radius: 12px;
+				margin-left: 12rpx;
+				height: 40rpx;
+				padding: 0 10rpx;
+				margin-top: 20rpx;
+
+				image {
+					width: 26rpx;
+					height: 26rpx;
+					margin-right: 6rpx;
+				}
+			}
 
 			.desc {
 				display: flex;
 				align-items: center;
 
-				.tui-credit {
-					background-color: #fff;
-					color: rgb(37, 188, 115);
-					font-size: 21rpx;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					border-radius: 12px;
-					margin-left: 12rpx;
-					height: 40rpx;
-					padding: 0 10rpx;
 
-					image {
-						width: 26rpx;
-						height: 26rpx;
-						margin-right: 6rpx;
-					}
-				}
 
 				.tui-vip {
 					background-color: #e4e3ff;

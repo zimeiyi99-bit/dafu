@@ -13,9 +13,7 @@
 						<view class="time">
 							{{item.time}}
 						</view>
-						<view class="time" v-if="item.seconds">
-							【{{item.seconds}}S】
-						</view>
+						
 					</view>
 					
 				</view>

@@ -3,6 +3,10 @@
 		<guo-headerTitle :title="options.title" :isTitleImg="true" :isRight="true"
 			@onClickTitle="onClickTitle"></guo-headerTitle>
 		<view class="tui-header">
+			<view class="tui-border" v-if="getUserItem.b_is == 1">
+				<text>{{$t('detail.ssz')}}</text>
+				<text>{{$t('detail.kssj')}}: {{getUserItem.b_start_time}}-{{getUserItem.b_end_time}}</text>
+			</view>
 			<view class="tui-Content">
 				<view class="tui-left">
 					<view class="bar"></view>
@@ -55,13 +59,13 @@
 			<view class="tui-tabs">
 				<v-tabs :isTime="true" v-model="timeActive" @change="getDetail()" :scroll="false"
 					:tabs="timeTabs.map(item=>item.text)" color="rgb(168, 169, 172)" activeColor="#222" bold
-					lineColor="#822151" :lineScale="0.2" bgColor="#f6f7fb" :zIndex="1"></v-tabs>
+					lineColor="#1150c2" :lineScale="0.2" bgColor="#f6f7fb" :zIndex="1"></v-tabs>
 			</view>
 			<kline ref="kline" :data="klineList"></kline>
 			<view class="tui-btn">
-				<button class="btn" style="background-color: #f33b50;"
+				<button class="btn" :style="{background:getUserItem.b_is == 1 ? 'rgba(241,243,246)' : '#f33b50'}"
 					@click="dealPopupOpen(1)">{{$t('detail.sg')}}</button>
-				<button class="btn" style="background-color: #0bb563;"
+				<button class="btn" :style="{background:getUserItem.b_is == 1 ? 'rgba(241,243,246)' : '#0bb563'}"
 					@click="dealPopupOpen(2)">{{$t('detail.sc')}}</button>
 			</view>
 		</view>
@@ -228,11 +232,11 @@
 					<view class="title"> {{$t('detail.cpjy')}} </view>
 					<view class="tui-search">
 						<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('detail.srcpmc')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151"
+							:inputBorder="true" :styles="styles" primaryColor="#1150c2"
 							placeholderStyle="color:#c9c9c9;font-size:28rpx" v-model="searchText"></uni-easyinput>
 					</view>
 					<!-- <view class="">
-						<v-tabs :value="0" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222" lineColor="#822151" bold
+						<v-tabs :value="0" :tabs="['货币种类']" color="#a8a9ac" activeColor="#222" lineColor="#1150c2" bold
 							bgColor=""></v-tabs>
 					</view> -->
 					<!-- 货币种类 -->
@@ -284,7 +288,8 @@
 		goods
 	} from '@/api/money.js'
 	import {
-		userInfo
+		userInfo,
+		getUserIndex
 	} from "@/api/user.js"
 	export default {
 		components: {
@@ -301,7 +306,7 @@
 					timeList: []
 				},
 				klineList: [],
-				timeActive: 0,
+				timeActive: 3,
 				timeTabs: [{
 					text: "1m",
 					value: '1min'
@@ -325,7 +330,7 @@
 					value: '1week'
 				}],
 				deal: {
-					amountTab: ['5000', '10000', '50000', '100000', '200000', '500000'],
+					amountTab: ['100', '500', '1000', '2000', '5000', '10000'],
 					actAmount: '',
 					actTime: '',
 					isType: '',
@@ -336,6 +341,7 @@
 				styles: {
 					borderColor: "#f6f8fa",
 				},
+				getUserItem: {}
 			};
 		},
 		computed: {
@@ -356,8 +362,8 @@
 						actAmount,
 						actTime
 					} = this.deal
-					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio 
-					console.log(actAmount,profit_ratio,'actAmount')
+					const profit_ratio = timeList.find(item => item.seconds == actTime).profit_ratio
+					console.log(actAmount, profit_ratio, 'actAmount')
 					return {
 						profit_ratio,
 						profit: profit_ratio * actAmount / 100
@@ -366,6 +372,7 @@
 			}
 		},
 		onLoad(options) {
+			this.getUserIndex()
 			this.options = options;
 			this.$nextTick(() => {
 				this.getDetail();
@@ -373,6 +380,7 @@
 			this.getDetailUserInfo()
 			this.timer = setInterval((_) => {
 				this.getDetail();
+				this.getUserIndex()
 			}, 5000);
 		},
 		onUnload() {
@@ -387,6 +395,16 @@
 			}
 		},
 		methods: {
+			getUserIndex() {
+				getUserIndex({
+					hideLoading: true,
+				}).then(({
+					data
+				}) => {
+
+					this.getUserItem = data;
+				});
+			},
 			onClickOrder() {
 				uni.navigateTo({
 					url: '/pages/order/order'
@@ -432,6 +450,7 @@
 				this.deal = this.$options.data().deal
 			},
 			dealPopupOpen(type) {
+				if (this.getUserItem.b_is == 1) return
 				this.getDetailUserInfo()
 				this.deal.isType = type
 				this.$refs.popup.open()
@@ -448,7 +467,7 @@
 			},
 			setColor(e) {
 				if (this.searchText.indexOf(e) != -1) {
-					return 'color:#822151' //自定义颜色
+					return 'color:#1150c2' //自定义颜色
 				}
 			},
 			getDetail() {
@@ -570,7 +589,7 @@
 	}
 
 	.tui-ok {
-		background-color: #822151 !important;
+		background-color: #1150c2 !important;
 		color: #fff !important;
 	}
 
@@ -895,6 +914,22 @@
 
 	.tui-header {
 		padding: 0 36rpx;
+
+		.tui-border {
+			color: rgb(249, 174, 61);
+			border: 1px solid rgb(249, 174, 61);
+			height: 44rpx;
+			padding: 0px 22rpx;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			text {
+				font-size: 30rpx;
+
+			}
+		}
 
 		.tui-Content {
 			border-radius: 13px;

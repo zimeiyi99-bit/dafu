@@ -4,7 +4,7 @@
 		<view class="tui-header">
 			<view class="tui-list">
 				<view class="tui-listItem" @click="$refs['langChange'].open()">
-					<view class="flex-item flex" >
+					<view class="flex-item flex">
 						<view class="title">
 							{{$t('set.yysz')}}
 						</view>
@@ -12,6 +12,32 @@
 					<view class="flex flex-item">
 						<view class="language">
 							{{$t('set.yy')}}
+						</view>
+						<image class="tui-rightIcon" src="/static/youjian.png" mode=""></image>
+					</view>
+				</view>
+				<view class="tui-listItem" @click="clickPassword('login')">
+					<view class="flex-item flex">
+						<view class="title">
+							{{$t('set.dlmm')}}
+						</view>
+					</view>
+					<view class="flex flex-item">
+						<view class="language">
+							{{$t('set.xg')}}
+						</view>
+						<image class="tui-rightIcon" src="/static/youjian.png" mode=""></image>
+					</view>
+				</view>
+				<view class="tui-listItem" @click="clickPassword('password')">
+					<view class="flex-item flex">
+						<view class="title">
+							{{$t('set.jymm')}}
+						</view>
+					</view>
+					<view class="flex flex-item">
+						<view class="language">
+							{{$t('set.xg')}}
 						</view>
 						<image class="tui-rightIcon" src="/static/youjian.png" mode=""></image>
 					</view>
@@ -44,7 +70,7 @@
 <script>
 	export default {
 		components: {
-			
+
 			langChange: () => import("@/components/langChange.vue"),
 		},
 		data() {
@@ -53,6 +79,11 @@
 			};
 		},
 		methods: {
+			clickPassword(type) {
+				uni.navigateTo({
+					url:'/pages/password/password?type=' + type
+				})
+			},
 			onClickLeft() {
 				uni.navigateBack(-1)
 			},

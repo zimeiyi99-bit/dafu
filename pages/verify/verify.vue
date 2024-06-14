@@ -6,15 +6,15 @@
 				<uni-forms ref="form" :modelValue="formData" label-position="top" label-width="200px" :rules="rules">
 					<uni-forms-item :label="$t('verify.xm')" name="real_name" required>
 						<uni-easyinput v-model="formData.real_name" :placeholder="$t('verify.srxm')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151" @blur="SetValue('real_name')" />
+							:styles="styles" primaryColor="#1150c2" @blur="SetValue('real_name')" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.zjh')" name="id_card" required>
 						<uni-easyinput type="number" v-model="formData.id_card" :placeholder="$t('verify.srzjh')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151" @blur="SetValue('id_card')" />
+							:inputBorder="true" :styles="styles" primaryColor="#1150c2" @blur="SetValue('id_card')" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.gj')" name="gj" required>
 						<uni-easyinput v-model="formData.gj" :placeholder="$t('verify.srgj')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" @blur="SetValue('gj')" />
+							primaryColor="#1150c2" @blur="SetValue('gj')" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.sczjz')">
 						<view class="tui-certificate">
@@ -340,7 +340,7 @@
 	}
 
 	.tui-ok {
-		background-color: #822151 !important;
+		background-color: #1150c2 !important;
 		color: #fff !important;
 	}
 

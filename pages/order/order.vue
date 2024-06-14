@@ -3,7 +3,7 @@
 		<guo-headerTitle :title="$t('home.dd.jl')" :backgroundColor="backgroundColor"></guo-headerTitle>
 		<view class="tui-tabs">
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]"
-				color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#822151" :lineScale="0.1"
+				color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#1150c2" :lineScale="0.1"
 				@change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-card">
@@ -12,7 +12,7 @@
 				<view class="tui-box" v-for="(item,index) in List" :key="index">
 					<view class="tui-title">
 						<view class="flex flex-item">
-							<text class="name">{{item.code}}</text>
+							<text class="name">{{item.title}}</text>
 							<text class="desc">{{item.seconds}}S</text>
 						</view>
 						<view class="right" :style="{color:item.type == 1 ? '#f33b50' : '#0bb563'}">

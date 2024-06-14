@@ -18,19 +18,19 @@
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200rpx">
 					<uni-forms-item :label="$t('login.zh')">
 						<uni-easyinput :adjust-position="false" v-model="formData.account" :placeholder="$t('login.qsrzh')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151"  @focus="hideTabbar" @blur="showTabbar" />
+							:styles="styles" primaryColor="#1150c2"  @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.sjh')">
 						<uni-easyinput :adjust-position="false" v-model="formData.phone" :placeholder="$t('login.qsrsjh')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151"  @focus="hideTabbar" @blur="showTabbar" />
+							:styles="styles" primaryColor="#1150c2"  @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.xm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.real_name" :placeholder="$t('verify.srxm')" :inputBorder="true"
-							:styles="styles" primaryColor="#822151"  @focus="hideTabbar" @blur="showTabbar" />
+							:styles="styles" primaryColor="#1150c2"  @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.khm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.invitecode" :placeholder="$t('login.qsrkhm')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151"  @focus="hideTabbar" @blur="showTabbar" />
+							:inputBorder="true" :styles="styles" primaryColor="#1150c2"  @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="checkInfo">
 						{{$t('login.xyb')}}
@@ -142,8 +142,6 @@
 	}
 
 	.bottom {
-		// position: fixed;
-		// bottom: calc(env(safe-area-inset-bottom) + 30rpx);
 		padding-bottom: calc(env(safe-area-inset-bottom) + 30rpx);
 		width: 100%;
 		display: flex;
@@ -167,7 +165,7 @@
 		padding-top: 20rpx;
 
 		.policy {
-			color: #822151;
+			color: #1150c2;
 			padding-left: 10rpx;
 		}
 	}
@@ -182,7 +180,7 @@
 
 	.tui-submit {
 		margin-top: 44rpx;
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 		width: 100%;
 		display: flex;

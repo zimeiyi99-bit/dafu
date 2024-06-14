@@ -171,6 +171,7 @@
 				const startAngle = Math.PI;
 				const endAngle = Math.PI * (1 + progress / 100);
 				const lineWidth = this.rpxToPx(35);
+
 				ctx.clearRect(0, 0, ctx.width, ctx.height);
 				ctx.setLineCap('round');
 
@@ -182,7 +183,7 @@
 
 				ctx.beginPath();
 				ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-				ctx.setStrokeStyle('#792950');
+				ctx.setStrokeStyle('#1150c2');
 				ctx.setLineWidth(lineWidth);
 				ctx.stroke();
 
@@ -203,6 +204,7 @@
 
 				ctx.draw();
 			},
+
 			getDetail() {
 				balanceInfo({
 					hideLoading: true

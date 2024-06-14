@@ -18,23 +18,23 @@
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200px">
 					<uni-forms-item :label="$t('login.mm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.passwd"
-							:placeholder="$t('login.qsrmm')" :inputBorder="true" :styles="styles" primaryColor="#822151"
+							:placeholder="$t('login.qsrmm')" :inputBorder="true" :styles="styles" primaryColor="#1150c2"
 							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.qrmm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.o_passwd"
 							:placeholder="$t('login.qsrqrmm')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
+							primaryColor="#1150c2" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.jymm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.mpasswd"
 							:placeholder="$t('login.qsrjymm')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
+							primaryColor="#1150c2" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.qrjymm')">
 						<uni-easyinput :adjust-position="false" v-model="formData.o_mpasswd"
 							:placeholder="$t('login.qsrqrjymm')" :inputBorder="true" :styles="styles"
-							primaryColor="#822151" @focus="hideTabbar" @blur="showTabbar" />
+							primaryColor="#1150c2" @focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onRegister">
 						{{$t('login.wczc')}}
@@ -166,7 +166,7 @@
 
 	.bottom {
 		position: fixed;
-		bottom: calc(env(safe-area-inset-bottom) + 30rpx);
+		bottom: 114rpx;
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -189,7 +189,7 @@
 		padding-top: 20rpx;
 
 		.policy {
-			color: #822151;
+			color: #1150c2;
 			padding-left: 10rpx;
 		}
 	}
@@ -204,7 +204,7 @@
 
 	.tui-submit {
 		margin-top: 44rpx;
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 		width: 100%;
 		display: flex;

@@ -20,15 +20,15 @@
 				{{$t('login.zhdl')}}
 			</view>
 			<view class="tui-form">
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top"  label-width="200rpx">
+				<uni-forms ref="baseForm" :modelValue="formData" label-position="top" label-width="200rpx">
 					<uni-forms-item :label="$t('login.zh')">
 						<uni-easyinput :adjust-position="false" v-model="formData.account"
-							:placeholder="$t('login.qsrzh')" :inputBorder="true" :styles="styles" primaryColor="#822151"
+							:placeholder="$t('login.qsrzh')" :inputBorder="true" :styles="styles" primaryColor="#1150c2"
 							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('login.mm')">
 						<uni-easyinput :adjust-position="false" type="password" v-model="formData.passwd"
-							:placeholder="$t('login.qsrmm')" :inputBorder="true" :styles="styles" primaryColor="#822151"
+							:placeholder="$t('login.qsrmm')" :inputBorder="true" :styles="styles" primaryColor="#1150c2"
 							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onClickLogin">
@@ -201,7 +201,7 @@
 		padding-top: 20rpx;
 
 		.policy {
-			color: #822151;
+			color: #1150c2;
 			padding-left: 10rpx;
 		}
 	}
@@ -209,7 +209,7 @@
 	.tui-first {
 		display: flex;
 		align-items: center;
-		color: #822151;
+		color: #1150c2;
 		font-size: 29rpx;
 
 		.symbol {
@@ -228,7 +228,7 @@
 
 	.tui-submit {
 		margin-top: 44rpx;
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 		width: 100%;
 		display: flex;

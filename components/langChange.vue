@@ -104,7 +104,7 @@
 
 			.tui-activite {
 				background-color: #f3f5f6 !important;
-				color: #822151 !important;
+				color: #1150c2 !important;
 			}
 		}
 

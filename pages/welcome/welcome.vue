@@ -69,7 +69,7 @@
 			.progressNow {
 				height: 100%;
 				border-radius: 4px;
-				background: linear-gradient(270deg, #822151, #9f2963);
+				background: linear-gradient(270deg, #fff, #2e6bdb);
 				position: relative;
 				transition: width .5s ease;
 

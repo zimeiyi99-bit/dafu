@@ -3,7 +3,7 @@
 		<guo-headerTitle :title="$t('product.yebmx')" backgroundColor="#fff"></guo-headerTitle>
 		<view class="tui-tabs">
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('product.qb'), $t('product.cr'), $t('product.zc'), $t('product.sy')]" color="rgb(168, 169, 172)"
-				activeColor="#222" bold lineColor="#822151" :lineScale="0.1" @change="onChangeTab"></v-tabs>
+				activeColor="#222" bold lineColor="#1150c2" :lineScale="0.1" @change="onChangeTab"></v-tabs>
 		</view>
 		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">

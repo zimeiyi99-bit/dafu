@@ -32,3 +32,9 @@ export const userWithdraw = function(data = {}) {
 export const getUserIndex = function(data = {}) {
 	return request.get('index/index', data)
 }
+export const up_password = function(data = {}) {
+	return request.post('user/up_password', data)
+}
+export const up_mpassword = function(data = {}) {
+	return request.post('user/up_mpassword', data)
+}

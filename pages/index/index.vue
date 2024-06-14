@@ -10,9 +10,9 @@
 			</view>
 		</view>
 		<view class="tui-banner">
-			<uni-swiper-dot class="uni-swiper-dot-box" :info="info" :current="current" :mode="mode"
+			<uni-swiper-dot class="uni-swiper-dot-box"  :info="info" :current="current" :mode="mode"
 				:dots-styles="dotsStyles" field="content">
-				<swiper class="swiper-box" @change="change">
+				<swiper class="swiper-box" @change="change" autoplay>
 					<swiper-item v-for="(item, index) in info" :key="index">
 						<view class="swiper-item" :class="'swiper-item' + index">
 							<image :src="item" mode=""></image>
@@ -198,9 +198,9 @@
 				current: 0,
 				mode: "dot",
 				info: [
-					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e2f2ec614550eb77a8fdc3b372bb0353.png",
-					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/e13da9f07ba8ef6558ba628210ed8280.png",
-					"https://d3td2q52cmojpi.cloudfront.net/storage/banner/image/51a57145d748f696d280b352b8df7420.png",
+					"https://dkzk65jpm6jtb.cloudfront.net/storage/banner/image/de8940e7b3d5aedfdac21084195d4bc9.jpeg",
+					"https://dkzk65jpm6jtb.cloudfront.net/storage/banner/image/063d3e72a395a86456b454173ec64e42.jpeg",
+					
 				],
 				dotsStyles: {
 					selectedBackgroundColor: "#fff",
@@ -767,7 +767,7 @@
 			}
 
 			&>text {
-				color: #822151;
+				color: #1150c2;
 				font-size: 32rpx;
 				margin: 0 18rpx;
 				font-weight: bold;
@@ -813,8 +813,8 @@
 					width: 99px;
 					height: 26px;
 					background-color: unset;
-					border: 1px solid #822151;
-					color: #822151;
+					border: 1px solid #1150c2;
+					color: #1150c2;
 					text-align: center;
 					line-height: 24px;
 					font-size: 12px;
@@ -850,8 +850,8 @@
 			left: 50%;
 			border-radius: 50%;
 			transform: translateX(44%) translateY(-166%) rotateZ(-7deg);
-			border: 1px solid #822151;
-			color: #822151;
+			border: 1px solid #1150c2;
+			color: #1150c2;
 			display: flex;
 			align-items: center;
 			justify-content: center;

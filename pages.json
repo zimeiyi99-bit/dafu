@@ -180,13 +180,21 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/password/password",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
+			}
 		}
 
 
 	],
 	"tabBar": {
 		"color": "rgb(168, 169, 172)",
-		"selectedColor": "rgb(130, 33, 81)",
+		"selectedColor": "#1150C2",
 		"backgroundColor": "#fff",
 		"borderStyle": "white",
 		"list": [{

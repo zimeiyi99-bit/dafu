@@ -136,7 +136,7 @@
 					<uni-forms-item :label="$t('withdraw-money.jymm')">
 
 						<uni-easyinput v-model="formData.mpwd" type="password" passwordIcon :inputBorder="true"
-							:styles="styles" primaryColor="#822151" />
+							:styles="styles" primaryColor="#1150c2" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit">
 						{{$t('withdraw-money.qdcj')}}
@@ -334,7 +334,7 @@
 <style lang="less">
 	.tui-activite {
 		background-color: #f3f5f6 !important;
-		color: #822151 !important;
+		color: #1150c2 !important;
 	}
 
 	.tui-cancle {
@@ -345,7 +345,7 @@
 
 	.tui-submit {
 		margin-top: 44rpx;
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 		width: 100%;
 		display: flex;

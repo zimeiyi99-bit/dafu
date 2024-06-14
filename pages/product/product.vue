@@ -2,12 +2,12 @@
 	<view>
 		<view class="tui-search">
 			<uni-easyinput class="uni-mt-5" suffixIcon="search" :placeholder="$t('product.ss')" :inputBorder="true"
-				:styles="styles" primaryColor="#822151" placeholderStyle="color:#c9c9c9;font-size:28rpx"
+				:styles="styles" primaryColor="#1150c2" placeholderStyle="color:#c9c9c9;font-size:28rpx"
 				v-model="searchText"></uni-easyinput>
 		</view>
 		<view class="tui-tabs">
 			<v-tabs v-model="current" :tabs="tabs" @change="changeTab" color="#a8a9ac" activeColor="#222"
-				lineColor="#822151" bold bgColor=""></v-tabs>
+				lineColor="#1150c2" bold bgColor=""></v-tabs>
 		</view>
 		<!-- 货币种类 -->
 		<view class="tui-variety">
@@ -114,7 +114,7 @@
 			},
 			setColor(e) {
 				if (this.searchText.indexOf(e) != -1) {
-					return 'color:#822151' //自定义颜色
+					return 'color:#1150c2' //自定义颜色
 				}
 			},
 			getGoods() {

@@ -137,7 +137,7 @@
 	}
 
 	.tui-submit {
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 		width: 320rpx;
 		display: flex;
@@ -210,7 +210,7 @@
 				color: #a8a9ac;
 
 				text {
-					color: #822151;
+					color: #1150c2;
 					padding-left: 10rpx;
 				}
 			}

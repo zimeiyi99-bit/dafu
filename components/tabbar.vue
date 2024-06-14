@@ -101,7 +101,7 @@
 				}
 
 				.selectTexts {
-					color:  rgb(130, 33, 81);
+					color:  #1150C2;
 				}
 
 				.texts {

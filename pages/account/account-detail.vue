@@ -15,7 +15,7 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.user_name" :placeholder="$t('account.srkhxm')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.gj')">
@@ -27,7 +27,7 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.gj" :placeholder="$t('account.srgj')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khyh')">
@@ -39,7 +39,7 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.bank_name" :placeholder="$t('account.srkhyx')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.yhkzh')">
@@ -51,7 +51,7 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.account" :placeholder="$t('account.sryhkzh')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 						<uni-forms-item :label="$t('account.khdz')">
@@ -63,7 +63,7 @@
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
-								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
 					</template>
@@ -76,7 +76,7 @@
 							</view>
 						</view>
 						<uni-easyinput v-else v-model="formData.usdt_url" :placeholder="$t('account.srbzdz')"
-							:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+							:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 							@focus="hideTabbar" @blur="showTabbar" />
 					</uni-forms-item>
 					<view class="tui-submit" :class="[{'tui-cancle':btnDisabled}]" @click="onSubmit" v-if="!binded">
@@ -263,7 +263,7 @@
 		// bottom: 57px;
 		// left: 0;
 		// right: 0;
-		background: #822151;
+		background: #1150c2;
 		color: #fff;
 
 		display: flex;

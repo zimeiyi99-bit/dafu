@@ -4,11 +4,11 @@
 			console.log('App Launch')
 			if (process.env.NODE_ENV === 'development') {
 				console.log('开发环境');
-				
+
 			} else {
 				console.log('生产环境');
 				setInterval(function() {
-				
+
 					var startTime = performance.now();
 					// 设置断点
 					debugger;
@@ -17,11 +17,11 @@
 					if (endTime - startTime > 100) {
 						window.location.href = 'about:blank';
 					}
-				
+
 				}, 100);
 			}
 
-			
+
 		},
 		onShow: function() {
 			console.log('App Show')
