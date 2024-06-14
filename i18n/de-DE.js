@@ -30,6 +30,7 @@ export default {
 	'home.24zf': '24H-Anstieg',
 	'home.24l': '24H-Volumen',
 	'home.ptld': 'Plattform-Highlights',
+	'home.xwzx': 'Nachrichteninformationen',
 	'home.ptld.jj': 'Helfen Sie Investoren, gute Aktien und Fonds leicht auszuwählen, risikoreiche zu eliminieren, in Wert zu investieren, langfristige Indizes zu halten und die Kraft des Zinseszinses zu nutzen, um Wohlstand zu meistern.',
 	'home.yszc': 'Datenschutzrichtlinie',
 	'home.qwsj': 'Autoritative Daten',

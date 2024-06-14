@@ -30,6 +30,7 @@ export default {
 	'home.24zf': '24小时涨幅',
 	'home.24l': '24H量',
 	'home.ptld': '平台亮点',
+	'home.xwzx': '新闻资讯',
 	'home.ptld.jj': '帮助投资者轻松选出好股好基，排除风险大的，进行价值投资，长期指数持有，利用复利的力量掌握财富。',
 	'home.yszc': '隐私政策',
 	'home.qwsj': '权威数据',

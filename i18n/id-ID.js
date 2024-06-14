@@ -30,6 +30,7 @@ export default {
 	'home.24zf': 'Kenaikan 24H',
 	'home.24l': 'Volume 24H',
 	'home.ptld': 'Sorotan Platform',
+	'home.xwzx': 'Berita Informasi',
 	'home.ptld.jj': 'Membantu investor dengan mudah memilih saham dan dana yang baik, menghilangkan yang berisiko tinggi, berinvestasi dalam nilai, memegang indeks jangka panjang, dan menggunakan kekuatan bunga majemuk untuk menguasai kekayaan.',
 	'home.yszc': 'Kebijakan Privasi',
 	'home.qwsj': 'Data Otoritatif',

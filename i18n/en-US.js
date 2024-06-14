@@ -30,6 +30,7 @@ export default {
 	'home.24zf': '24H Increase',
 	'home.24l': '24H Volume',
 	'home.ptld': 'Platform Highlights',
+	'home.xwzx': 'News Information',
 	'home.ptld.jj': 'Help investors easily select good stocks and funds, eliminate high-risk ones, invest in value, hold indices long-term, and use compound interest to master wealth.',
 	'home.yszc': 'Privacy Policy',
 	'home.qwsj': 'Authoritative Data',

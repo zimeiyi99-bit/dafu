@@ -30,6 +30,7 @@ export default {
 	'home.24zf': 'Augmentation sur 24H',
 	'home.24l': 'Volume sur 24H',
 	'home.ptld': 'Points forts de la plateforme',
+	'home.xwzx': 'Informations',
 	'home.ptld.jj': 'Aidez les investisseurs à sélectionner facilement de bonnes actions et fonds, éliminer ceux à haut risque, investir dans la valeur, détenir des indices à long terme et utiliser la puissance des intérêts composés pour maîtriser la richesse.',
 	'home.yszc': 'Politique de confidentialité',
 	'home.qwsj': 'Données autorisées',

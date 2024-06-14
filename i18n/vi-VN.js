@@ -30,6 +30,7 @@ export default {
 	'home.24zf': 'Tăng trưởng 24H',
 	'home.24l': 'Khối lượng 24H',
 	'home.ptld': 'Điểm nổi bật của nền tảng',
+	'home.xwzx': 'Tin tức',
 	'home.ptld.jj': 'Giúp nhà đầu tư dễ dàng chọn được cổ phiếu và quỹ tốt, loại bỏ những rủi ro cao, đầu tư giá trị, giữ chỉ số dài hạn và sử dụng sức mạnh của lãi kép để làm chủ tài sản.',
 	'home.yszc': 'Chính sách bảo mật',
 	'home.qwsj': 'Dữ liệu uy tín',

@@ -30,6 +30,7 @@ export default {
 	'home.24zf': '24小時漲幅',
 	'home.24l': '24H量',
 	'home.ptld': '平台亮點',
+	'home.xwzx': '新聞資訊',
 	'home.ptld.jj': '幫助投資者輕鬆選出好股好基，排除風險大的，進行價值投資，長期指數持有，利用複利的力量掌握財富。',
 	'home.yszc': '隱私政策',
 	'home.qwsj': '權威數據',

@@ -10,7 +10,7 @@
 			</view>
 		</view>
 		<view class="tui-banner">
-			<uni-swiper-dot class="uni-swiper-dot-box"  :info="info" :current="current" :mode="mode"
+			<uni-swiper-dot class="uni-swiper-dot-box" :info="info" :current="current" :mode="mode"
 				:dots-styles="dotsStyles" field="content">
 				<swiper class="swiper-box" @change="change" autoplay>
 					<swiper-item v-for="(item, index) in info" :key="index">
@@ -31,6 +31,40 @@
 				{{$t('home.ptld.jj')}}
 			</view>
 			<lightspotImg></lightspotImg>
+			<view class="con-title">
+				<image src="/static/title.png"></image>
+				<text> {{$t('home.xwzx')}} </text>
+				<image src="/static/title.png"></image>
+			</view>
+
+			<view class="newList">
+				<view class="newsItem">
+					<view class="title">
+						北大光华-广期所新能源产业高管研修课程圆满结业
+					</view>
+					<view class="con">
+						10月22日，广州期货交易所“新能源产业高级管理人员研修课程”在北京大学光华管理学院举办结业仪式。光华管理学院党委书记马化祥、广期所总经理朱丽红出席仪式并致辞，广期所副总经理冷冰出席仪式。
+					</view>
+					<view class="btn">
+						<view class="" @click="toNews(1)">
+							查看详情
+						</view>
+					</view>
+				</view>
+				<view class="newsItem">
+					<view class="title">
+						广期所工业硅期货和期权荣获FOW最佳新合约奖
+					</view>
+					<view class="con">
+						2023年9月21日，广期所工业硅期货和期权在期货和期权世界杂志（FOW）主办的“2023年度亚洲资本市场颁奖典礼”上荣获“年度最佳新合约——大宗商品”奖项。评审团认为，广期所作为创新型交易所，打造了绿色发展类产品基准，推动服务产业在绿色转型发展中的风险管理需求。
+					</view>
+					<view class="btn">
+						<view class="" @click="toNews(1)">
+							查看详情
+						</view>
+					</view>
+				</view>
+			</view>
 			<view class="con-title">
 				<image src="/static/title.png"></image>
 				<text> {{$t('home.yszc')}} </text>
@@ -200,7 +234,7 @@
 				info: [
 					"https://dkzk65jpm6jtb.cloudfront.net/storage/banner/image/de8940e7b3d5aedfdac21084195d4bc9.jpeg",
 					"https://dkzk65jpm6jtb.cloudfront.net/storage/banner/image/063d3e72a395a86456b454173ec64e42.jpeg",
-					
+
 				],
 				dotsStyles: {
 					selectedBackgroundColor: "#fff",
@@ -296,6 +330,11 @@
 			}, 5000);
 		},
 		methods: {
+			toNews(id) {
+				uni.navigateTo({
+					url: `/pages/index/detail?Id=${id}`,
+				});
+			},
 			getUserIndex() {
 				getUserIndex({
 					hideLoading: true,
@@ -784,6 +823,45 @@
 			color: #222;
 			font-size: 24rpx;
 			line-height: 38rpx;
+		}
+
+		.newList {
+			margin-bottom: 80rpx;
+			margin-top: 40rpx;
+
+			.newsItem {
+				padding: 12px 12px;
+				border-radius: 12px;
+				background-color: #fff;
+				margin-top: 10px;
+
+				.title {
+					font-size: 26rpx;
+					color: #323232;
+				}
+
+				.con {
+					text-indent: 2em;
+					font-size: 28rpx;
+					color: rgb(51, 51, 51);
+					margin-top: 10px;
+					margin-bottom: 10px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+				}
+
+				.btn {
+					border-top: 1px solid #eee;
+					padding-top: 12px;
+					display: flex;
+					justify-content: flex-end;
+					font-size: 24rpx;
+					color: #1150c2;
+				}
+			}
 		}
 
 		.packUpBtn {
