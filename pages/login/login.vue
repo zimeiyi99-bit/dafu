@@ -75,8 +75,10 @@
 		data() {
 			return {
 				formData: {
-					// account: 'user66', 'mumu'
-					// passwd: '666666', '123456'
+					// account: 'user66', 
+					// passwd: '123456', 
+					// account: 'mumu',
+					// passwd: '123456'
 					account: '',
 					passwd: ''
 				},
@@ -87,7 +89,7 @@
 				windowHeight: ''
 			};
 		},
-		
+
 		onLoad() {
 			uni.getSystemInfo({
 				success: (res) => {
@@ -117,9 +119,9 @@
 				return false
 			}
 		},
-		
+
 		methods: {
-			
+
 			showTabbar() {
 				this.tabbar = true;
 			},
