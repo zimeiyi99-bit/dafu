@@ -6,11 +6,11 @@
 			<view class="tui-form">
 				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
 					<template v-if="formData.pay_type == 'bank_card'">
-						<uni-forms-item :label="$t('account.khxm')">
+						<uni-forms-item :label="$t('withdraw-money.xm')">
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{formData.user_name.substring(0, 1) + '**' + formData.user_name.substring(2)}}
+										{{this.$utils.replaceWithAsterisks(formData.user_name,1,2)}}
 									</view>
 								</view>
 							</view>
@@ -18,11 +18,11 @@
 								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
-						<uni-forms-item :label="$t('account.gj')">
+						<uni-forms-item :label="$t('withdraw-money.gj')">
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{formData.gj}}
+										{{this.$utils.replaceWithAsterisks(formData.gj,1,4)}}
 									</view>
 								</view>
 							</view>
@@ -30,7 +30,19 @@
 								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
-						<uni-forms-item :label="$t('account.khyh')">
+						<uni-forms-item :label="$t('account.khdz')">
+							<view class="tui-listItem" v-if="binded">
+								<view class="flex-item flex">
+									<view class="title">
+										{{this.$utils.replaceWithAsterisks(formData.bank_branch,2,7)}}
+									</view>
+								</view>
+							</view>
+							<uni-easyinput v-else v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
+								:inputBorder="true" :styles="styles" primaryColor="#822151" :adjust-position="false"
+								@focus="hideTabbar" @blur="showTabbar" />
+						</uni-forms-item>
+						<uni-forms-item :label="$t('withdraw-money.khh')">
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
@@ -42,27 +54,15 @@
 								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>
-						<uni-forms-item :label="$t('account.yhkzh')">
+						<uni-forms-item :label="$t('withdraw-money.kh')">
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{formData.account.substring(0, 6) + '****' + formData.account.substring(10)}}
+										{{this.$utils.replaceWithAsterisks(formData.account,6,10)}}
 									</view>
 								</view>
 							</view>
 							<uni-easyinput v-else v-model="formData.account" :placeholder="$t('account.sryhkzh')"
-								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
-								@focus="hideTabbar" @blur="showTabbar" />
-						</uni-forms-item>
-						<uni-forms-item :label="$t('account.khdz')">
-							<view class="tui-listItem" v-if="binded">
-								<view class="flex-item flex">
-									<view class="title">
-										{{formData.bank_branch}}
-									</view>
-								</view>
-							</view>
-							<uni-easyinput v-else v-model="formData.bank_branch" :placeholder="$t('account.srkhdz')"
 								:inputBorder="true" :styles="styles" primaryColor="#1150c2" :adjust-position="false"
 								@focus="hideTabbar" @blur="showTabbar" />
 						</uni-forms-item>

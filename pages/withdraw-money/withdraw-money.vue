@@ -65,7 +65,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.user_name}}
+											{{this.$utils.replaceWithAsterisks(selectCashInfo.user_name,1,2)}}
 										</view>
 									</view>
 								</view>
@@ -76,7 +76,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.gj}}
+											{{this.$utils.replaceWithAsterisks(selectCashInfo.gj,1,4)}}
 										</view>
 									</view>
 								</view>
@@ -87,7 +87,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.bank_branch}}
+											{{this.$utils.replaceWithAsterisks(selectCashInfo.bank_branch,2,7)}}
 										</view>
 									</view>
 								</view>
@@ -109,7 +109,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.account.substring(0, 6) + '****' + selectCashInfo.account.substring(10)}}
+											{{this.$utils.replaceWithAsterisks(selectCashInfo.account,6,10)}}
 										</view>
 									</view>
 								</view>
