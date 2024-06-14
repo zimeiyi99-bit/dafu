@@ -238,7 +238,7 @@ const regEmail = function(str) {
 	return !RegExp(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/).test(str);
 }
 //金额输入框限制
-const validateAmount = function(val, max = '99999') {
+const validateAmount = function(val, max = '999999') {
 	let value = val.toString();
 	if (!value) return '';
 	// 仅保留数字和小数点

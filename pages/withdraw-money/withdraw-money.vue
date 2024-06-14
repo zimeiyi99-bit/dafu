@@ -219,7 +219,9 @@
 				} catch (e) {
 					return true
 				}
-
+				if (this.formData.money > this.userInfo.money) {
+					return true
+				}
 				return false
 			},
 			binded() {
@@ -270,7 +272,7 @@
 			validateInput() {
 
 				this.formData.num = (this.formData.money / (this.getUserItem.hui_lv || 7.24)).toFixed(2);
-				let value = this.$utils.validateAmount(this.formData.money, this.userInfo.money);
+				let value = this.$utils.validateAmount(this.formData.money);
 				this.$nextTick(_ => {
 					// 更新 v-model
 					this.formData.money = value;
