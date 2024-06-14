@@ -24,9 +24,7 @@
 <script>
 	export default {
 		data() {
-			return {
-
-			};
+			return {};
 		}
 	}
 </script>
@@ -42,7 +40,7 @@
 		}
 	}
 
-	
+
 
 	.text-des-color {
 		font-size: 14px;

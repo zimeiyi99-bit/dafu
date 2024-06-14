@@ -14,7 +14,7 @@
 						<input v-model="amount" type="text" class="input" disabled />
 					</view>
 					<view class="bottom">
-						{{$t('product.k')}}{{typeList[type]}}{{$t('app.je')}}{{type == 'sell' ? pirce : userInfo.money}}CNY,
+						{{$t('product.k')}}{{typeList[type]}}{{$t('app.je')}}{{usableAmount}}CNY,
 						<text>{{$t('product.qb')}}{{typeList[type]}}</text>
 					</view>
 				</view>
@@ -61,11 +61,19 @@
 			};
 		},
 		computed: {
+			usableAmount() {
+				return this.type == 'sell' ? this.pirce : this.userInfo.money
+			},
 			btnDisabled() {
 				const {
 					amount
 				} = this
-				return !amount || amount <= 0
+				if (!amount || amount <= 0) {
+					return true
+				} else if (amount > this.usableAmount) {
+					return true
+				}
+				return fasle
 			},
 		},
 		onLoad(e) {
