@@ -262,6 +262,28 @@ const validateAmount = function(val, max = '999999') {
 	}
 	return value
 }
+const replaceWithAsterisks = function(str, start, end) {
+	// 验证输入参数是否有效
+	if (typeof str !== 'string' || typeof start !== 'number' || typeof end !== 'number') {
+		throw new Error('Invalid input parameters');
+	}
+
+	// 确保开始位置和结束位置在合理范围内
+	start = Math.max(0, start);
+	end = Math.min(str.length, end);
+
+	// 确保开始位置小于等于结束位置
+	if (start > end) {
+		throw new Error('Start position should be less than or equal to end position');
+	}
+
+	// 构建替换后的字符串
+	const prefix = str.slice(0, start);
+	const middle = '*'.repeat(end - start);
+	const suffix = str.slice(end);
+
+	return prefix + middle + suffix;
+}
 export default {
 	imgUrl,
 	h5Appid,
@@ -282,5 +304,6 @@ export default {
 	regPhoneFormat,
 	regCheckNum,
 	regEmail,
-	validateAmount
+	validateAmount,
+	replaceWithAsterisks
 }

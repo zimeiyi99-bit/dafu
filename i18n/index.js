@@ -25,6 +25,9 @@ const messages = {
 	'fr-FR': frFR,
 	'de-DE': deDE,
 };
+if (!localStorage.getItem('i18nLang')) {
+	localStorage.setItem('i18nLang', 'zh-CN')
+}
 const locale = uni.getStorageSync('i18nLang');
 let i18nConfig = {
 	locale, // 获取已设置的语言
