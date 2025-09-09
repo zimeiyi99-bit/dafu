@@ -9,6 +9,7 @@
 3. **环境配置错误**: ECharts环境设置不适合APP环境
 4. **缺少备用方案**: 没有WebView回退机制
 5. **错误处理不足**: 初始化失败时没有重试和提示
+6. **API兼容性问题** (2024-09-09更新): uni-app 2.x版本不支持`.node()`方法，导致`TypeError: query.select(...).node is not a function`错误
 
 ## 解决方案
 
@@ -23,20 +24,31 @@ query.select('#' + this.chartId).boundingClientRect((data) => {
 
 **修复后**:
 ```javascript
-query.select('#' + this.chartId).node((res) => {
-    const canvas = res.node;
-    const ctx = canvas.getContext('2d');
-    const dpr = uni.getSystemInfoSync().pixelRatio;
-    canvas.width = res.width * dpr;
-    canvas.height = res.height * dpr;
-    ctx.scale(dpr, dpr);
-    
-    this.chartInstance = this.$echarts.init(canvas, null, {
-        width: res.width,
-        height: res.height,
-        devicePixelRatio: dpr
-    });
-})
+// 兼容uni-app 2.x版本的方法
+const queryMethod = query.select('#' + this.chartId);
+if (queryMethod.fields) {
+    queryMethod.fields({ 
+        node: true, 
+        rect: true 
+    }, (res) => {
+        if (res && res.node) {
+            const canvas = res.node;
+            const ctx = canvas.getContext('2d');
+            const dpr = uni.getSystemInfoSync().pixelRatio;
+            canvas.width = res.width * dpr;
+            canvas.height = res.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            this.chartInstance = this.$echarts.init(canvas, null, {
+                width: res.width,
+                height: res.height
+            });
+        }
+    }).exec();
+} else {
+    // 如果不支持则直接使用WebView回退
+    this.handleInitError(new Error('uni-app版本不支持canvas fields方法'));
+}
 ```
 
 ### 2. 模板条件编译

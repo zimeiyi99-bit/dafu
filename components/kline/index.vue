@@ -138,42 +138,54 @@
 					// #ifdef APP-PLUS
 					// APP环境下需要获取canvas节点和上下文
 					const query = uni.createSelectorQuery().in(this);
-					query.select('#' + this.chartId).node((res) => {
-						if (res && res.node && !this.chartInstance) {
-							try {
-								const canvas = res.node;
-								const ctx = canvas.getContext('2d');
-								
-								// 设置canvas尺寸，确保有合理的默认值
-								const dpr = uni.getSystemInfoSync().pixelRatio || 1;
-								const width = res.width || 400;
-								const height = res.height || 400;
-								
-								canvas.width = width * dpr;
-								canvas.height = height * dpr;
-								ctx.scale(dpr, dpr);
-								
-								// 初始化ECharts，传入canvas和context
-								this.chartInstance = this.$echarts.init(canvas, null, {
-									width: width,
-									height: height
-								});
-								
-								this.initError = false;
-								
-								// 如果有数据，立即渲染
-								if (this.displayKlineData && this.displayKlineData.length > 0) {
-									this.renderChart();
+					
+					// 尝试使用 fields 方法（兼容uni-app 2.x）
+					const queryMethod = query.select('#' + this.chartId);
+					if (queryMethod.fields) {
+						queryMethod.fields({ 
+							node: true, 
+							rect: true 
+						}, (res) => {
+							if (res && res.node && !this.chartInstance) {
+								try {
+									const canvas = res.node;
+									const ctx = canvas.getContext('2d');
+									
+									// 设置canvas尺寸，确保有合理的默认值
+									const dpr = uni.getSystemInfoSync().pixelRatio || 1;
+									const width = res.width || 400;
+									const height = res.height || 400;
+									
+									canvas.width = width * dpr;
+									canvas.height = height * dpr;
+									ctx.scale(dpr, dpr);
+									
+									// 初始化ECharts，传入canvas和context
+									this.chartInstance = this.$echarts.init(canvas, null, {
+										width: width,
+										height: height
+									});
+									
+									this.initError = false;
+									
+									// 如果有数据，立即渲染
+									if (this.displayKlineData && this.displayKlineData.length > 0) {
+										this.renderChart();
+									}
+								} catch (error) {
+									console.error('APP ECharts初始化失败:', error);
+									this.handleInitError(error);
 								}
-							} catch (error) {
-								console.error('APP ECharts初始化失败:', error);
-								this.handleInitError(error);
+							} else if (!res || !res.node) {
+								console.error('Canvas节点未找到，尝试WebView回退');
+								this.handleInitError(new Error('Canvas节点未找到'));
 							}
-						} else if (!res || !res.node) {
-							console.error('Canvas节点未找到');
-							this.handleInitError(new Error('Canvas节点未找到'));
-						}
-					}).exec();
+						}).exec();
+					} else {
+						// 如果 fields 方法不存在，直接触发WebView回退
+						console.error('uni-app版本不支持canvas fields方法，使用WebView回退');
+						this.handleInitError(new Error('uni-app版本不支持canvas fields方法'));
+					}
 					// #endif
 					
 				} catch (error) {
@@ -195,6 +207,7 @@
 				} else {
 					// 最大重试次数后，标记为错误状态
 					this.initError = true;
+					console.log('ECharts初始化达到最大重试次数，建议使用WebView回退');
 					// #ifdef APP-PLUS
 					// APP环境下可以提供WebView回退选项
 					// #endif
