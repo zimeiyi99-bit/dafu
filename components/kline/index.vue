@@ -1,417 +1,460 @@
 <template>
-	<div class="chart">
-		<div id="Kline" class="kline">
-		</div>
-	</div>
+	<view class="chart">
+		<view :id="chartId" class="kline">
+		</view>
+		<!-- 价格变化指示器 -->
+		<view v-if="priceChange.show" :class="['price-change', priceChange.direction, priceChange.show ? 'show' : '']">
+			{{ priceChange.direction === 'up' ? '+' : '-' }}{{ priceChange.value }}
+		</view>
+	</view>
 </template>
+
 <script>
 	import dayjs from 'dayjs'
 	export default {
 		props: ['data'],
 		data() {
-			return {}
+			return {
+				chartInstance: null,
+				chartId: 'Kline_' + Math.random().toString(36).substr(2, 9), // 唯一ID
+				realKlineData: [], // 真实K线数据
+				displayKlineData: [], // 显示用的K线数据
+				updateTimer: null, // 5秒更新定时器
+				lastUpdateTime: 0, // 上次更新时间
+				priceChange: {
+					show: false,
+					direction: 'up',
+					value: '0.0000'
+				}
+			}
+		},
+		watch: {
+			data: {
+				handler(newData) {
+					if (newData && newData.length > 0) {
+						this.realKlineData = [...newData];
+						this.displayKlineData = [...newData];
+						this.startDisplayUpdate();
+						// 确保图表实例已创建后再更新
+						if (this.chartInstance) {
+							this.updateChart();
+						}
+					}
+				},
+				immediate: true,
+				deep: true
+			}
 		},
 		mounted() {
-
+			// 设置ECharts环境
 			this.$echarts.env.touchEventsSupported = true;
 			this.$echarts.env.wxa = false;
 			this.$echarts.env.canvasSupported = false;
 			this.$echarts.env.svgSupported = true;
 			this.$echarts.env.domSupported = true;
+			
+			// 延迟初始化，确保DOM已渲染
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.init();
+				}, 100);
+			});
 		},
 		methods: {
 			init() {
-				const kline = this.$echarts.init(document.getElementById("Kline"));
+				// 检查是否已经初始化过
+				if (this.chartInstance) {
+					return;
+				}
+				
+				// #ifdef H5
+				const element = document.getElementById(this.chartId);
+				if (element) {
+					this.chartInstance = this.$echarts.init(element);
+					// 如果有数据，立即渲染
+					if (this.displayKlineData && this.displayKlineData.length > 0) {
+						this.renderChart();
+					}
+				}
+				// #endif
+				
+				// #ifdef APP-PLUS
+				// 手机端使用uni-app的方式获取元素
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#' + this.chartId).boundingClientRect((data) => {
+					if (data && !this.chartInstance) {
+						this.chartInstance = this.$echarts.init(data);
+						// 如果有数据，立即渲染
+						if (this.displayKlineData && this.displayKlineData.length > 0) {
+							this.renderChart();
+						}
+					}
+				}).exec();
+				// #endif
+			},
+			
+			// 开始5秒显示更新
+			startDisplayUpdate() {
+				if (this.updateTimer) {
+					clearInterval(this.updateTimer);
+				}
+				
+				this.updateTimer = setInterval(() => {
+					this.updateDisplayData();
+				}, 5000); // 5秒更新一次
+			},
+			
+			// 更新显示数据
+			updateDisplayData() {
+				if (this.displayKlineData.length === 0) return;
+				
+				// 获取最新一根K线
+				const latestKline = this.displayKlineData[this.displayKlineData.length - 1];
+				const previousClose = this.displayKlineData[this.displayKlineData.length - 2]?.close || latestKline.close;
+				
+				// 生成小幅波动 (-0.1% 到 +0.1%)
+				const volatility = (Math.random() - 0.5) * 0.002; // ±0.1%
+				const priceChange = latestKline.close * volatility;
+				
+				// 更新最新K线数据
+				const newClose = latestKline.close + priceChange;
+				const newHigh = Math.max(latestKline.high, newClose);
+				const newLow = Math.min(latestKline.low, newClose);
+				
+				// 更新显示数据
+				this.displayKlineData[this.displayKlineData.length - 1] = {
+					...latestKline,
+					close: newClose,
+					high: newHigh,
+					low: newLow
+				};
+				
+				// 显示价格变化效果
+				const change = newClose - previousClose;
+				if (Math.abs(change) > 0.0001) {
+					this.showPriceChange(change > 0 ? 'up' : 'down', Math.abs(change));
+				}
+				
+				// 重新渲染图表
+				this.updateChart();
+			},
+			
+			// 显示价格变化效果
+			showPriceChange(direction, change) {
+				this.priceChange = {
+					show: true,
+					direction: direction,
+					value: change.toFixed(4)
+				};
+				
+				// 3秒后隐藏
+				setTimeout(() => {
+					this.priceChange.show = false;
+				}, 3000);
+			},
+			
+			renderChart() {
+				if (!this.chartInstance) return;
+				
 				const upColor = '#00da3c';
 				const downColor = '#ec0000'
-				let data = []
-				data = formatData(this.data);
+				let data = this.formatData(this.displayKlineData);
 
-				function formatData(rawData) {
-					let categoryData = [];
-					let values = [];
-					let volumes = [];
-					rawData.forEach((item, index) => {
-						categoryData.push(dayjs(item.time).format('MM-DD HH:mm:ss'));
-						values.push([item.open, item.close, item.low, item.high])
-						volumes.push([index, item.volume, item.open > item.close ? 1 : -1]);
-					})
-					return {
-						categoryData: categoryData,
-						values: values,
-						volumes: volumes
-					}
-				}
-				if (this.data.length) {
-
-
-					function calculateMA(dayCount, data) {
-						let result = [];
-						for (let i = 0, len = data.values.length; i < len; i++) {
-							if (i < dayCount) {
-								result.push('-');
-								continue;
-							}
-							let sum = 0;
-							for (let j = 0; j < dayCount; j++) {
-								sum += data.values[i - j][1];
-							}
-							result.push(+(sum / dayCount).toFixed(3));
-						}
-						return result;
-					}
-
-					let option = {
-						animation: true,
-						tooltip: {
-							trigger: 'axis',
-							axisPointer: {
-								type: 'cross'
-							},
-							textStyle: {
-								color: '#333'
-							},
-							className: 'klineTooltip',
-							position: function(pos, params, el, elRect, size) {
-								var obj = {
-									top: 10
-								};
-								obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
-								return obj;
-							},
-							formatter: function(params) {
-								const themeColor = params[5].value[3] > 0 ? upColor : downColor
-								const param = params[0];
-								return `
-							<ul style="border-color:${themeColor}">
-								<li> 
-									<div class="dot" style="background-color:${themeColor}"></div>
-									 <span>${param.name}</span> 
-								</li>
-								<li>
-									 <div class="dot" style="background-color:${themeColor}"></div> 
-									 <span>open <span>${param.data[0]}</span></span>
-								</li>
-								<li> 
-									<div class="dot" style="background-color:${themeColor}"></div>
-									 <span>close <span>${param.data[1]}</span></span> 
-								</li>
-								<li> 
-									<div class="dot" style="background-color:${themeColor}"></div> 
-									<span>lowest <span>${param.data[2]}</span></span>
-								</li>
-								<li> 
-									<div class="dot" style="background-color:${themeColor}"></div>
-									 <span>highest <span>${param.data[3]}</span></span> 
-								</li>
-							</ul>
-							`
-							},
-							extraCssText: 'width: 170px'
-						},
-
-						axisPointer: {
-							link: {
-								xAxisIndex: 'all'
-							},
-							label: {
-								backgroundColor: '#777'
-							}
-						},
-						toolbox: {
-							show: false
-
-						},
-
-						visualMap: {
-							show: false,
-							seriesIndex: 5,
-							dimension: 2,
-							pieces: [{
-								value: 1,
-								color: downColor
-							}, {
-								value: -1,
-								color: upColor
-							}]
-						},
-						grid: [{
-								left: '0%',
-								right: '15%',
-								height: '50%',
-								top: '8%'
-							},
-							{
-								left: '0%',
-								right: '15%',
-								top: '66%',
-								height: '6%'
-							}
-						],
-						xAxis: [{
-								type: 'category',
-								data: data.categoryData,
-								scale: true,
-								boundaryGap: false,
-								axisTick: {
-									show: true
-								},
-								axisLine: {
-									onZero: false
-								},
-								splitLine: {
-									show: false
-								},
-								splitNumber: 20,
-								min: 'dataMin',
-								max: 'dataMax',
-								axisPointer: {
-									z: 100
-								}
-							},
-							{
-								type: 'category',
-								gridIndex: 1,
-								data: data.categoryData,
-								scale: true,
-								boundaryGap: false,
-								axisLine: {
-									onZero: false
-								},
-								axisTick: {
-									show: false
-								},
-								splitLine: {
-									show: false
-								},
-								axisLabel: {
-									show: false
-								},
-								splitNumber: 20,
-								min: 'dataMin',
-								max: 'dataMax',
-								axisPointer: {
-									type: 'shadow',
-									label: {
-										show: false
-									},
-									triggerTooltip: true,
-									handle: {
-										show: true,
-										margin: 30,
-										color: '#B80C00'
-									}
-								}
-
-							}
-						],
-						yAxis: [{
-								scale: true,
-								position: 'right',
-								// splitArea: {
-								// 	show: true
-								// }
-								// axisTick: {
-								// 	show: true
-								// }
-							},
-							{
-								scale: true,
-								gridIndex: 1,
-								splitNumber: 2,
-								axisLabel: {
-									show: false
-								},
-								axisLine: {
-									show: false
-								},
-								axisTick: {
-									show: false
-								},
-								splitLine: {
-									show: false
-								}
-							}
-						],
-						dataZoom: [{
-								type: 'slider',
-								xAxisIndex: [0, 1],
-								realtime: false,
-								start: 70,
-								end: 100,
-								top: 10,
-								height: 16,
-								handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-								handleSize: '120%'
-							},
-							{
-								type: 'inside',
-								xAxisIndex: [0, 1],
-								start: 70,
-								end: 100,
-								top: 30,
-								height: 16
-							}
-						],
-						series: [{
-								name: 'kline',
-								type: 'candlestick',
-								data: data.values,
-								itemStyle: {
-									normal: {
-										color: upColor,
-										color0: downColor,
-										borderColor: null,
-										borderColor0: null
-									}
-								},
-								markLine: {
-									symbol: "none", //去掉警戒线最后面的箭头
-									label: {
-										backgroundColor: '#75c566',
-										padding: [4, 6, 2, 6],
-										borderRadius: 4,
-										color: '#fff',
-										position: "insideEndTop", //将警示值放在哪个位置，三个值“start”,"middle","end"  开始  中点 结束
-									},
-									lineStyle: {
-										color: '#75c566',
-									},
-									data: [{
-										silent: false, //鼠标悬停事件  true没有，false有
-										yAxis: '', // 警戒线的标注值，可以有多个yAxis,多条警示线   或者采用   {type : 'average', name: '平均值'}，type值有  max  min  average，分为最大，最小，平均值
-									}, ],
-								},
-							},
-							{
-								name: 'MA5',
-								type: 'line',
-								data: calculateMA(5, data),
-								smooth: true,
-								lineStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-								itemStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-							},
-							{
-								name: 'MA10',
-								type: 'line',
-								data: calculateMA(10, data),
-								smooth: true,
-								lineStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-								itemStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-							},
-							{
-								name: 'MA20',
-								type: 'line',
-								data: calculateMA(20, data),
-								smooth: true,
-								lineStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-								itemStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-							},
-							{
-								name: 'MA30',
-								type: 'line',
-								data: calculateMA(30, data),
-								smooth: true,
-								lineStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-								itemStyle: {
-									normal: {
-										opacity: 0
-									}
-								},
-							},
-							{
-								name: 'Volume',
-								type: 'bar',
-								xAxisIndex: 1,
-								yAxisIndex: 1,
-								data: data.volumes,
-							}
-						]
-					};
-					option.series[0].markLine.data[0].yAxis = data.values[
-						data.values.length - 1
-					][0];
-					kline.setOption(option);
-				} else {
-					kline.clear();
+				if (this.displayKlineData && this.displayKlineData.length) {
+					let option = this.createChartOption(data, upColor, downColor);
+					this.chartInstance.setOption(option);
 				}
 			},
+			
+			// 更新图表显示
+			updateChart() {
+				if (this.chartInstance) {
+					this.renderChart();
+				}
+			},
+			
+			formatData(rawData) {
+				if (!rawData || !Array.isArray(rawData)) return { categoryData: [], values: [], volumes: [] };
+				
+				let categoryData = [];
+				let values = [];
+				let volumes = [];
+				rawData.forEach((item, index) => {
+					categoryData.push(item.time);
+					values.push([item.open, item.close, item.low, item.high])
+					volumes.push([index, item.volume, item.open > item.close ? 1 : -1]);
+				})
+				return {
+					categoryData: categoryData,
+					values: values,
+					volumes: volumes
+				}
+			},
+			
+			calculateMA(dayCount, data) {
+				let result = [];
+				for (let i = 0, len = data.values.length; i < len; i++) {
+					if (i < dayCount) {
+						result.push('-');
+						continue;
+					}
+					let sum = 0;
+					for (let j = 0; j < dayCount; j++) {
+						sum += data.values[i - j][1];
+					}
+					result.push(+(sum / dayCount).toFixed(3));
+				}
+				return result;
+			},
+			
+			createChartOption(data, upColor, downColor) {
+				return {
+					animation: true,
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							type: 'cross'
+						},
+						textStyle: {
+							color: '#333'
+						},
+						className: 'klineTooltip',
+						position: function(pos, params, el, elRect, size) {
+							var obj = {
+								top: 10
+							};
+							obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+							return obj;
+						},
+						formatter: function(params) {
+							const themeColor = params[5].value[3] > 0 ? upColor : downColor
+							const param = params[0];
+							return `
+						<ul style="border-color:${themeColor}">
+							<li> 
+								<div class="dot" style="background-color:${themeColor}"></div>
+								 <span>${param.name}</span> 
+							</li>
+							<li>
+								 <div class="dot" style="background-color:${themeColor}"></div> 
+								 <span>open <span>${param.data[0]}</span></span>
+							</li>
+							<li> 
+								<div class="dot" style="background-color:${themeColor}"></div>
+								 <span>close <span>${param.data[1]}</span></span> 
+							</li>
+							<li> 
+								<div class="dot" style="background-color:${themeColor}"></div>
+								 <span>low <span>${param.data[2]}</span></span> 
+							</li>
+							<li> 
+								<div class="dot" style="background-color:${themeColor}"></div>
+								 <span>high <span>${param.data[3]}</span></span> 
+							</li>
+							<li> 
+								<div class="dot" style="background-color:${themeColor}"></div>
+								 <span>volume <span>${params[5].data[1]}</span></span> 
+							</li>
+						</ul>
+					`
+						}
+					},
+					legend: {
+						data: ['K线', 'MA5', 'MA10', 'MA20', 'MA30'],
+						selected: {
+							'MA5': true,
+							'MA10': true,
+							'MA20': true,
+							'MA30': true
+						}
+					},
+					grid: [{
+						left: '10%',
+						right: '10%',
+						height: '50%'
+					}, {
+						left: '10%',
+						right: '10%',
+						top: '63%',
+						height: '16%'
+					}],
+					xAxis: [{
+						type: 'category',
+						data: data.categoryData,
+						scale: true,
+						boundaryGap: false,
+						axisLine: { onZero: false },
+						splitLine: { show: false },
+						min: 'dataMin',
+						max: 'dataMax'
+					}, {
+						type: 'category',
+						gridIndex: 1,
+						data: data.categoryData,
+						scale: true,
+						boundaryGap: false,
+						axisLine: { onZero: false },
+						axisTick: { show: false },
+						splitLine: { show: false },
+						axisLabel: { show: false },
+						min: 'dataMin',
+						max: 'dataMax'
+					}],
+					yAxis: [{
+						scale: true,
+						splitArea: {
+							show: true
+						}
+					}, {
+						scale: true,
+						gridIndex: 1,
+						splitNumber: 2,
+						axisLabel: { show: false },
+						axisLine: { show: false },
+						axisTick: { show: false },
+						splitLine: { show: false }
+					}],
+					dataZoom: [{
+						type: 'inside',
+						xAxisIndex: [0, 1],
+						start: 50,
+						end: 100
+					}, {
+						show: true,
+						xAxisIndex: [0, 1],
+						type: 'slider',
+						bottom: '0%',
+						start: 50,
+						end: 100
+					}],
+					series: [{
+						name: 'K线',
+						type: 'candlestick',
+						data: data.values,
+						itemStyle: {
+							color: upColor,
+							color0: downColor,
+							borderColor: upColor,
+							borderColor0: downColor
+						}
+					}, {
+						name: 'MA5',
+						type: 'line',
+						data: this.calculateMA(5, data),
+						smooth: true,
+						lineStyle: {
+							opacity: 0.5
+						}
+					}, {
+						name: 'MA10',
+						type: 'line',
+						data: this.calculateMA(10, data),
+						smooth: true,
+						lineStyle: {
+							opacity: 0.5
+						}
+					}, {
+						name: 'MA20',
+						type: 'line',
+						data: this.calculateMA(20, data),
+						smooth: true,
+						lineStyle: {
+							opacity: 0.5
+						}
+					}, {
+						name: 'MA30',
+						type: 'line',
+						data: this.calculateMA(30, data),
+						smooth: true,
+						lineStyle: {
+							opacity: 0.5
+						}
+					}, {
+						name: 'Volume',
+						type: 'bar',
+						xAxisIndex: 1,
+						yAxisIndex: 1,
+						data: data.volumes
+					}]
+				};
+			}
 		},
-
+		
+		beforeDestroy() {
+			// 清理定时器
+			if (this.updateTimer) {
+				clearInterval(this.updateTimer);
+				this.updateTimer = null;
+			}
+			
+			// 清理图表实例
+			if (this.chartInstance) {
+				this.chartInstance.dispose();
+				this.chartInstance = null;
+			}
+		}
 	}
 </script>
+
 <style lang="scss" scoped>
+	.chart {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+	
 	.kline {
 		width: 100%;
-		height: 468px;
+		height: 400px;
 	}
-
-	::v-deep .klineTooltip {
-		box-shadow: none !important;
-		background-color: transparent !important;
-		padding: 0 !important;
-
-		&>ul {
-			border-radius: 6px;
-			padding: 10px;
-			border: 1px solid transparent;
-			background-color: #fff;
-
-			&>li {
-				display: flex;
-				align-items: center;
-
-				.dot {
-					border-radius: 50%;
-					width: 5px;
-					height: 5px;
-					margin-right: 10px;
-				}
-
-				&:first-child {
-					.dot {
-						width: 10px;
-						height: 10px;
-					}
-				}
-
-				&>span {
-					display: flex;
-					flex: 1;
-
-					&>span {
-						margin-left: auto;
-					}
-				}
-			}
+	
+	/* 价格变化指示器 */
+	.price-change {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		padding: 8px 16px;
+		border-radius: 20px;
+		font-weight: bold;
+		font-size: 14px;
+		z-index: 1000;
+		opacity: 0;
+		transform: translateY(20px);
+		transition: all 0.3s ease;
+	}
+	
+	.price-change.up {
+		background: rgba(76, 175, 80, 0.9);
+		color: white;
+	}
+	
+	.price-change.down {
+		background: rgba(244, 67, 54, 0.9);
+		color: white;
+	}
+	
+	.price-change.show {
+		opacity: 1;
+		transform: translateY(0);
+		animation: priceChange 3s ease-out;
+	}
+	
+	@keyframes priceChange {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		20% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		80% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-20px);
 		}
 	}
 </style>

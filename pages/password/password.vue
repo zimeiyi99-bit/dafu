@@ -20,7 +20,7 @@
 					</uni-forms-item>
 
 
-					<view class="tui-submit" :class="isBtn ? 'tui-ok' : 'tui-cancle'" @click="onClickBtn">
+					<view class="tui-submit" :class="(isBtn || is_ok) ? 'tui-ok' : 'tui-cancle'" @click="onClickBtn">
 						{{$t('password.tj')}}
 					</view>
 				</uni-forms>
@@ -78,6 +78,12 @@
 			} else {
 				this.title = this.$t('password.xgzfmm')
 			}
+		},
+		computed: {
+			is_ok() {
+				return this.formData.o_password.length > 5 && this.formData.password.length > 5 
+				&& this.formData.check_password.length > 5
+			}	
 		},
 		methods: {
 			onClickBtn() {

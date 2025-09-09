@@ -1,6 +1,23 @@
 <template>
-	<view>
-		<guo-headerTitle :title="$t('home.dd.jl')" :backgroundColor="backgroundColor"></guo-headerTitle>
+	<view class="modern-order-container">
+		<!-- 背景装饰 -->
+		<view class="bg-decoration">
+			<view class="circle circle-1"></view>
+			<view class="circle circle-2"></view>
+			<view class="circle circle-3"></view>
+		</view>
+		
+		<!-- 现代头部 -->
+		<view class="modern-header">
+			<view class="header-content">
+				<view class="back-button" @click="goBack">
+					<uni-icons type="arrow-left" size="25" color="#fff"></uni-icons>
+				</view>
+				<view class="page-title">
+					<text class="title-text">{{$t('home.dd.jl')}}</text>
+				</view>
+			</view>
+		</view>
 		<view class="tui-tabs">
 			<v-tabs v-model="activeTab" :scroll="false" :tabs="[$t('home.dd.cslb'), $t('home.dd.csjl')]"
 				color="rgb(168, 169, 172)" activeColor="#222" bold lineColor="#1150c2" :lineScale="0.1"
@@ -24,7 +41,7 @@
 							{{$t('order.ddbh')}}
 						</view>
 						<view class="code">
-							BOSTT8WRPWX{{item.id}}
+							{{item.order_sn}}
 						</view>
 					</view>
 					<view class="flex flex-wrap">
@@ -40,7 +57,7 @@
 							<view class="">
 								{{$t('order.yk')}}
 							</view>
-							<view class="pice tui-green">
+							<view class="pice"  :style="{color:item.end_profit < 0 ? '#f33b50' : '#0bb563'}">
 								{{item.end_profit}}
 							</view>
 						</view>
@@ -137,6 +154,9 @@
 			console.log(this.FileInfoList.length)
 		},
 		methods: {
+			goBack() {
+				uni.navigateBack();
+			},
 			onChangeTab(e) {
 				console.log(e)
 				this.PageIndex = 1;
@@ -264,5 +284,121 @@
 				}
 			}
 		}
+	}
+
+	/* 现代样式 */
+	.modern-order-container {
+		min-height: 100vh;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.bg-decoration {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		
+		.circle {
+			position: absolute;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.1);
+			animation: float 6s ease-in-out infinite;
+			
+			&.circle-1 {
+				width: 200rpx;
+				height: 200rpx;
+				top: 10%;
+				left: 10%;
+				animation-delay: 0s;
+			}
+			
+			&.circle-2 {
+				width: 150rpx;
+				height: 150rpx;
+				top: 60%;
+				right: 15%;
+				animation-delay: 2s;
+			}
+			
+			&.circle-3 {
+				width: 100rpx;
+				height: 100rpx;
+				bottom: 20%;
+				left: 20%;
+				animation-delay: 4s;
+			}
+		}
+	}
+
+	.modern-header {
+		position: relative;
+		z-index: 10;
+		padding: 60rpx 30rpx 30rpx;
+		
+		.header-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			
+			.back-button {
+				position: absolute;
+				left: 0;
+				width: 60rpx;
+				height: 60rpx;
+				background: rgba(255, 255, 255, 0.2);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				backdrop-filter: blur(10px);
+				transition: all 0.3s ease;
+				
+				&:active {
+					transform: scale(0.95);
+					background: rgba(255, 255, 255, 0.3);
+				}
+			}
+			
+			.page-title {
+				.title-text {
+					font-size: 36rpx;
+					font-weight: bold;
+					color: #fff;
+					text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+				}
+			}
+		}
+	}
+
+	.tui-tabs {
+		position: relative;
+		z-index: 10;
+		margin: 0 30rpx 20rpx;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(20px);
+		border-radius: 20rpx;
+		box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+		border: 1rpx solid rgba(255, 255, 255, 0.2);
+	}
+
+	.tui-card {
+		position: relative;
+		z-index: 10;
+		margin: 0 30rpx 20rpx;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(20px);
+		border-radius: 20rpx;
+		box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+		border: 1rpx solid rgba(255, 255, 255, 0.2);
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0px); }
+		50% { transform: translateY(-20px); }
 	}
 </style>

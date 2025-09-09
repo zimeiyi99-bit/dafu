@@ -7,32 +7,53 @@ fly.config.baseURL = utils.getQueryUrl()
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {
 	const token = store.state.token;
-	if (!request.body['checkFree'] && !token) {
-		console.log('跳转登录', utils.getUrl())
-		//需要登录才能请求,未登录
-		uni.setStorageSync('lastVisitedPage', utils.getUrl());
+	const currentPage = utils.getUrl();
+	
+	// 检查是否在登录相关页面
+	const isLoginPage = currentPage.includes('/pages/login/') || 
+					   currentPage.includes('/pages/register/') || 
+					   currentPage.includes('/pages/registerCheck/');
+	
+	// 检查是否是公开API（不需要登录的接口）
+	const isPublicAPI = request.body['checkFree'] || 
+					   request.url.includes('/api/public/') ||
+					   request.url.includes('/api/common/');
+	
+	// 如果已经在登录页面，或者是公开API，或者有token，则允许请求
+	if (isLoginPage || isPublicAPI || token) {
+		if (token) {
+			// 已登录，自动携带token
+			request.headers.token = token;
+			request.headers.lang = uni.getStorageSync('i18nLang');
+		}
+		
+		// 删除标记
+		if (request.body['checkFree']) {
+			delete request.body['checkFree'];
+		}
+		
+		// 处理loading
+		if (!request.body['hideLoading']) {
+			uni.showLoading({
+				title: "Loading..."
+			});
+		} else {
+			delete request.body['hideLoading'];
+		}
+		
+		return request;
+	} else {
+		// 需要登录但未登录，跳转到登录页面
+		console.log('跳转登录', currentPage);
+		uni.setStorageSync('lastVisitedPage', currentPage);
 		uni.reLaunch({
 			url: '/pages/login/login'
-		})
-		return Promise.reject("跳转登录页面")
-	} else if (!request.body['checkFree'] || token) {
-		//不需要登录就能请求,已登录,自动携带token
-		request.headers.token = token;
-		request.headers.lang = uni.getStorageSync('i18nLang');
+		});
+		return Promise.reject("Jump to login page");
 	}
-	//最后删除标记
-	delete request.body['checkFree']
-	if (!request.body['hideLoading']) {
-		uni.showLoading({
-			title: "加载中"
-		})
-	} else {
-		delete request.body['hideLoading']
-	}
-	return request
 }, function(error) {
 	uni.showToast({
-		title: '发送请求失败!',
+		title: 'Failed to send request!',
 		icon: 'none'
 	});
 	// 对请求错误做些什么
@@ -45,27 +66,39 @@ fly.interceptors.response.use((res) => {
 	const token = store.state.token;
 	if (![1].includes(res.data.status)) {
 		//错误码
+		console.error('API响应错误:', res.data)
 		uni.showToast({
-			title: res.data.massage,
-			icon: 'none'
+			title: res.data.massage || res.data.message || '请求失败',
+			icon: 'none',
+			duration: 3000
 		});
-		return Promise.reject(res.data.massage)
+		return Promise.reject(res.data.massage || res.data.message || '请求失败')
 	}
 	return res.data
 }, (error) => {
 	uni.hideLoading()
-	if ([401].includes(error.status)) {
-		console.log('401响应', utils.getUrl())
+	console.error('请求失败:', error)
+	
+	// 只有在明确是401认证失败时才清除token
+	if (error.status === 401 && error.response && error.response.data && error.response.data.message === 'token无效') {
+		console.log('Token无效，清除用户信息', utils.getUrl());
 		uni.setStorageSync('lastVisitedPage', utils.getUrl());
-		let storeuser = {
-			'token': ''
-		}
-		store.commit('setUser', storeuser)
+		store.commit('RESET_STATE');
+		
+		// 跳转到登录页面
+		uni.reLaunch({
+			url: '/pages/login/login'
+		});
+	} else if (error.status === 401) {
+		// 其他401错误，可能是网络问题，不立即清除token
+		console.log('401响应，可能是网络问题', error);
 	} else {
-		// uni.showToast({
-		// 	title: '加载数据失败',
-		// 	icon: 'error'
-		// });
+		// 网络错误或其他错误
+		uni.showToast({
+			title: '网络连接失败，请检查网络设置',
+			icon: 'none',
+			duration: 3000
+		});
 	}
 	return Promise.reject(error)
 })

@@ -5,7 +5,12 @@
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
 				<view class="tui-left">
 					<view class="title">
-						{{item.content}}
+						<view v-if="item.is_z==1" style="color: #0bb563;">
+							{{$t('top.shouru')}}
+						</view>
+						<view v-if="item.is_z==2" style="color: #f33b50;">
+							{{$t('top.zhichu')}}
+						</view>
 					</view>
 					<view class="time">
 						{{item.addtime}}
@@ -13,7 +18,7 @@
 				</view>
 
 				<view class="tui-right" :style="{color:item.is_z == 1 ? '#0bb563' : '#f33b50'}">
-					{{item.is_z == 1 ? "+" : '-'}} {{item.money}}
+					{{item.is_z == 1 ? "+" : ''}} {{item.money}}
 				</view>
 			</view>
 			<!--加载loadding-->
@@ -81,9 +86,19 @@
 					}
 					this.loadding = false;
 					if (this.PageIndex == 1) {
-						this.List = data.lists
+						this.List = data.lists.map(item => {
+							if (item.content &&item.content.includes("平仓获得收益")) {
+								item.content = "平仓成功"
+							}
+							return item
+						})
 					} else {
-						this.List = this.List.concat(data.lists)
+						this.List = this.List.concat(data.lists).map(item => {
+							if (item.content &&item.content.includes("平仓获得收益")) {
+								item.content = "平仓成功"
+							}
+							return item
+						})
 					}
 				})
 			}

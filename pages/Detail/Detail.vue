@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<guo-headerTitle :title="options.title" :isTitleImg="true" :isRight="true"
+		<guo-headerTitle :title="options.title" :isTitleImg="true" :isRight="true" :orderNum="orderCountNum"
 			@onClickTitle="onClickTitle"></guo-headerTitle>
 		<view class="tui-header">
 			<view class="tui-border" v-if="getUserItem.b_is == 1">
@@ -160,15 +160,15 @@
 							{{item}}
 						</view>
 					</view>
-					<view class="tui-inputBox">
+					<view class="tui-inputBox" style="color:#333">
 						<input class="tui-input" v-model="deal.actAmount" :placeholder="$t('detail.srje')"
 							type="text" />
-						<text>CNY</text>
+						<text></text>
 					</view>
-					<view class="flex flex-between flex-item" style="margin-top: 16rpx;">
+					<view class="flex flex-between flex-item" style="margin-top: 16rpx;color: #333">
 						<view class="flex flex-item">
-							<view class="tui-money">
-								{{$t('detail.ye')}}：<text>{{userInfo.money}}</text> <text class="tui-cny">CNY</text>
+							<view class="tui-money" style="color: #333">
+								{{$t('detail.ye')}}：<text>{{userInfo.money}}</text> <text class="tui-cny"></text>
 							</view>
 						</view>
 						<view class="tui-alling" @click="deal.actAmount = userInfo.money">
@@ -179,10 +179,20 @@
 						{{$t('detail.sj')}}
 					</view>
 					<view class="items">
-						<view class="tui-item" v-for="(item,index) in pageDetail.timeList" :key="index"
+						<view class="tui-item1" v-for="(item,index) in pageDetail.timeList" :key="index"
 							@click="deal.actTime=item.seconds"
-							:class="deal.actTime == item.seconds ? 'tui-activite' : ''">
-							{{item.seconds_desc}}
+							:class="deal.actTime == item.seconds ? 'tui-activite1' : ''">
+							
+							<div style="width: 210rpx;height: 44rpx;line-height: 44rpx;text-align: center;font-size: 32rpx;">
+								{{item.seconds_desc}}
+							</div>
+							<div style="width: 210rpx;height: 28rpx;line-height: 28rpx;text-align: center;font-size: 20rpx;">
+								{{$t('yinli')}}：{{item.profit_ratio}}%
+							</div>
+							<div style="width: 210rpx;height: 28rpx;line-height: 28rpx;text-align: center;font-size: 20rpx;">
+								{{$t('kuisun')}}：{{item.profit_ratio}}%
+							</div>
+							
 						</view>
 					</view>
 					<view class="tui-detail">
@@ -253,7 +263,7 @@
 								hover-class="tui-hover" @click="selectGoods(item)">
 								<view class="name">
 									<view class="flex flex-item">
-										<text class="piceName" v-for="(v,i) in item.title.split('')" :key=""
+										<text class="piceName" v-for="(v,i) in item.title.split('')" :key="i"
 											:style="setColor(v)">{{ v }}</text>
 									</view>
 									<view class="flex-column" style="color: #a8a9ac;font-size: 20rpx;">
@@ -291,6 +301,9 @@
 		userInfo,
 		getUserIndex
 	} from "@/api/user.js"
+	import {
+		orderCount
+	} from "@/api/order.js"
 	export default {
 		components: {
 			kline: () => import("@/components/kline/index.vue"),
@@ -299,6 +312,7 @@
 		data() {
 			return {
 				timer: null,
+				orderTimer: null,
 				options: {},
 				userInfo: {},
 				goodsList: [],
@@ -306,7 +320,7 @@
 					timeList: []
 				},
 				klineList: [],
-				timeActive: 3,
+				timeActive:0,
 				timeTabs: [{
 					text: "1m",
 					value: '1min'
@@ -341,7 +355,8 @@
 				styles: {
 					borderColor: "#f6f8fa",
 				},
-				getUserItem: {}
+				getUserItem: {},
+				orderCountNum: 0
 			};
 		},
 		computed: {
@@ -382,11 +397,18 @@
 				this.getDetail();
 				this.getUserIndex()
 			}, 5000);
+			this.getOrderCountNum()
+			this.orderTimer = setInterval(() => {
+				this.getOrderCountNum()
+			}, 2000)
 		},
 		onUnload() {
 			// 页面销毁时清除定时器
 			if (this.timer) {
 				clearInterval(this.timer);
+			}
+			if (this.orderTimer) {
+				clearInterval(this.orderTimer);
 			}
 		},
 		onHide() {
@@ -395,6 +417,13 @@
 			}
 		},
 		methods: {
+			getOrderCountNum() {
+				orderCount().then(({
+					data
+				}) => {
+					this.orderCountNum = data.count
+				})
+			},
 			getUserIndex() {
 				getUserIndex({
 					hideLoading: true,
@@ -429,6 +458,10 @@
 				goodMicrotrade(paramData).then(_ => {
 					this.$refs.popupSuccess.open()
 					this.$refs.popup.close()
+					
+					const audioContext = uni.createInnerAudioContext();
+					audioContext.src = '/static/success.mp3';
+					audioContext.play();
 					// uni.showToast({
 					// 	title: this.$t('detail.czcg'),
 					// 	icon: "none"
@@ -496,14 +529,13 @@
 					data
 				}) => {
 					this.klineList = data || [];
-					this.$nextTick(_ => {
-						this.$refs['kline'].init()
-					})
+					// K线组件会自动监听data变化并更新图表
 				});
 			},
 			getGoods() {
 				goods({
 					hideLoading: true,
+					cid:this.pageDetail.cid,
 				}).then(({
 					data
 				}) => {
@@ -613,7 +645,7 @@
 		margin-top: 40rpx;
 
 		.text-ts {
-			color: #a8a9ac;
+			color: #333;
 			font-size: 10px;
 		}
 
@@ -640,7 +672,7 @@
 			padding-bottom: 40rpx;
 
 			.tui-firstTitle {
-				color: #a8a9ac;
+				color: #333;
 				font-size: 28rpx;
 				margin-top: 60rpx;
 
@@ -688,7 +720,7 @@
 
 				text {
 					font-size: 24rpx;
-					color: #a8a9ac;
+					color: #333;
 				}
 			}
 
@@ -700,20 +732,41 @@
 				padding: 20rpx 0 0 0;
 
 				.tui-activite {
-					border: 1px solid #0bb563 !important;
-					color: #0bb563 !important;
+					//border: 1px solid #0bb563 !important;
+					// background: #0bb563 !important;
+					// color: #fff !important;
+					background: linear-gradient(315deg, #fdcb83, #ddd0ad, #d6b372)  !important;
+					color: #000 !important;
 				}
-
+				.tui-activite1 {
+					background: linear-gradient(315deg, #fdcb83, #ddd0ad, #d6b372)  !important;
+					color: #000 !important;
+				}
+				
 				.tui-item {
 					margin-bottom: 20rpx;
 					width: 210rpx;
 					height: 116rpx;
-					color: #a8a9ac;
+					color: #333;
 					opacity: 1;
 					background-color: #f6f7fb;
 					border-radius: 12px !important;
 					font-size: 28rpx;
 					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+				.tui-item1 {
+					margin-bottom: 20rpx;
+					padding: 55rpx 0rpx;
+					width: 210rpx;
+					height: 210rpx;
+					border-radius: 105rpx !important;
+					opacity: 1;
+					background-color: #f6f7fb;
+					color: #bcc4c9;
+					font-size: 28rpx;
+					
 					align-items: center;
 					justify-content: center;
 				}

@@ -3,26 +3,54 @@ const imgUrl = 'https://lcssoss.oss-cn-shanghai.aliyuncs.com'
 const h5Appid = 'wx025090c8839f889a'
 const getQueryUrl = function() {
 	if (process.env.NODE_ENV === 'development') {
-		//开发环境请求地址---在manifest.json配置跨域
+		//开发环境请求地址
+		// #ifdef H5
+		// H5环境使用代理
 		return '/api'
+		// #endif
+		// #ifdef APP-PLUS
+		// APP环境使用完整URL
+		return 'https://47.83.184.139/api'
+		// #endif
+		// #ifdef MP-WEIXIN
+		// 微信小程序使用完整URL
+		return 'https://47.83.184.139/api'
+		// #endif
+		// 默认返回
+		return 'https://47.83.184.139/api'
 	} else if (process.env.NODE_ENV === 'production') {
 		//正式环境请求地址
+		// #ifdef H5
 		return '/api'
+		// #endif
+		// #ifdef APP-PLUS
+		return 'https://47.83.184.139/api'
+		// #endif
+		// #ifdef MP-WEIXIN
+		return 'https://47.83.184.139/api'
+		// #endif
+		// 默认返回
+		return 'https://47.83.184.139/api'
 	}
 }
 //获取当前运行域名
 const getDomain = function() {
 	if (process.env.NODE_ENV === 'development') {
 		//开发环境
-		return 'https://www.baidu.com'
+		return 'https://47.83.184.139'
 	} else if (process.env.NODE_ENV === 'production') {
 		//正式环境
 		// #ifdef H5
 		return 'https://' + window.location.hostname
 		// #endif
-		// #ifdef MP-WEIXIN
-		return 'https://www.baidu.com'
+		// #ifdef APP-PLUS
+		return 'https://47.83.184.139'
 		// #endif
+		// #ifdef MP-WEIXIN
+		return 'https://47.83.184.139'
+		// #endif
+		// 默认返回
+		return 'https://47.83.184.139'
 	}
 }
 //获取当前页面路径以及参数
@@ -264,14 +292,14 @@ const validateAmount = function(val, max = '999999') {
 }
 const replaceWithAsterisks = function(str, start, end) {
 	// 验证输入参数是否有效
-	if (typeof str !== 'string' || typeof start !== 'number' || typeof end !== 'number') {
-		throw new Error('Invalid input parameters');
+	if (typeof str !== 'string' || typeof start !== 'number') {
+		return ''
+		// throw new Error('Invalid input parameters');
 	}
-
+	if(!end) end = str.length
 	// 确保开始位置和结束位置在合理范围内
 	start = Math.max(0, start);
 	end = Math.min(str.length, end);
-
 	// 确保开始位置小于等于结束位置
 	if (start > end) {
 		throw new Error('Start position should be less than or equal to end position');

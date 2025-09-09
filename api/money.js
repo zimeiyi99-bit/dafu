@@ -20,6 +20,10 @@ export const withdraw_record = function(data = {}) {
 export const upmark_record = function(data = {}) {
 	return request.get('user/upmark_record', data)
 }
+//入金记录
+export const top_log = function(data = {}) {
+	return request.get('user/top_log', data)
+}
 // 出金
 export const downmark = function(data = {}) {
 	return request.post('user/downmark', {

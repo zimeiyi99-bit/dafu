@@ -13,8 +13,13 @@
 				</view>
 			</template>
 			<template v-slot:right v-if="isRight">
-				<view class="tui-leftIcon" @click="onClickRight">
+				<view class="tui-leftIcon" @click="onClickRight" v-if="orderNum == 0">
 					<image src="/static/righticon.png" class="tui-rightIconImg" mode=""></image>
+				</view>
+				<view class="tui-leftIcon2" @click="onClickRight" v-else>
+					<view class="kz"></view>
+					<image src="/static/righticon.png" class="tui-rightIconImg" style="position: relative;z-index: 29"
+						mode=""></image>
 				</view>
 			</template>
 		</uni-nav-bar>
@@ -58,10 +63,21 @@
 				default: false,
 				type: Boolean
 			},
+			orderNum: {
+				default: 0,
+				type: Number
+			}
 		},
 		methods: {
 			onClickLeft() {
-				uni.navigateBack()
+				const canNavBack = getCurrentPages()
+				if (canNavBack && canNavBack.length > 1) {
+					uni.navigateBack({
+						delta: 1
+					})
+				} else {
+					history.back()
+				}
 			},
 			onClickRight() {
 				uni.navigateTo({
@@ -107,5 +123,43 @@
 		justify-content: center;
 		align-items: center;
 
+	}
+
+	.tui-leftIcon2 {
+		width: 80rpx;
+		height: 80rpx;
+		color: #fff !important;
+		background-color: #822151 !important;
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 40rpx;
+		position: relative;
+	}
+
+	.kz {
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 50%;
+		background-color: #822151 !important;
+		position: absolute;
+		z-index: 28;
+		opacity: 0.6;
+		animation: shadow-expand 1s infinite;
+	}
+
+	@keyframes shadow-expand {
+		0% {
+			width: 80rpx;
+			height: 80rpx;
+			opacity: 0.6;
+		}
+
+		100% {
+			width: 110rpx;
+			height: 110rpx;
+			opacity: 0.2;
+		}
 	}
 </style>

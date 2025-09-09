@@ -8,8 +8,8 @@
 						<image v-else class="img" :src="item.iconPath"></image>
 					</view>
 				</view>
-				<view v-if="actIndex === index" class="tit selectTexts">{{ item.text }}</view>
-				<view v-else class="tit texts">{{ item.text }}</view>
+				<view v-if="actIndex === index" class="tit selectTexts" style="width: 100%;white-space: nowrap;text-align: center;">{{ item.text }}</view>
+				<view v-else class="tit texts" style="width: 100%;white-space: nowrap;text-align: center;">{{ item.text }}</view>
 			</view>
 		</view>
 	</view>
@@ -33,6 +33,7 @@
 						"iconPath": require("@/static/tabbar/index.png"),
 						"selectedIconPath": require("@/static/tabbar/index_active.png")
 					},
+					
 					{
 						"pagePath": "/pages/product/product",
 						"text": this.$t('app.tabbar.cp'),
@@ -40,10 +41,10 @@
 						"selectedIconPath": require("@/static/tabbar/chanpin_active.png")
 					},
 					{
-						"pagePath": "/pages/money/money",
-						"text": this.$t('app.tabbar.yeb'),
-						"iconPath": require("@/static/tabbar/yue.png"),
-						"selectedIconPath": require("@/static/tabbar/yue_active.png")
+						"pagePath": "/pages/product/service",
+						"text": this.$t('home.zxkf'),
+						"iconPath": require("@/static/tabbar/service.png"),
+						"selectedIconPath": require("@/static/tabbar/service2.png")
 					},
 					{
 						"pagePath": "/pages/user/user",

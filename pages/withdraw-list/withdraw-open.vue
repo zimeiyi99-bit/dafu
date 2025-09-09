@@ -4,23 +4,64 @@
 
 		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
+				<view style="box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;width: 100%;">
 				<view class="tui-left">
 					<view class="title">
-						{{item.money}}
+						{{$t('top.rjfs')}}
 					</view>
-					<view class="time">
-						{{$t('withdraw-list.ddbh')}} <text>WCDMRFWES{{item.id}}</text>
+					<view class="title">
+						{{$t('top.money')}}
 					</view>
+					<view class="title" v-if="item.status==1">
+						{{$t('top.sjdz')}}
+					</view>
+					<view class="title">
+						{{$t('top.code')}}
+					</view>
+					<view class="title">
+						{{$t('withdraw-list.ddbh')}} 
+					</view>
+					<view class="title">
+						{{$t('top.time')}} 
+					</view>
+					
 				</view>
 				<view class="tui-right">
-					<view class="message"
-						:style="{color:item.status == 1 ? '#25BC73' : item.status == 2 ? '#222' : '#f33b50'}">
-						{{item.status == 1 ? $t('withdraw-list.cg') : item.status == 2 ? $t('withdraw-list.shz') : $t('withdraw-list.sb')}}
+					<view class="title" style="text-align: right;font-size: 24rpx;">
+						<span v-if="item.pay_type=='usdt-trc20'">USDT-TRC20</span>
+						<span v-if="item.pay_type=='usdt-erc20'">USDT-ERC20</span>
+						<span v-if="item.pay_type=='btc'">BTC</span>
+						<span v-if="item.pay_type=='eth'">ETH</span>
+						<span v-if="item.pay_type=='bank_card'">{{$t('withdraw-money.yhk')}}</span>
 					</view>
-					<view class="time">
+					<view class="title" style="text-align: right;">
+						{{item.money}} 
+					</view>
+					<view class="title" style="text-align: right;font-size: 24rpx;" v-if="item.status==1">
+						{{item.act_money}}
+					</view>
+					<view style="text-align: right;font-size: 24rpx;" class="title"
+						:style="{color:item.status == 1 ? '#25BC73' : item.status == 0 ? '#222' : '#f33b50'}">
+						{{item.status == 1 ? $t('withdraw-list.cg') : item.status == 0 ? $t('withdraw-list.shz') : $t('withdraw-list.sb')}}
+					</view>
+					<view class="title" style="text-align: right;font-size: 24rpx;">
+						<text>{{item.order_sn || 'null'}}</text>
+					</view>
+					
+					<view class="title" style="text-align: right;font-size: 24rpx;">
 						{{item.time}}
 					</view>
+					
 				</view>
+				
+			</view>
+				<div  style="text-indent: 2em;width: 100%;font-size:24rpx;color: orangered;line-height: 48rpx;" v-if="item.status==2">
+					{{item.remark}}
+				</div>
+				
 			</view>
 			<!--加载loadding-->
 			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
@@ -37,7 +78,8 @@
 
 <script>
 	import {
-		upmark_record
+		upmark_record,
+		top_log
 	} from '@/api/money.js'
 	export default {
 
@@ -53,7 +95,7 @@
 			};
 		},
 		onLoad() {
-			this.upmark_record()
+			this.top_log()
 		},
 		// 上拉加载
 		async onReachBottom() {
@@ -61,7 +103,7 @@
 			this.PageIndex = this.PageIndex + 1;
 			this.loadding = true;
 			if (this.PageIndex <= this.pageCount) {
-				await this.upmark_record()
+				await this.top_log()
 			} else {
 				this.loadding = false;
 				this.pullUpOn = false
@@ -70,8 +112,8 @@
 			console.log(this.FileInfoList.length)
 		},
 		methods: {
-			upmark_record() {
-				upmark_record({
+			top_log() {
+				top_log({
 					page: this.PageIndex
 				}).then(({
 					data
@@ -104,16 +146,13 @@
 			background-color: #fff;
 			border-radius: 13px;
 			padding: 26rpx;
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
+			width: 100%;
 			margin-top: 20rpx;
 
 			.tui-right {
 				display: flex;
 				flex-direction: column;
-
+				line-height: 48rpx;
 				.message {
 					font-size: 20rpx;
 					color: #f33b50;
@@ -129,6 +168,7 @@
 			.tui-left {
 				display: flex;
 				flex-direction: column;
+				line-height: 48rpx;
 
 				.title {
 					font-size: 28rpx;

@@ -3,7 +3,7 @@
 		{
 			"path": "pages/welcome/welcome",
 			"style": {
-				"navigationBarTitleText": "欢迎使用",
+				"navigationBarTitleText": "Welcome",
 				"navigationStyle": "custom"
 			}
 		},
@@ -17,41 +17,55 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页",
+				"navigationBarTitleText": "Home",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": "登录",
+				"navigationBarTitleText": "Log in",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/registerCheck",
 			"style": {
-				"navigationBarTitleText": "注册",
+				"navigationBarTitleText": "Register",
 				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/login/register",
 			"style": {
-				"navigationBarTitleText": "设置密码",
+				"navigationBarTitleText": "Set password",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "个人中心",
+				"navigationBarTitleText": "Personal Center",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/product/product",
 			"style": {
-				"navigationBarTitleText": "产品",
+				"navigationBarTitleText": "product",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/product/service",
+			"style": {
+				"navigationBarTitleText": "customer service",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/webview/webview",
+			"style": {
+				"navigationBarTitleText": "网页",
 				"navigationStyle": "custom"
 			}
 		},
@@ -65,14 +79,14 @@
 		{
 			"path": "pages/set/set",
 			"style": {
-				"navigationBarTitleText": "设置",
+				"navigationBarTitleText": "set up",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/account/account",
 			"style": {
-				"navigationBarTitleText": "出款账户",
+				"navigationBarTitleText": "Withdrawal Account",
 				"navigationStyle": "custom"
 			}
 		},
@@ -86,7 +100,7 @@
 		{
 			"path": "pages/money-record/money-record",
 			"style": {
-				"navigationBarTitleText": "资金记录",
+				"navigationBarTitleText": "Funding Records",
 				"navigationStyle": "custom"
 			}
 		},
@@ -115,6 +129,13 @@
 			"path": "pages/verify/verify",
 			"style": {
 				"navigationBarTitleText": "实名认证",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/top-up/top-money",
+			"style": {
+				"navigationBarTitleText": "入金",
 				"navigationStyle": "custom"
 			}
 		},
@@ -156,7 +177,7 @@
 		{
 			"path": "pages/money/detail",
 			"style": {
-				"navigationBarTitleText": "余额宝规则",
+				"navigationBarTitleText": "My AI Quantification Record",
 				"navigationStyle": "custom"
 			}
 		},
@@ -212,17 +233,18 @@
 				"selectedIconPath": "/static/tabbar/index_active.png"
 			},
 			{
+				"pagePath": "pages/product/service",
+				"text": "客服",
+				"iconPath": "/static/tabbar/service.png",
+				"selectedIconPath": "/static/tabbar/service2.png"
+			},
+			{
 				"pagePath": "pages/product/product",
 				"text": "产品",
 				"iconPath": "/static/tabbar/chanpin.png",
 				"selectedIconPath": "/static/tabbar/chanpin_active.png"
 			},
-			{
-				"pagePath": "pages/money/money",
-				"text": "余额宝",
-				"iconPath": "/static/tabbar/yue.png",
-				"selectedIconPath": "/static/tabbar/yue_active.png"
-			},
+			
 			{
 				"pagePath": "pages/user/user",
 				"text": "个人中心",

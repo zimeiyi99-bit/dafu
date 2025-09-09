@@ -28,6 +28,12 @@ export const userBindWithdraw = function(data = {}) {
 export const userWithdraw = function(data = {}) {
 	return request.post('user/downmark', data)
 }
+export const userDeposit = function(data = {}) {
+	return request.post('index/deposit_address', data)
+}
+export const userDepositdo = function(data = {}) {
+	return request.post('user/deposit_user', data)
+}
 //公共配置
 export const getUserIndex = function(data = {}) {
 	return request.get('index/index', data)

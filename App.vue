@@ -1,72 +1,44 @@
 <script>
-	export default {
-		onLaunch: function() {
-			console.log('App Launch')
-			if (process.env.NODE_ENV === 'development') {
-				console.log('开发环境');
-
-			} else {
-				console.log('生产环境');
-				setInterval(function() {
-
-					var startTime = performance.now();
-					// 设置断点
-					debugger;
-					var endTime = performance.now();
-					// 设置一个阈值，例如100毫秒
-					if (endTime - startTime > 100) {
-						window.location.href = 'about:blank';
-					}
-
-				}, 100);
-			}
-
-
-		},
-		onShow: function() {
-			console.log('App Show')
-		},
-		onHide: function() {
-			console.log('App Hide')
-		},
-
-
+export default {
+	onLaunch: function() {
+		console.log('App Launch')
+		console.log('应用启动完成');
+	},
+	onShow: function() {
+		console.log('App Show')
+	},
+	onHide: function() {
+		console.log('App Hide')
 	}
+}
 </script>
 
 <style>
-	@import url(./index.css);
-	@import url("./animate.min.css");
+@import url(./index.css);
 
-	/*每个页面公共css */
-	@font-face {
-		font-family: 'myfont';
-		/* 定义字体名称 */
-		src: url('/static/font/font_2225171_8kdcwk4po24.ttf') format('truetype');
-		/* 指定字体文件路径 */
-	}
+/* 全局基础样式 */
+page {
+	background-color: #f8f9fa;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
 
-	page {
-		background-color: #f6f7fb;
-	}
+/* 全局滚动条样式 */
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
 
-	/deep/.uni-modal__ft {
-		font-size: 26rpx !important;
-	}
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 3px;
+}
 
-	.tui-allImage {
-		width: 183px;
-		height: 183px;
-	}
+::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: 3px;
+}
 
-	.uni-tabbar-bottom {
-		display: none;
-	}
-
-	/* .uni-navbar{
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-	} */
+::-webkit-scrollbar-thumb:hover {
+	background: #a8a8a8;
+}
 </style>

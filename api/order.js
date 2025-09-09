@@ -4,3 +4,7 @@ import request from '@/utils/request.js';
 export const orderlist = function(data = {}) {
 	return request.get('order/orderlist', data)
 }
+
+export const orderCount = function() {
+	return request.get('order/ordercount', {hideLoading: true})
+}

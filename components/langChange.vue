@@ -1,34 +1,19 @@
 <template>
 	<view>
-		<uni-popup ref="popup" type="bottom" border-radius="10px 10px 0 0">
-			<view class="tui-popupContent">
-				<view class="flex flex-between flex-item p-26">
-					<view class="title">
-						{{$t('app.yysz')}}
-					</view>
-					<view class="cancle" @click="onClickCancle">
-						{{$t('app.qx')}}
-					</view>
-				</view>
-				<view class="tui-content">
-					<view class="tui-contentItem" v-for="(item,index) in langList" :key="index" @click="seletLang(item)"
-						:class="[{'tui-activite':showLang==item.value}]">
-						{{item.name}}
-					</view>
-
-				</view>
-			</view>
-		</uni-popup>
+		<!-- 语言切换组件 - 使用ActionSheet，无需模板 -->
 	</view>
 </template>
 
 <script>
+	import { setLanguage } from '@/i18n/index.js'
+	
 	export default {
 		name: "langChange",
 		data() {
 			return {
-				showLang: uni.getStorageSync('i18nLang'),
-				langList: [{
+				showLang: uni.getStorageSync('i18nLang') || 'zh-CN',
+				langList: [
+					{
 						name: '简体中文',
 						value: 'zh-CN'
 					},
@@ -68,55 +53,91 @@
 		},
 		methods: {
 			open() {
-				// 通过组件定义的ref调用uni-popup方法 ,如果传入参数 ，type 属性将失效 ，仅支持 ['top','left','bottom','right','center']
-				this.$refs.popup.open()
+				console.log('语言切换组件open方法被调用')
+				this.showLanguageOptions()
 			},
+			
+			showLanguageOptions() {
+				console.log('显示语言选择')
+				const itemList = this.langList.map(item => item.name)
+				uni.showActionSheet({
+					itemList: itemList,
+					success: (res) => {
+						console.log('用户选择了语言:', res.tapIndex)
+						const selectedLang = this.langList[res.tapIndex]
+						if (selectedLang) {
+							this.seletLang(selectedLang)
+						}
+					},
+					fail: (error) => {
+						console.error('显示语言选择失败:', error)
+						uni.showToast({
+							title: '语言选择失败',
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 			seletLang(item) {
-				uni.setStorageSync('i18nLang', item.value)
-				location.reload();
+				console.log('选择语言:', item.name, item.value)
+				
+				// 使用动态语言切换方法
+				if (setLanguage(item.value)) {
+					// 更新当前显示的语言
+					this.showLang = item.value
+					
+					// 显示切换成功提示
+					uni.showToast({
+						title: `已切换到${item.name}`,
+						icon: 'success',
+						duration: 1500
+					})
+					
+					// 延迟刷新当前页面，让语言设置生效
+					setTimeout(() => {
+						console.log('开始刷新当前页面，目标语言:', item.value)
+						
+						// 获取当前页面路径
+						const currentPages = getCurrentPages()
+						const currentPage = currentPages[currentPages.length - 1]
+						
+						if (currentPage && currentPage.route) {
+							const currentUrl = '/' + currentPage.route
+							console.log('当前页面路径:', currentUrl)
+							
+							// 刷新当前页面
+							uni.reLaunch({
+								url: currentUrl,
+								success: () => {
+									console.log('语言切换成功，刷新当前页面')
+								},
+								fail: (error) => {
+									console.error('刷新当前页面失败:', error)
+									// 备用方案：回到登录页
+									uni.reLaunch({
+										url: '/pages/login/login'
+									})
+								}
+							})
+						} else {
+							// 如果无法获取当前页面，回到登录页
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+						}
+					}, 1500)
+				} else {
+					uni.showToast({
+						title: '语言切换失败',
+						icon: 'none'
+					})
+				}
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.tui-popupContent {
-		border-radius: 24px 24px 0 0;
-		padding: 48rpx 0 0;
-		background-color: #fff;
-
-		.p-26 {
-			padding: 0 32rpx;
-		}
-
-		.tui-content {
-			margin-top: 40rpx;
-			padding-bottom: 100rpx;
-
-			.tui-contentItem {
-				height: 100rpx;
-				font-size: 28rpx;
-				color: #222;
-				display: flex;
-				align-items: center;
-				padding: 0 32rpx;
-			}
-
-			.tui-activite {
-				background-color: #f3f5f6 !important;
-				color: #1150c2 !important;
-			}
-		}
-
-		.title {
-			font-size: 32rpx;
-			font-weight: 800;
-			color: #222;
-		}
-
-		.cancle {
-			color: #a8a9ac;
-			font-size: 28rpx;
-		}
-	}
+	/* 语言切换组件样式 - 使用ActionSheet，无需特殊样式 */
 </style>

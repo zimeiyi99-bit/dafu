@@ -68,12 +68,12 @@
 				const {
 					amount
 				} = this
-				if (!amount || amount <= 0) {
+				if (!amount || amount * 1 <= 0) {
 					return true
-				} else if (amount > this.usableAmount) {
+				} else if (amount * 1 > this.usableAmount) {
 					return true
 				}
-				return fasle
+				return false
 			},
 		},
 		onLoad(e) {

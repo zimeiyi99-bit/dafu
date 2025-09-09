@@ -10,7 +10,7 @@
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{this.$utils.replaceWithAsterisks(formData.user_name,1,2)}}
+										{{formData.user_name && this.$utils.replaceWithAsterisks(formData.user_name,1)}}
 									</view>
 								</view>
 							</view>
@@ -22,7 +22,7 @@
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{this.$utils.replaceWithAsterisks(formData.gj,1,4)}}
+										{{formData.gj && this.$utils.replaceWithAsterisks(formData.gj,1)}}
 									</view>
 								</view>
 							</view>
@@ -34,7 +34,7 @@
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{this.$utils.replaceWithAsterisks(formData.bank_branch,2,7)}}
+										{{formData.bank_branch && this.$utils.replaceWithAsterisks(formData.bank_branch,2)}}
 									</view>
 								</view>
 							</view>
@@ -58,7 +58,7 @@
 							<view class="tui-listItem" v-if="binded">
 								<view class="flex-item flex">
 									<view class="title">
-										{{this.$utils.replaceWithAsterisks(formData.account,6,10)}}
+										{{formData.account && getUsdt_back}}
 									</view>
 								</view>
 							</view>
@@ -71,7 +71,7 @@
 						<view class="tui-listItem" v-if="binded">
 							<view class="flex-item flex">
 								<view class="title">
-									{{formData.usdt_url.substring(0, 6) + '****' + formData.usdt_url.substring(10)}}
+									{{getUsdt_url }}
 								</view>
 							</view>
 						</view>
@@ -124,25 +124,37 @@
 		},
 		computed: {
 			btnDisabled() {
+				
 				const {
 					formData
 				} = this
 				if (formData.pay_type == 'bank_card') {
-					try {
-						Object.entries(formData).forEach(([key, val]) => {
-							if (!val && key !== 'usdt_url') {
-								throw this.$t('account.ykz')
-							}
-						})
-					} catch (e) {
-						return true
+					for(let i in formData) {
+						if (!formData[i] && i !== 'usdt_url'){
+							return true
+						}
 					}
 				} else {
+					
 					if (!formData.usdt_url) {
 						return true
 					}
 				}
 				return false
+			},
+			getUsdt_url(){
+				if(!this.formData.usdt_url) return ''
+				if(this.formData.usdt_url.length<=4)
+					return this.formData.usdt_url + '**********' + this.formData.usdt_url
+				else
+					return this.formData.usdt_url.substring(0,4)+ '**********' + this.formData.usdt_url.substring(this.formData.usdt_url.length-4)
+			},
+			getUsdt_back(){
+				if(!this.formData.account) return ''
+				if(this.formData.account.length<=4)
+					return this.formData.account + '**********' + this.formData.account
+				else
+					return this.formData.account.substring(0,4)+ '**********' + this.formData.account.slice(-4)
 			}
 		},
 		onLoad(e) {
@@ -200,6 +212,7 @@
 					uni.showToast({
 						title: this.$t('account.szcg'),
 						icon: 'none',
+						confirmText: "Sure",
 						success() {
 							setTimeout(_ => {
 								uni.navigateBack()
@@ -224,7 +237,7 @@
 		font-size: 30rpx;
 		background-color: #fff;
 		border-radius: 13px;
-		padding: 20rpx;
+		padding: 28rpx;
 		box-sizing: border-box;
 		display: flex;
 		margin-top: 20rpx;
@@ -245,7 +258,7 @@
 		}
 
 		.title {
-			font-size: 24rpx;
+			font-size: 25rpx;
 			color: #222;
 		}
 
@@ -312,13 +325,16 @@
 
 	/deep/.uni-forms-item__label {
 		color: #a8a9ac !important;
+		padding: 0 !important;
+		height:auto;
+		font-size: 12px;
 	}
 
 	.bindTip {
 		background-color: #f4eadd;
 		color: #fc6d22;
 		border-radius: 12px;
-		margin-top: 20px;
+		margin-top: 32px;
 		padding: 15px;
 		font-size: 14px;
 		display: flex;

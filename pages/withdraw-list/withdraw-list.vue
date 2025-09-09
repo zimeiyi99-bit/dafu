@@ -4,23 +4,57 @@
 
 		<view class="tui-headerTitle" v-if="!isData">
 			<view class="tui-card" v-for="(item,index) in List" :key="index">
-				<view class="tui-left">
-					<view class="title">
-						{{item.money}}
+				<view style="box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;width: 100%;line-height: 48rpx;">
+					<view class="tui-left">
+						<view class="title" style="font-size: 24rpx;">
+							{{$t('top.txlx')}}
+						</view>
+						<view class="title" style="font-size: 24rpx;">
+							{{$t('top.code')}}
+						</view>
+						
+						<view class="title" style="font-size: 24rpx;">
+							{{$t('top.txje')}}
+						</view>
+						<view class="title" style="font-size: 24rpx;">
+							{{$t('withdraw-list.ddbh')}} 
+						</view>
+						<view class="title" style="font-size: 24rpx;">
+							{{$t('top.time')}} 
+						</view>
 					</view>
-					<view class="time">
-						{{$t('withdraw-list.ddbh')}} <text>WCDMRFWES{{item.id}}</text>
+					<view class="tui-right" style="text-align: right;">
+						<view class="title" style="font-size: 24rpx;">
+							<view v-if="item.pay_type=='网银出金' || item.pay_type=='BANK_CARD'">
+								{{$t('withdraw-money.yhk')}}
+							</view>
+							<view v-else>
+								{{item.pay_type}}
+							</view>
+						</view>
+						<view class="message"
+							:style="{color:item.status == 1 ? '#25BC73' : item.status == 2 ? '#222' : '#f33b50'}">
+							{{item.status == 1 ? $t('withdraw-list.cg') : item.status == 2 ? $t('withdraw-list.shz') : $t('withdraw-list.sb')}}
+						</view>
+						<view class="title" style="font-size: 24rpx;">
+							{{item.money}}
+						</view>
+						<view class="title" style="font-size: 24rpx;">
+							{{item.order_sn}}
+						</view>
+						
+						<view class="title" style="font-size: 24rpx;">
+							{{item.time}}
+						</view>
 					</view>
 				</view>
-				<view class="tui-right">
-					<view class="message"
-						:style="{color:item.status == 1 ? '#25BC73' : item.status == 2 ? '#222' : '#f33b50'}">
-						{{item.status == 1 ? $t('withdraw-list.cg') : item.status == 2 ? $t('withdraw-list.shz') : $t('withdraw-list.sb')}}
-					</view>
-					<view class="time">
-						{{item.time}}
-					</view>
-				</view>
+				<div  style="text-indent: 2em;width: 100%;font-size:24rpx;color: orangered;line-height: 48rpx;" v-if="item.status==3">
+					{{item.check_remark}}
+				</div>
+				
 			</view>
 			<!--加载loadding-->
 			<tui-loadmore :visible="loadding" :index="3" type="red"></tui-loadmore>
@@ -107,10 +141,7 @@
 			background-color: #fff;
 			border-radius: 13px;
 			padding: 26rpx;
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
+			
 			margin-top: 20rpx;
 
 			.tui-right {
@@ -118,14 +149,14 @@
 				flex-direction: column;
 
 				.message {
-					font-size: 20rpx;
+					font-size: 24rpx;
 					color: #f33b50;
 					text-align: right;
 				}
 
 				.time {
 					color: #a8a9ac;
-					font-size: 20rpx;
+					font-size: 24rpx;
 				}
 			}
 
@@ -134,7 +165,7 @@
 				flex-direction: column;
 
 				.title {
-					font-size: 28rpx;
+					font-size: 24rpx;
 					color: #222;
 				}
 

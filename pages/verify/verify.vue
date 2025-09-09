@@ -9,7 +9,7 @@
 							:styles="styles" primaryColor="#1150c2" @blur="SetValue('real_name')" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.zjh')" name="id_card" required>
-						<uni-easyinput type="number" v-model="formData.id_card" :placeholder="$t('verify.srzjh')"
+						<uni-easyinput  v-model="formData.id_card" :placeholder="$t('verify.srzjh')"
 							:inputBorder="true" :styles="styles" primaryColor="#1150c2" @blur="SetValue('id_card')" />
 					</uni-forms-item>
 					<uni-forms-item :label="$t('verify.gj')" name="gj" required>
@@ -173,7 +173,7 @@
 
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
-						this.formData.id_img_2 = xhr.data.headimg
+						this.formData.id_img_2 = xhr.data.content_all
 						this.img2 = xhr.data.content_all
 						this.$refs.form.validate().then((res) => {
 							this.isBtn = true
@@ -195,7 +195,7 @@
 
 						let xhr = await updateFile(tempFilePaths[0])
 						console.log(xhr)
-						this.formData.id_img_1 = xhr.data.headimg
+						this.formData.id_img_1 = xhr.data.content_all
 						this.img1 = xhr.data.content_all
 						this.$refs.form.validate().then((res) => {
 							this.isBtn = true

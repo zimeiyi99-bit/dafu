@@ -3,7 +3,7 @@ const token = store.state.token;
 export default function updateFile(imageUrl, Type) {
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
-			url: 'https://43.132.156.95:41927/api/user/uploadimg',
+			url: '/api/user/uploadimg',
 			method: "POST",
 			header: {
 				'Token': token,

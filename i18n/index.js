@@ -25,10 +25,27 @@ const messages = {
 	'fr-FR': frFR,
 	'de-DE': deDE,
 };
-if (!localStorage.getItem('i18nLang')) {
-	localStorage.setItem('i18nLang', 'zh-CN')
+
+// 修复nvue兼容性问题 - 使用uni.getStorageSync替代localStorage
+let savedLang;
+try {
+	savedLang = uni.getStorageSync('i18nLang');
+} catch (e) {
+	console.warn('读取语言设置失败:', e);
+	savedLang = null;
 }
-const locale = uni.getStorageSync('i18nLang');
+
+if (!savedLang) {
+	try {
+		uni.setStorageSync('i18nLang', 'zh-CN');
+		savedLang = 'zh-CN';
+	} catch (e) {
+		console.warn('保存语言设置失败:', e);
+		savedLang = 'zh-CN';
+	}
+}
+
+const locale = savedLang || 'zh-CN';
 let i18nConfig = {
 	locale, // 获取已设置的语言
 	messages
@@ -36,6 +53,24 @@ let i18nConfig = {
 
 Vue.use(VueI18n)
 const i18n = new VueI18n(i18nConfig)
+
+// 添加动态语言切换方法
+export function setLanguage(lang) {
+	try {
+		uni.setStorageSync('i18nLang', lang);
+		i18n.locale = lang;
+		console.log('语言切换成功:', lang);
+		return true;
+	} catch (e) {
+		console.error('语言切换失败:', e);
+		return false;
+	}
+}
+
+// 获取当前语言
+export function getCurrentLanguage() {
+	return i18n.locale;
+}
 
 // 导出
 export default i18n;

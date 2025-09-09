@@ -7,24 +7,24 @@
 					<uni-forms-item>
 						<view class="tui-form">
 							<view class="title">
-								{{$t('withdraw-money.cjje')}}(CNY)
+								{{$t('withdraw-money.cjje')}}
 							</view>
 							<view class="flex flex-column">
 								<view class="tui-inputBox">
 									<view class="font-bolder">
-										￥
+										
 									</view>
 									<input v-model="formData.money" @input="validateInput" type="text" class="input" />
 								</view>
 
-								<block v-if="formData.num != ''">
+								<!-- <block v-if="formData.num != ''"  style="display: none;">
 									<view class="" style="margin-top: 8rpx;font-size: 20rpx;"
 										v-if="formData.pay_type != 'bank_card'">
 										≈ {{formData.num}}USDT
 									</view>
-								</block>
+								</block> -->
 								<view class="bottom">
-									{{$t('withdraw-money.kyye')}}: <text>￥{{userInfo.money}}</text>
+									{{$t('withdraw-money.kyye')}}: <text>{{userInfo.money}}</text>
 								</view>
 							</view>
 						</view>
@@ -65,7 +65,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{this.$utils.replaceWithAsterisks(selectCashInfo.user_name,1,2)}}
+											{{selectCashInfo.user_name && this.$utils.replaceWithAsterisks(selectCashInfo.user_name,1)}}
 										</view>
 									</view>
 								</view>
@@ -76,7 +76,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{this.$utils.replaceWithAsterisks(selectCashInfo.gj,1,4)}}
+											{{selectCashInfo.gj && this.$utils.replaceWithAsterisks(selectCashInfo.gj,1)}}
 										</view>
 									</view>
 								</view>
@@ -87,7 +87,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{this.$utils.replaceWithAsterisks(selectCashInfo.bank_branch,2,7)}}
+											{{selectCashInfo.bank_branch && this.$utils.replaceWithAsterisks(selectCashInfo.bank_branch,2)}}
 										</view>
 									</view>
 								</view>
@@ -109,7 +109,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{this.$utils.replaceWithAsterisks(selectCashInfo.account,6,10)}}
+											{{selectCashInfo.account && getUsdt_back}}
 										</view>
 									</view>
 								</view>
@@ -123,7 +123,7 @@
 								<view class="tui-listItem">
 									<view class="flex-item flex">
 										<view class="title">
-											{{selectCashInfo.usdt_url}}
+											{{getUsdt_url}}
 										</view>
 									</view>
 								</view>
@@ -180,7 +180,7 @@
 			return {
 				formData: {
 					money: '',
-					pay_type: 'bank_card',
+					pay_type: 'usdt-trc20',
 					mpwd: '',
 					num: ''
 				},
@@ -210,6 +210,7 @@
 				if (!this.binded) {
 					return true
 				}
+				console.log(formData)
 				try {
 					Object.entries(formData).forEach(([key, val]) => {
 						if (!val && key !== 'usdt_url') {
@@ -219,9 +220,9 @@
 				} catch (e) {
 					return true
 				}
-				if (this.formData.money > this.userInfo.money) {
-					return true
-				}
+				// if (this.formData.money > this.userInfo.money) {
+				// 	return true
+				// }
 				return false
 			},
 			binded() {
@@ -256,6 +257,20 @@
 				else {
 					return {}
 				}
+			},
+			getUsdt_url(){
+				if(!this.selectCashInfo.usdt_url) return ''
+				if(this.selectCashInfo.usdt_url.length<=4)
+					return this.selectCashInfo.usdt_url + '**********' + this.selectCashInfo.usdt_url
+				else
+					return this.selectCashInfo.usdt_url.substring(0,4)+ '**********' + this.selectCashInfo.usdt_url.substring(this.selectCashInfo.usdt_url.length-4)
+			},
+			getUsdt_back(){
+				if(!this.selectCashInfo.account) return ''
+				if(this.selectCashInfo.account.length<=4)
+					return this.selectCashInfo.account + '**********' + this.selectCashInfo.account
+				else
+					return this.selectCashInfo.account.substring(0,4)+ '**********' + this.selectCashInfo.account.slice(-4)
 			}
 		},
 		methods: {
@@ -271,7 +286,7 @@
 			},
 			validateInput() {
 
-				this.formData.num = (this.formData.money / (this.getUserItem.hui_lv || 7.24)).toFixed(2);
+				this.formData.num = (this.formData.money / (this.getUserItem.hui_lv || 1)).toFixed(2);
 				let value = this.$utils.validateAmount(this.formData.money);
 				this.$nextTick(_ => {
 					// 更新 v-model
@@ -288,6 +303,7 @@
 					uni.showModal({
 						title: this.$t('withdraw-money.czcg'),
 						content: this.$t('withdraw-money.nxdd'),
+						confirmText: "Sure",
 						showCancel: false,
 					}).then(_ => {
 						uni.navigateBack()
