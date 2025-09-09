@@ -98,6 +98,7 @@
 			// #endif
 			
 			// #ifdef APP-PLUS
+			// 设置APP-PLUS环境的ECharts配置
 			this.$echarts.env.touchEventsSupported = true;
 			this.$echarts.env.wxa = false;
 			this.$echarts.env.canvasSupported = true;
@@ -109,7 +110,7 @@
 			this.$nextTick(() => {
 				setTimeout(() => {
 					this.init();
-				}, 200); // APP环境需要更长延迟
+				}, 300); // APP环境需要更长延迟确保canvas完全渲染
 			});
 		},
 		methods: {
@@ -135,13 +136,29 @@
 					// #endif
 					
 					// #ifdef APP-PLUS
-					// APP环境下使用boundingClientRect获取canvas信息
+					// APP环境下需要获取canvas节点和上下文
 					const query = uni.createSelectorQuery().in(this);
-					query.select('#' + this.chartId).boundingClientRect((data) => {
-						if (data && !this.chartInstance) {
+					query.select('#' + this.chartId).node((res) => {
+						if (res && res.node && !this.chartInstance) {
 							try {
-								// 使用传统的ECharts初始化方式
-								this.chartInstance = this.$echarts.init(data);
+								const canvas = res.node;
+								const ctx = canvas.getContext('2d');
+								
+								// 设置canvas尺寸，确保有合理的默认值
+								const dpr = uni.getSystemInfoSync().pixelRatio || 1;
+								const width = res.width || 400;
+								const height = res.height || 400;
+								
+								canvas.width = width * dpr;
+								canvas.height = height * dpr;
+								ctx.scale(dpr, dpr);
+								
+								// 初始化ECharts，传入canvas和context
+								this.chartInstance = this.$echarts.init(canvas, null, {
+									width: width,
+									height: height
+								});
+								
 								this.initError = false;
 								
 								// 如果有数据，立即渲染
@@ -152,9 +169,9 @@
 								console.error('APP ECharts初始化失败:', error);
 								this.handleInitError(error);
 							}
-						} else if (!data) {
-							console.error('Canvas元素未找到');
-							this.handleInitError(new Error('Canvas元素未找到'));
+						} else if (!res || !res.node) {
+							console.error('Canvas节点未找到');
+							this.handleInitError(new Error('Canvas节点未找到'));
 						}
 					}).exec();
 					// #endif
