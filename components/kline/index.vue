@@ -13,7 +13,7 @@
 		
 		<!-- WebView fallback for APP when native rendering fails -->
 		<!-- #ifdef APP-PLUS -->
-		<web-view v-if="useWebViewFallback" :src="webViewUrl" class="kline" @message="onWebViewMessage"></web-view>
+		<web-view v-if="useWebViewFallback" ref="webview" :src="webViewUrl" class="kline" @message="onWebViewMessage" @onPostMessage="onWebViewMessage"></web-view>
 		<!-- #endif -->
 		
 		<!-- Error state -->
@@ -63,8 +63,12 @@
 				// 构建WebView加载的URL，包含数据
 				const baseUrl = '/static/kline-h5.html';
 				return baseUrl;
-			}
+			},
 			// #endif
+			// 占位符确保对象结构正确
+			placeholder() {
+				return true;
+			}
 		},
 		watch: {
 			data: {
@@ -106,7 +110,6 @@
 				setTimeout(() => {
 					this.init();
 				}, 200); // APP环境需要更长延迟
-			});
 			});
 		},
 		methods: {
@@ -213,7 +216,26 @@
 			
 			// 向WebView发送数据
 			sendDataToWebView() {
-				// WebView加载完成后发送数据的逻辑将在onWebViewMessage中处理
+				if (this.displayKlineData && this.displayKlineData.length > 0) {
+					// 通过WebView的evaluateJavaScript方法发送数据
+					const webViewComponent = this.$refs.webview;
+					if (webViewComponent) {
+						const dataString = JSON.stringify(this.displayKlineData);
+						const jsCode = `
+							if (window.updateKlineData) {
+								window.updateKlineData(${dataString});
+							}
+						`;
+						// uni.webView.postMessage 发送消息
+						try {
+							uni.webView.evaluateJavaScript({
+								data: jsCode
+							});
+						} catch (error) {
+							console.log('WebView数据发送失败:', error);
+						}
+					}
+				}
 			},
 			
 			// WebView消息处理
@@ -300,6 +322,12 @@
 				if (this.chartInstance) {
 					this.renderChart();
 				}
+				// #ifdef APP-PLUS
+				else if (this.useWebViewFallback) {
+					// 如果使用WebView回退，向WebView发送更新数据
+					this.sendDataToWebView();
+				}
+				// #endif
 			},
 			
 			formatData(rawData) {
