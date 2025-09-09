@@ -1,7 +1,31 @@
 <template>
 	<view class="chart">
-		<view :id="chartId" class="kline">
+		<!-- Native rendering -->
+		<view v-if="!useWebViewFallback">
+			<!-- #ifdef H5 -->
+			<view :id="chartId" class="kline">
+			</view>
+			<!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<canvas :id="chartId" :canvas-id="chartId" class="kline" type="2d"></canvas>
+			<!-- #endif -->
 		</view>
+		
+		<!-- WebView fallback for APP when native rendering fails -->
+		<!-- #ifdef APP-PLUS -->
+		<web-view v-if="useWebViewFallback" :src="webViewUrl" class="kline" @message="onWebViewMessage"></web-view>
+		<!-- #endif -->
+		
+		<!-- Error state -->
+		<view v-if="initError && !useWebViewFallback" class="error-state">
+			<text class="error-icon">📈</text>
+			<text class="error-text">图表加载失败</text>
+			<text class="error-subtitle">请检查网络连接或稍后重试</text>
+			<!-- #ifdef APP-PLUS -->
+			<view class="retry-btn" @click="tryWebViewFallback">使用备用显示</view>
+			<!-- #endif -->
+		</view>
+		
 		<!-- 价格变化指示器 -->
 		<view v-if="priceChange.show" :class="['price-change', priceChange.direction, priceChange.show ? 'show' : '']">
 			{{ priceChange.direction === 'up' ? '+' : '-' }}{{ priceChange.value }}
@@ -25,8 +49,22 @@
 					show: false,
 					direction: 'up',
 					value: '0.0000'
-				}
+				},
+				// 新增错误处理和回退相关
+				initError: false, // 初始化错误标记
+				retryCount: 0, // 重试次数
+				maxRetries: 3, // 最大重试次数
+				useWebViewFallback: false // 是否使用WebView回退
 			}
+		},
+		computed: {
+			// #ifdef APP-PLUS
+			webViewUrl() {
+				// 构建WebView加载的URL，包含数据
+				const baseUrl = '/static/kline-h5.html';
+				return baseUrl;
+			}
+			// #endif
 		},
 		watch: {
 			data: {
@@ -46,52 +84,143 @@
 			}
 		},
 		mounted() {
-			// 设置ECharts环境
+			// 根据平台设置ECharts环境
+			// #ifdef H5
 			this.$echarts.env.touchEventsSupported = true;
 			this.$echarts.env.wxa = false;
-			this.$echarts.env.canvasSupported = false;
+			this.$echarts.env.canvasSupported = true;
 			this.$echarts.env.svgSupported = true;
 			this.$echarts.env.domSupported = true;
+			// #endif
 			
-			// 延迟初始化，确保DOM已渲染
+			// #ifdef APP-PLUS
+			this.$echarts.env.touchEventsSupported = true;
+			this.$echarts.env.wxa = false;
+			this.$echarts.env.canvasSupported = true;
+			this.$echarts.env.svgSupported = false;
+			this.$echarts.env.domSupported = false;
+			// #endif
+			
+			// 延迟初始化，确保DOM/Canvas已渲染
 			this.$nextTick(() => {
 				setTimeout(() => {
 					this.init();
-				}, 100);
+				}, 200); // APP环境需要更长延迟
+			});
 			});
 		},
 		methods: {
 			init() {
-				// 检查是否已经初始化过
-				if (this.chartInstance) {
+				// 检查是否已经初始化过或使用WebView回退
+				if (this.chartInstance || this.useWebViewFallback) {
 					return;
 				}
 				
-				// #ifdef H5
-				const element = document.getElementById(this.chartId);
-				if (element) {
-					this.chartInstance = this.$echarts.init(element);
-					// 如果有数据，立即渲染
-					if (this.displayKlineData && this.displayKlineData.length > 0) {
-						this.renderChart();
-					}
-				}
-				// #endif
-				
-				// #ifdef APP-PLUS
-				// 手机端使用uni-app的方式获取元素
-				const query = uni.createSelectorQuery().in(this);
-				query.select('#' + this.chartId).boundingClientRect((data) => {
-					if (data && !this.chartInstance) {
-						this.chartInstance = this.$echarts.init(data);
+				try {
+					// #ifdef H5
+					const element = document.getElementById(this.chartId);
+					if (element) {
+						this.chartInstance = this.$echarts.init(element);
+						this.initError = false;
 						// 如果有数据，立即渲染
 						if (this.displayKlineData && this.displayKlineData.length > 0) {
 							this.renderChart();
 						}
+					} else {
+						throw new Error('H5 element not found');
 					}
-				}).exec();
-				// #endif
+					// #endif
+					
+					// #ifdef APP-PLUS
+					// APP环境下需要获取实际的canvas上下文进行初始化
+					const query = uni.createSelectorQuery().in(this);
+					query.select('#' + this.chartId).node((res) => {
+						try {
+							if (res && res.node && !this.chartInstance) {
+								const canvas = res.node;
+								const ctx = canvas.getContext('2d');
+								
+								// 验证canvas上下文
+								if (!ctx) {
+									throw new Error('无法获取Canvas 2D上下文');
+								}
+								
+								// 设置canvas尺寸
+								const systemInfo = uni.getSystemInfoSync();
+								const dpr = systemInfo.pixelRatio || 2;
+								canvas.width = res.width * dpr;
+								canvas.height = res.height * dpr;
+								ctx.scale(dpr, dpr);
+								
+								// 初始化ECharts实例
+								this.chartInstance = this.$echarts.init(canvas, null, {
+									width: res.width,
+									height: res.height,
+									devicePixelRatio: dpr
+								});
+								
+								this.initError = false;
+								
+								// 如果有数据，立即渲染
+								if (this.displayKlineData && this.displayKlineData.length > 0) {
+									this.renderChart();
+								}
+							} else {
+								throw new Error('Canvas节点获取失败');
+							}
+						} catch (error) {
+							console.error('APP ECharts初始化失败:', error);
+							this.handleInitError(error);
+						}
+					}).exec();
+					// #endif
+					
+				} catch (error) {
+					console.error('ECharts初始化失败:', error);
+					this.handleInitError(error);
+				}
 			},
+			
+			// 处理初始化错误
+			handleInitError(error) {
+				this.retryCount++;
+				console.error(`ECharts初始化失败 (第${this.retryCount}次):`, error);
+				
+				if (this.retryCount < this.maxRetries) {
+					// 延迟重试
+					setTimeout(() => {
+						this.init();
+					}, 1000 * this.retryCount);
+				} else {
+					// 最大重试次数后，标记为错误状态
+					this.initError = true;
+					// #ifdef APP-PLUS
+					// APP环境下可以提供WebView回退选项
+					// #endif
+				}
+			},
+			
+			// #ifdef APP-PLUS
+			// 尝试WebView回退
+			tryWebViewFallback() {
+				this.useWebViewFallback = true;
+				this.initError = false;
+				// 向WebView传递数据
+				this.$nextTick(() => {
+					this.sendDataToWebView();
+				});
+			},
+			
+			// 向WebView发送数据
+			sendDataToWebView() {
+				// WebView加载完成后发送数据的逻辑将在onWebViewMessage中处理
+			},
+			
+			// WebView消息处理
+			onWebViewMessage(event) {
+				console.log('WebView消息:', event);
+			},
+			// #endif
 			
 			// 开始5秒显示更新
 			startDisplayUpdate() {
@@ -406,6 +535,54 @@
 	.kline {
 		width: 100%;
 		height: 400px;
+	}
+	
+	/* 错误状态样式 */
+	.error-state {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 400px;
+		background: #f9f9f9;
+		border: 1px solid #e5e5e5;
+		border-radius: 8px;
+	}
+	
+	.error-icon {
+		font-size: 48px;
+		margin-bottom: 16px;
+		opacity: 0.5;
+	}
+	
+	.error-text {
+		font-size: 16px;
+		color: #666;
+		margin-bottom: 8px;
+		font-weight: 500;
+	}
+	
+	.error-subtitle {
+		font-size: 12px;
+		color: #999;
+		margin-bottom: 20px;
+		text-align: center;
+		line-height: 1.4;
+	}
+	
+	.retry-btn {
+		padding: 8px 16px;
+		background: #1150c2;
+		color: white;
+		border-radius: 4px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background 0.3s;
+	}
+	
+	.retry-btn:active {
+		background: #0a3d91;
 	}
 	
 	/* 价格变化指示器 */

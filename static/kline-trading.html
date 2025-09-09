@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>K线交易图表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f6f7fb;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #e5e5e5;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .chart-container {
+            flex: 1;
+            padding: 10px;
+            background: #fff;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        #kline-chart {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1150c2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .controls {
+            background: #fff;
+            padding: 15px;
+            margin: 0 10px 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .time-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .time-btn.active {
+            background: #1150c2;
+            color: white;
+            border-color: #1150c2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">K线交易图表</div>
+        
+        <div class="controls">
+            <div class="time-btn active" data-period="1min">1分钟</div>
+            <div class="time-btn" data-period="5min">5分钟</div>
+            <div class="time-btn" data-period="15min">15分钟</div>
+            <div class="time-btn" data-period="30min">30分钟</div>
+            <div class="time-btn" data-period="1hour">1小时</div>
+            <div class="time-btn" data-period="1day">1天</div>
+        </div>
+        
+        <div class="chart-container">
+            <div id="kline-chart" class="loading">加载中...</div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script>
+        // 全局变量
+        let chart = null;
+        let currentPeriod = '1min';
+        let klineData = [];
+        
+        // 初始化图表
+        function initChart() {
+            const chartDom = document.getElementById('kline-chart');
+            chartDom.innerHTML = '';
+            chart = echarts.init(chartDom);
+            
+            // 生成模拟数据
+            generateMockData();
+            
+            // 渲染图表
+            renderChart();
+            
+            // 启动数据更新
+            startDataUpdate();
+        }
+        
+        // 生成模拟K线数据
+        function generateMockData() {
+            klineData = [];
+            const now = new Date();
+            let basePrice = 50000 + Math.random() * 10000;
+            
+            for (let i = 100; i >= 0; i--) {
+                const time = new Date(now.getTime() - i * getPeriodMs());
+                const open = basePrice + (Math.random() - 0.5) * 1000;
+                const close = open + (Math.random() - 0.5) * 500;
+                const high = Math.max(open, close) + Math.random() * 200;
+                const low = Math.min(open, close) - Math.random() * 200;
+                const volume = 1000 + Math.random() * 5000;
+                
+                klineData.push({
+                    time: formatTime(time),
+                    open: +open.toFixed(2),
+                    close: +close.toFixed(2),
+                    high: +high.toFixed(2),
+                    low: +low.toFixed(2),
+                    volume: +volume.toFixed(0)
+                });
+                
+                basePrice = close;
+            }
+        }
+        
+        // 获取周期毫秒数
+        function getPeriodMs() {
+            const periods = {
+                '1min': 60 * 1000,
+                '5min': 5 * 60 * 1000,
+                '15min': 15 * 60 * 1000,
+                '30min': 30 * 60 * 1000,
+                '1hour': 60 * 60 * 1000,
+                '1day': 24 * 60 * 60 * 1000
+            };
+            return periods[currentPeriod] || periods['1min'];
+        }
+        
+        // 格式化时间
+        function formatTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            if (currentPeriod === '1day') {
+                return `${month}-${day}`;
+            } else {
+                return `${hours}:${minutes}`;
+            }
+        }
+        
+        // 渲染图表
+        function renderChart() {
+            if (!chart || !klineData.length) return;
+            
+            const upColor = '#00da3c';
+            const downColor = '#ec0000';
+            
+            const categoryData = klineData.map(item => item.time);
+            const values = klineData.map(item => [item.open, item.close, item.low, item.high]);
+            const volumes = klineData.map((item, index) => [
+                index, 
+                item.volume, 
+                item.open > item.close ? 1 : -1
+            ]);
+            
+            const option = {
+                animation: true,
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'cross' },
+                    backgroundColor: 'rgba(245, 245, 245, 0.8)',
+                    borderWidth: 1,
+                    borderColor: '#ccc',
+                    textStyle: { color: '#000' },
+                    position: function (pos, params, el, elRect, size) {
+                        const obj = { top: 10 };
+                        obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+                        return obj;
+                    }
+                },
+                legend: {
+                    data: ['K线', 'MA5', 'MA10', 'MA20']
+                },
+                grid: [{
+                    left: '10%',
+                    right: '8%',
+                    height: '50%'
+                }, {
+                    left: '10%',
+                    right: '8%',
+                    top: '63%',
+                    height: '16%'
+                }],
+                xAxis: [{
+                    type: 'category',
+                    data: categoryData,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    splitLine: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
+                }, {
+                    type: 'category',
+                    gridIndex: 1,
+                    data: categoryData,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false }
+                }],
+                yAxis: [{
+                    scale: true,
+                    splitArea: { show: true }
+                }, {
+                    scale: true,
+                    gridIndex: 1,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
+                }],
+                dataZoom: [{
+                    type: 'inside',
+                    xAxisIndex: [0, 1],
+                    start: 50,
+                    end: 100
+                }],
+                series: [{
+                    name: 'K线',
+                    type: 'candlestick',
+                    data: values,
+                    itemStyle: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upColor,
+                        borderColor0: downColor
+                    }
+                }, {
+                    name: 'MA5',
+                    type: 'line',
+                    data: calculateMA(5, values),
+                    smooth: true,
+                    lineStyle: { opacity: 0.5 }
+                }, {
+                    name: 'MA10',
+                    type: 'line',
+                    data: calculateMA(10, values),
+                    smooth: true,
+                    lineStyle: { opacity: 0.5 }
+                }, {
+                    name: 'MA20',
+                    type: 'line',
+                    data: calculateMA(20, values),
+                    smooth: true,
+                    lineStyle: { opacity: 0.5 }
+                }, {
+                    name: 'Volume',
+                    type: 'bar',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    data: volumes
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        // 计算移动平均线
+        function calculateMA(dayCount, data) {
+            const result = [];
+            for (let i = 0; i < data.length; i++) {
+                if (i < dayCount) {
+                    result.push('-');
+                } else {
+                    let sum = 0;
+                    for (let j = 0; j < dayCount; j++) {
+                        sum += data[i - j][1];
+                    }
+                    result.push(+(sum / dayCount).toFixed(2));
+                }
+            }
+            return result;
+        }
+        
+        // 启动数据更新
+        function startDataUpdate() {
+            setInterval(() => {
+                if (klineData.length > 0) {
+                    const lastIndex = klineData.length - 1;
+                    const lastKline = klineData[lastIndex];
+                    
+                    // 更新最新一根K线
+                    const volatility = (Math.random() - 0.5) * 0.002;
+                    const priceChange = lastKline.close * volatility;
+                    const newClose = lastKline.close + priceChange;
+                    const newHigh = Math.max(lastKline.high, newClose);
+                    const newLow = Math.min(lastKline.low, newClose);
+                    
+                    klineData[lastIndex] = {
+                        ...lastKline,
+                        close: +newClose.toFixed(2),
+                        high: +newHigh.toFixed(2),
+                        low: +newLow.toFixed(2)
+                    };
+                    
+                    renderChart();
+                }
+            }, 3000);
+        }
+        
+        // 时间周期切换
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('time-btn')) {
+                document.querySelectorAll('.time-btn').forEach(btn => 
+                    btn.classList.remove('active')
+                );
+                e.target.classList.add('active');
+                currentPeriod = e.target.dataset.period;
+                generateMockData();
+                renderChart();
+            }
+        });
+        
+        // 窗口大小调整
+        window.addEventListener('resize', function() {
+            if (chart) {
+                chart.resize();
+            }
+        });
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initChart, 100);
+        });
+        
+        // 接收来自APP的消息
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'updateKlineData') {
+                klineData = event.data.data || [];
+                renderChart();
+            }
+        });
+        
+        // 暴露给APP调用的方法
+        window.updateKlineData = function(data) {
+            if (data && Array.isArray(data)) {
+                klineData = data;
+                renderChart();
+            }
+        };
+    </script>
+</body>
+</html>
