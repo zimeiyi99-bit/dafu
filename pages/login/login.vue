@@ -117,7 +117,8 @@
 					'backgroundColor': '#f8f9fa'
 				},
 				tabbar: true,
-				windowHeight: ''
+				windowHeight: '',
+				onWindowResizeCallback: null
 			};
 		},
 
@@ -127,12 +128,15 @@
 					this.windowHeight = res.windowHeight;
 				}
 			});
-			uni.onWindowResize((res) => {
+			this.onWindowResizeCallback = (res) => {
 				this.windowHeight = res.size.windowHeight;
-			});
+			};
+			uni.onWindowResize(this.onWindowResizeCallback);
 		},
 		onUnload() {
-			uni.offWindowResize();
+			if (this.onWindowResizeCallback) {
+				uni.offWindowResize(this.onWindowResizeCallback);
+			}
 		},
 		computed: {
 			btnDisabled() {

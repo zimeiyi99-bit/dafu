@@ -135,45 +135,26 @@
 					// #endif
 					
 					// #ifdef APP-PLUS
-					// APP环境下需要获取实际的canvas上下文进行初始化
+					// APP环境下使用boundingClientRect获取canvas信息
 					const query = uni.createSelectorQuery().in(this);
-					query.select('#' + this.chartId).node((res) => {
-						try {
-							if (res && res.node && !this.chartInstance) {
-								const canvas = res.node;
-								const ctx = canvas.getContext('2d');
-								
-								// 验证canvas上下文
-								if (!ctx) {
-									throw new Error('无法获取Canvas 2D上下文');
-								}
-								
-								// 设置canvas尺寸
-								const systemInfo = uni.getSystemInfoSync();
-								const dpr = systemInfo.pixelRatio || 2;
-								canvas.width = res.width * dpr;
-								canvas.height = res.height * dpr;
-								ctx.scale(dpr, dpr);
-								
-								// 初始化ECharts实例
-								this.chartInstance = this.$echarts.init(canvas, null, {
-									width: res.width,
-									height: res.height,
-									devicePixelRatio: dpr
-								});
-								
+					query.select('#' + this.chartId).boundingClientRect((data) => {
+						if (data && !this.chartInstance) {
+							try {
+								// 使用传统的ECharts初始化方式
+								this.chartInstance = this.$echarts.init(data);
 								this.initError = false;
 								
 								// 如果有数据，立即渲染
 								if (this.displayKlineData && this.displayKlineData.length > 0) {
 									this.renderChart();
 								}
-							} else {
-								throw new Error('Canvas节点获取失败');
+							} catch (error) {
+								console.error('APP ECharts初始化失败:', error);
+								this.handleInitError(error);
 							}
-						} catch (error) {
-							console.error('APP ECharts初始化失败:', error);
-							this.handleInitError(error);
+						} else if (!data) {
+							console.error('Canvas元素未找到');
+							this.handleInitError(new Error('Canvas元素未找到'));
 						}
 					}).exec();
 					// #endif
