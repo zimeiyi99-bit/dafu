@@ -1,19 +1,19 @@
 # Python
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
 *.pyd
-*.egg-info/
 .venv/
-venv/
 .env
+venv/
 
 # PyInstaller
 build/
 dist/
 *.spec
 
-# IDE
-.vscode/
-.idea/
+# macOS
 .DS_Store
+
+# Windows
+Thumbs.db
